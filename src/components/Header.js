@@ -1,17 +1,20 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 import rotate1 from '../assets/img/rotate-1.png'
 import token from '../assets/img/token.png'
 
-import {API_DOMAIN} from '../constant'
 import Menu from './Menu'
 import { useSelector, useDispatch } from 'react-redux'
 import { checkLanguage } from '../helpers'
 import { atcChangeLanguage } from '../store/action'
-export default function App({VisibleBanner}){
+import menubar from '../assets/img/menubar.png'
+export default function App({data}){
+    const VisibleBanner = data[0].visible_banner
     const dispatch = useDispatch()
+
+    const [html, sethtml] = useState('')
 
     const email = useSelector(state=>{
         return state.settings && state.settings.email && state.settings.email.email
@@ -62,7 +65,6 @@ export default function App({VisibleBanner}){
                 const img = imgStr + index;
                 const link = linkStr + index;
                 if(!rotate_banner[img] || !rotate_banner[link]) {
-                    console.log(returnArray);
                     return returnArray
                 }
                 else {
@@ -72,6 +74,14 @@ export default function App({VisibleBanner}){
             }
         }
     })
+
+    useEffect(()=>{
+        if(bannerContent){
+            if(window.innerWidth <767){
+                sethtml(checkLanguage({vi:bannerContent.text_vi , en: bannerContent.text_en},language))
+            }else sethtml(checkLanguage({vi:bannerContent.text_mobile_vi , en: bannerContent.text_mobile_en},language))
+        }
+    },[language,bannerContent])
     return(
         <>
         <header style={VisibleBanner ? {backgroundImage: 'url(/images/backgroundtop.png)'} : {}} className="header">
@@ -80,7 +90,7 @@ export default function App({VisibleBanner}){
                     <div className="social">
                         {
                             listIcon && listIcon.map((o, index)=>
-                            <a href={o.link} key={index}><img alt="" src={API_DOMAIN + o.img}/></a>
+                            <a target="_blank" href={o.link} key={index}><img alt="" src={ o.img}/></a>
                             )
                         }
                     </div>
@@ -89,7 +99,7 @@ export default function App({VisibleBanner}){
                         <span className="mail">{email}</span>
                     </div>
                     <div className="lang">
-                        <span>VI</span>
+                        <span>{language == 'vi' ? 'VI' : 'EN'}</span>
                         <FontAwesomeIcon icon={faCaretDown}/>
                         
                         <ul className="dropdown">
@@ -102,7 +112,8 @@ export default function App({VisibleBanner}){
             </div>
             <div className="bottom-header">
                 <div className="kdg-container logo-menu">
-                    <a href="/"><img alt="KingDomGame" src={API_DOMAIN + logoHeader}/></a>
+                    <span className="menubar"><img src={menubar} alt="" /></span>
+                    <a className="logo" href="/"><img alt="KingDomGame" src={logoHeader}/></a>
                     <h1>{checkLanguage(textLogo, language)}</h1>
                     <Menu />
                 </div>
@@ -122,7 +133,7 @@ export default function App({VisibleBanner}){
                                 <div className="icon">
                                     {
                                         listIcoinRotate && 
-                                        listIcoinRotate.map(o=><a href={o.link} target="_blank" className='icon-container'><img className="" src={API_DOMAIN +o.img} alt=""/> </a>)
+                                        listIcoinRotate.map(o=><a href={o.link} target="_blank" className='icon-container'><img className="" src={o.img} alt=""/> </a>)
                                     }
                                 </div>
                             </div>

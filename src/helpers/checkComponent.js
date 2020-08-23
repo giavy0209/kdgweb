@@ -13,24 +13,24 @@ import {
 
 export default function checkComponents(type){
     if(type === 1){
-        return Header
+        return {component: Header, haveContainer : false}
     }else if(type === 2){
-        return TitleOpacity
+        return {component: TitleOpacity, haveContainer : true}
     }else if(type === 3){
-        return List
+        return {component: List, haveContainer : true}
     }else if(type === 4){
-        return Description
+        return {component: Description, haveContainer : true}
     }else if(type === 5){
-        return MainChart
+        return {component: MainChart, haveContainer : true}
     }else if(type === 6){
-        return ListImage
+        return {component: ListImage, haveContainer : true}
     }else if(type === 8){
-        return Ecosystem
+        return {component: Ecosystem, haveContainer : true}
     }else if(type === 9){
-        return HightlightTitle
+        return {component: HightlightTitle, haveContainer : true}
     }else if(type === 10){
-        return Tab
+        return {component: Tab, haveContainer : true}
     }else if(type === 11){
-        return Footer
+        return {component: Footer, haveContainer : false}
     }
 }

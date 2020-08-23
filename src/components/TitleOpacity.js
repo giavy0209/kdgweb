@@ -1,10 +1,15 @@
 import React from 'react';
-export default function App({title}){
+import { useSelector } from 'react-redux';
+import { checkLanguage } from '../helpers'
+export default function App({data}){
+    const title = data[0]
+    const language = useSelector(state=> state.lang)
+    
     return (
         <>
             <div className="title-opacity">
-            <h2 className="">{title}</h2>
-            <span>{title}</span>
+            <h2 className="">{checkLanguage(title, language)}</h2>
+            <span>{checkLanguage(title, language)}</span>
             </div>
         </>
     )

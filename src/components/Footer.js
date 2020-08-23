@@ -1,10 +1,7 @@
 import React from 'react'
-// import logo from '../assets/img/logo.png'
-import fbfooter from '../assets/img/fbfooter.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker ,faEnvelope} from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
-import {API_DOMAIN} from '../constant'
 import { checkLanguage } from '../helpers'
 export default function App({...prop}) {
     const lang = useSelector(state => state.lang)
@@ -69,14 +66,14 @@ export default function App({...prop}) {
                 <div className="kdg-container">
                     <div className="kdg-row top-footer">
                         <div className="kdg-col-4">
-                            <a href="/"><img alt="KingDomGame" src={API_DOMAIN + logoFooter} /></a>
+                            <a href="/"><img alt="KingDomGame" src={logoFooter} /></a>
                             <p style={{fontSize: 23, fontWeight: 600, marginTop: 30}}>{checkLanguage(titleFooter, lang)}</p>
                             <p style={{fontSize:14, marginTop: 27}}><FontAwesomeIcon color="#fac800" icon={faMapMarker}/> {checkLanguage(address, lang)} </p>
                             <p style={{fontSize:14, marginTop: 14}}><FontAwesomeIcon color="#fac800" icon={faEnvelope}/> {email} </p>
                             <div className="social">
                                 {
                                     listIcon && listIcon.map((o, index)=>
-                                    <a className="social-block" href={o.link} key={index}><img alt="" src={API_DOMAIN + o.img}/></a>
+                                    <a  target="_blank" className="social-block" href={o.link} key={index}><img alt="" src={o.img}/></a>
                                     )
                                 }
                             </div>
