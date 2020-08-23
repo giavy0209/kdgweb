@@ -14,15 +14,31 @@ export default function App() {
     setCurrentUrl(location.pathname);
   }, [location])
 
-  const handleClick = useCallback((selectedItem,event) => {
-    if(selectedItem !== ''){
-      event.stopPropagation();
-      setCurrentUrl(selectedItem);
-      history.push(selectedItem);
+  const handleClick = useCallback((selectedItem,event,isURL,{path, pathEN}) => {
+    if(pathEN){
+      window.open(checkLanguage({vi:path, en: pathEN}, language),'_blank')
+    }
+    if(isURL){
+      window.open(selectedItem, '_blank')
+    }
+    if(!isURL && !pathEN){
+      if(selectedItem !== ''){
+        event.stopPropagation();
+        setCurrentUrl(selectedItem);
+        history.push(selectedItem);
+      }
     }
   },[history]);
   const logoHeader = useSelector(state=>{
     return state && state.settings && state.settings.logo && state.settings.logo.logo_header
+  })
+
+  const loginBtn = useSelector(state=>{
+    return state && state.settings && state.settings.login_button
+  })
+
+  const regBtn = useSelector(state=>{
+    return state && state.settings && state.settings.reg_button
   })
 
   useEffect(()=>{
@@ -64,7 +80,7 @@ export default function App() {
               return ( 
                 <li
                 className={`${currentUrl === router.path && 'active'} hover`}
-                onClick={(e)=>{handleClick(router.path,e)}}
+                onClick={(e)=>{handleClick(router.path,e, router.isURL,{path: router.path, pathEN : router.pathEN})}}
                 key={router.path}>
                   <span dangerouslySetInnerHTML={{__html: checkLanguage(router.name,language)}}></span>
                   {
@@ -74,7 +90,7 @@ export default function App() {
                           if(submenu.name && submenu){
                             if(submenu.parent === router.id){
                               return (
-                                <li onClick={(e)=>{handleClick(submenu.path,e)}} key={submenu.path}><span dangerouslySetInnerHTML={{__html: checkLanguage(submenu.name,language)}}></span></li>
+                                <li onClick={(e)=>{handleClick(submenu.path,e,submenu.isURL)}} key={submenu.path}><span dangerouslySetInnerHTML={{__html: checkLanguage(submenu.name,language)}}></span></li>
                               )
                             }
                             
@@ -88,11 +104,11 @@ export default function App() {
             }
           })
         }
-        <li className="login"><a target="_blank" href="http://161.35.2.43:4000/login">Đăng nhập</a></li>
-        <li className="reg"><a target="_blank" href="http://161.35.2.43:4000/reg">Đăng ký</a></li>
+        <li className="login"><a target="_blank" href="http://161.35.2.43:4000/login"> {checkLanguage(loginBtn, language)} </a></li>
+        <li className="reg"><a target="_blank" href="http://161.35.2.43:4000/reg"> {checkLanguage(regBtn,language)} </a></li>
         <span className="button-mobile">
-            <li className="login"><a target="_blank" href="http://161.35.2.43:4000/login">Đăng nhập</a></li>
-            <li className="reg"><a target="_blank" href="http://161.35.2.43:4000/reg">Đăng ký</a></li>
+            <li className="login"><a target="_blank" href="http://161.35.2.43:4000/login"> {checkLanguage(loginBtn, language)} </a></li>
+            <li className="reg"><a target="_blank" href="http://161.35.2.43:4000/reg"> {checkLanguage(regBtn,language)} </a></li>
         </span>
         <span className='language'>
           <li className={language === 'en' && 'active'} onClick={()=>handleChooseLang('en')}>EN</li>

@@ -60,6 +60,7 @@ export function asyncGetListCategories(){
             res.forEach(el=>{
                 var route = {
                     path: el.slug,
+                    pathEN: el.slugEN,
                     exact: true,
                     name: el.name,
                     isShow: el.display,
@@ -67,7 +68,8 @@ export function asyncGetListCategories(){
                     page:  el.page,
                     name: {name_vi: el.name_vi, name_en: el.name_en},
                     id: el._id,
-                    parent : el.parent
+                    parent : el.parent,
+                    isURL : el.isURL,
                 }
                 router.push(route)
             })

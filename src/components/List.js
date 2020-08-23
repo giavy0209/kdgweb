@@ -22,12 +22,10 @@ export default function App({data,...prop}){
             }) 
         }, 2000);
 
-        if(window.innerWidth < 992) {
+        if(window.innerWidth < 767) {
 
             setlistFunctionWidth(document.querySelector('.function-list-track').offsetWidth)
-            console.log(window.innerWidth);
         }
-
     },[])
 
     useEffect(()=>{

@@ -18,7 +18,7 @@ function App() {
           {
             ROUTERS_LINK && ROUTERS_LINK.map(route => {
               console.log(route);
-              if(route.path){
+              if(route.path && !route.isURL && !route.pathEN){
                 return (
                   <Route key={route.path} exact={true} path={route.path}>
                     <Home components={route.page.components}/>

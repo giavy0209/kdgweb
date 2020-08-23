@@ -29,21 +29,7 @@ export default function App(){
 
     return(
     <div className="chart-container" >
-        <div className="title-filter">
-          <div><p>KDG Price Chart</p></div>
-          <div>
-            <select>
-              <option>7 Ngày</option>
-            </select>
-          </div>
-        </div>
-        <div className="note">
-            <p><span className="yellow"></span> Market Cap</p>
-            <p><span className="blue"></span> Price</p>
-        </div>
-        <div className="chart">
-        <Chart  data={data} series={series} axes={axes} />
-        </div>
+      <coingecko-coin-compare-chart-widget  coin-ids="kingdom-game-4-0" currency="usd" locale="en"></coingecko-coin-compare-chart-widget>
     </div>
     )
 }
