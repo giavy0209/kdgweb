@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import {checkComponent} from '../../helpers'
-import LazyLoad from 'react-lazyload';
 import { useHistory } from 'react-router-dom';
 import {storage} from '../../helpers'
 import { useDispatch } from 'react-redux';

@@ -8,9 +8,10 @@ import '../../assets/css/login-reg.scss'
 
 async function getCode(email){
     try {
-        const res = (await axios.post('http://171.244.18.130:6001/api/create_register_code',{email})).data
+        const res = (await axios.post('http://171.244.18.130:6001/api/send_email',{toAddress: email,subject: "Register Code",textBody: '123'})).data
+        console.log(res);
         if(res){}
-        message.success(`Đã gửi mã code đến email: ${email}`)
+        message.success(`Mã code đã được gửi vào email của bạn!`)
     } catch (error) {
         if(error.response.data.err === 'email is empty'){
             message.error("Email không được để trống")
