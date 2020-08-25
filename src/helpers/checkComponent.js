@@ -9,6 +9,12 @@ import {
     HightlightTitle,
     Tab,
     Footer,
+    Account,
+    LuckySpin,
+    Staking,
+    StakingHistory,
+    StakingEvent,
+    Wallet
 } from '../components'
 
 export default function checkComponents(type){
@@ -24,6 +30,8 @@ export default function checkComponents(type){
         return {component: MainChart, haveContainer : true}
     }else if(type === 6){
         return {component: ListImage, haveContainer : true}
+    }else if(type === 7){
+        return {component: Account, haveContainer : true}
     }else if(type === 8){
         return {component: Ecosystem, haveContainer : true}
     }else if(type === 9){
@@ -32,5 +40,15 @@ export default function checkComponents(type){
         return {component: Tab, haveContainer : true}
     }else if(type === 11){
         return {component: Footer, haveContainer : false}
+    }else if(type === 12){
+        return {component: LuckySpin, haveContainer : false}
+    }else if(type === 13){
+        return {component: Staking, haveContainer : false}
+    }else if(type === 14){
+        return {component: StakingHistory, haveContainer : false}
+    }else if(type === 15){
+        return {component: StakingEvent, haveContainer : false}
+    }else if(type === 16){
+        return {component: Wallet, haveContainer : false}
     }
 }

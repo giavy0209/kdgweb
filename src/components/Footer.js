@@ -73,7 +73,7 @@ export default function App({...prop}) {
                             <div className="social">
                                 {
                                     listIcon && listIcon.map((o, index)=>
-                                    <a  target="_blank" className="social-block" href={o.link} key={index}><img alt="" src={o.img}/></a>
+                                    <a  target="_blank" rel="noopener noreferrer"  className="social-block" href={o.link} key={index}><img alt="" src={o.img}/></a>
                                     )
                                 }
                             </div>

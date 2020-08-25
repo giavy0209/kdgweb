@@ -1,0 +1,408 @@
+import React, {useEffect, useState, useCallback} from 'react'
+import defaultAccount from '../../assets/img/default-account.png'
+import {Header, Footer} from '../../components'
+import Calendar from 'calendar-reactjs'
+import Wheel from '../../components/wheel/Wheel'
+import './styles.css'
+import btcIcon from '../../assets/img/btc_icon.png'
+import axios from 'axios';
+var totalReward = 0
+var totalSpend = 0
+export default function App({...prop}) {
+    const [totalSpend, settotalSpend] = useState(0)
+    const [totalReward, settotalReward] = useState(0)
+    const places = [
+
+        {title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 2},
+        {title: '1 KDG Reward', key: 1, orderNum: 3},
+        {title: '5 KDG Reward', key: 5, orderNum: 4},
+        {title: '10 KDG Reward', key: 10, orderNum: 5},
+        {title: '50 KDG Reward', key: 50, orderNum: 6},
+        {title: '100 KDG Reward', key: 100, orderNum: 7},
+        {title: '500 KDG Reward', key: 500, orderNum: 0},
+        {title: '1000 KDG Reward', key: 1000, orderNum: 1},
+    
+    
+    
+      ]
+
+      const [SpinValue, setSpinValue] = useState(null);
+      const random = Math.floor(Math.random() * places.length);
+
+      const test  = useCallback(async ()=>{
+        var {spin_value} =  (await axios.post('http://171.244.18.130:6001/api/get_lucky_spin',{userId : '5f27dfdc81d58518f022b054', token: 'a123'})).data
+        console.log(spin_value);
+        settotalSpend(totalSpend + 5)
+        var reward = places.find(o => o.key === spin_value).value
+        settotalReward(totalReward + reward)
+        console.log(totalReward, totalSpend);
+      },[totalReward,totalSpend])
+
+      useEffect(()=>{
+          setInterval(() => {
+              
+              test()
+          }, 50);
+      },[])
+
+    return(
+        <>
+        {/* <button onClick={test}>click</button> */}
+        <Header />
+        <div className="kdg-container ">
+        <div className="App kdg-row lucky-container">
+            <div className="kdg-col-5"> 
+                <div style={{position: 'relative', top: -20}}>
+                    <h2>VÒNG QUAY MAY MẮN</h2>
+                    <h4>Quay ngay bây giờ</h4>
+                    <h3>và chiến thắng!</h3>
+                    <div className="kdg-phi-container">
+                    <img style={{marginRight: 5}} src={btcIcon} width="18" height="18"/> <span className="kdg-span-phi-title">Phí: </span><span className="kdg-span-phi">&nbsp;&nbsp;2 KDG Reward/lượt</span>
+                    </div>
+                    <p style={{margin: 16, fontSize: 15, fontWeight: 'bold'}}>Số KDG Reward:  <span style={{color: '#fac800'}}>15,300</span></p>
+                </div>
+            </div>
+            
+            <div className="kdg-col-4" style={{position: 'relative', top: 80, left: -90}}>          
+                <Wheel items={places} keyValue={SpinValue} setSpinValue={setSpinValue} getValue={test}/>
+            </div>
+            <div className="kdg-col-3">
+               <div style={{position: 'relative', top: -20, left: 40}}>
+                   <div>
+                       <p style={{fontSize: 15, fontWeight: 'bold'}}>CÁC GIẢI THƯỞNG</p>
+                       <p style={{fontSize: 20, fontWeight: 'bold', marginTop: -10}}>CỦA THÁNG NÀY</p>
+                       <p style={{fontSize: 20, fontWeight: 'bold', marginTop: 80}}>THẮNG GIẢI</p>
+                       <ul>
+                           <div className="lucky-list-box">
+                                <li >1 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >5 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box">
+                                <li >10 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >25 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box">
+                                <li >30 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >50 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           
+                          
+                       </ul>
+                   </div>
+               </div>
+            </div>
+     
+        </div>
+        </div>
+
+        <Footer />
+        </>
+    )
+    
+}
+
+
+        {title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 2, value: 0},
+        {title: '1 KDG Reward', key: 1, orderNum: 3, value: 1},
+        {title: '5 KDG Reward', key: 5, orderNum: 4, value: 5},
+        {title: '10 KDG Reward', key: 10, orderNum: 5, value: 10},
+        {title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 6, value : 0},
+        {title: '25 KDG Reward', key: 25, orderNum: 7, value:  25},
+        {title: '30 KDG Reward', key: 30, orderNum: 0, value: 30},
+        {title: '50 KDG Reward', key: 50, orderNum: 1, value: 50},
+
+
+import React, {useEffect, useState, useCallback} from 'react'
+import defaultAccount from '../../assets/img/default-account.png'
+import {Header, Footer} from '../../components'
+import Calendar from 'calendar-reactjs'
+import Wheel from '../../components/wheel/Wheel'
+import './styles.css'
+import btcIcon from '../../assets/img/btc_icon.png'
+import axios from 'axios';
+
+export default function App({...prop}) {
+    
+    const places = [
+        {title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 2},
+        {title: '1 KDG Reward', key: 1, orderNum: 3},
+        {title: '5 KDG Reward', key: 5, orderNum: 4},
+        {title: '10 KDG Reward', key: 10, orderNum: 5},
+        {title: '50 KDG Reward', key: 50, orderNum: 6},
+        {title: '100 KDG Reward', key: 100, orderNum: 7},
+        {title: '500 KDG Reward', key: 500, orderNum: 0},
+        {title: '1000 KDG Reward', key: 1000, orderNum: 1},
+    
+    
+      ]
+
+      const [SpinValue, setSpinValue] = useState(null); 
+      const random = Math.floor(Math.random() * places.length);
+
+      const Spin  = useCallback(async ()=>{
+        var res =  (await axios.post('http://171.244.18.130:6001/api/get_lucky_spin',{userId : '5f27dfdc81d58518f022b054', token: '5f27dfdc81d58518f022b054'})).data
+        setSpinValue(res.spin_value);
+      },[])
+      
+console.log(SpinValue);
+    return(
+        <>
+        <Header />
+        <div className="kdg-container ">
+        <div className="App kdg-row lucky-container">
+            <div className="kdg-col-5"> 
+                <div style={{position: 'relative', top: -20}}>
+                    <h2>VÒNG QUAY MAY MẮN</h2>
+                    <h4>Quay ngay bây giờ</h4>
+                    <h3>và chiến thắng!</h3>
+                    <div className="kdg-phi-container">
+                    <img style={{marginRight: 5}} src={btcIcon} width="18" height="18"/> <span className="kdg-span-phi-title">Phí: </span><span className="kdg-span-phi">&nbsp;&nbsp;5 KDG Reward/lượt</span>
+                    </div>
+    <p style={{margin: 16, fontSize: 15, fontWeight: 'bold'}}>Số KDG Reward:  <span style={{color: '#fac800'}}>Lấy từ DB</span></p>
+                </div>
+            </div>
+            
+            <div className="kdg-col-4" style={{position: 'relative', top: 80, left: -90}}>          
+                <Wheel items={places} keyValue={SpinValue} setSpinValue={setSpinValue} getValue={Spin}/>
+            </div>
+            <div className="kdg-col-3">
+               <div style={{position: 'relative', top: -20, left: 40}}>
+                   <div>
+                       <p style={{fontSize: 15, fontWeight: 'bold'}}>CÁC GIẢI THƯỞNG</p>
+                       <p style={{fontSize: 20, fontWeight: 'bold', marginTop: -10}}>CỦA THÁNG NÀY</p>
+                       <p style={{fontSize: 20, fontWeight: 'bold', marginTop: 80}}>THẮNG GIẢI</p>
+                       <ul>
+                           <div className="lucky-list-box">
+                                <li >1 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >5 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box">
+                                <li >10 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >25 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box">
+                                <li >30 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >50 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           
+                          
+                       </ul>
+                   </div>
+               </div>
+            </div>
+     
+        </div>
+
+
+        <div className="kdg-attendance-container">
+        </div>
+        </div>
+
+        <Footer />
+        </>
+    )
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+import React, {useEffect, useState, useCallback} from 'react'
+import defaultAccount from '../../assets/img/default-account.png'
+import {Header, Footer} from '../../components'
+import Calendar from 'calendar-reactjs'
+import Wheel from '../../components/wheel/Wheel'
+import './styles.css'
+import btcIcon from '../../assets/img/btc_icon.png'
+import axios from 'axios';
+
+export default function App({...prop}) {
+    useEffect(()=>{
+        var heightLeft = document.querySelector('.calendar-left').offsetHeight
+        var heightRight = document.querySelector('.calendar-right').offsetHeight
+        if(heightLeft > heightRight) document.querySelector('.calendar-right').style.height = heightLeft + 'px'
+        if(heightLeft < heightRight) document.querySelector('.calendar-left').style.height = heightRight + 'px'
+    },[])
+    const places = [
+        {title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 2},
+        {title: '1 KDG Reward', key: 1, orderNum: 3},
+        {title: '2 KDG Reward', key: 2, orderNum: 4},
+        {title: '5 KDG Reward', key: 5, orderNum: 5},
+        {title: '25 KDG Reward', key: 25, orderNum: 6},
+        {title: '50 KDG Reward', key: 50, orderNum: 7},
+        {title: '250 KDG Reward', key: 250, orderNum: 0},
+        {title: '500 KDG Reward', key: 500, orderNum: 1},
+    
+    
+      ]
+
+      const [SpinValue, setSpinValue] = useState(null); 
+      const random = Math.floor(Math.random() * places.length);
+
+      const Spin  = useCallback(async ()=>{
+        var res =  (await axios.post('http://171.244.18.130:6001/api/get_lucky_spin',{userId : '5f27dfdc81d58518f022b054', token: '5f27dfdc81d58518f022b054'})).data
+        setSpinValue(res.spin_value);
+      },[])
+      
+console.log(SpinValue);
+    return(
+        <>
+        <Header />
+        <div className="kdg-container ">
+        <div className="App kdg-row lucky-container">
+            <div className="kdg-col-4"> 
+                <div style={{}}>
+                    <h2>VÒNG QUAY MAY MẮN</h2>
+                    <h4>Quay ngay bây giờ</h4>
+                    <h3>và chiến thắng!</h3>
+                    <div className="kdg-phi-container">
+                    <img style={{marginRight: 5}} src={btcIcon} width="18" height="18"/> <span className="kdg-span-phi-title">Phí: </span><span className="kdg-span-phi">&nbsp;&nbsp;5 KDG Reward/lượt</span>
+                    </div>
+                    <p style={{margin: 16, fontSize: 15, fontWeight: 'bold'}}>Số KDG Reward:  <span style={{color: '#fac800'}}>Lấy từ DB</span></p>
+                </div>
+            </div>
+            
+            <div className="kdg-col-4" style={{width: 369}}>          
+                <Wheel items={places} keyValue={SpinValue} setSpinValue={setSpinValue} getValue={Spin}/>
+            </div>
+            <div className="kdg-col-3">
+               <div style={{}}>
+                   <div style={{marginLeft: 85, width: 300}}>
+                       <p style={{fontSize: 15, fontWeight: 'bold'}}>CÁC GIẢI THƯỞNG</p>
+                       <p style={{fontSize: 20, fontWeight: 'bold'}}>CỦA THÁNG NÀY</p>
+                       <p style={{fontSize: 20, fontWeight: 'bold', marginTop: 80}}>THẮNG GIẢI</p>
+                       <ul>
+                           <div className="lucky-list-box">
+                                <li >1 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >5 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box">
+                                <li >10 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >25 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box">
+                                <li >30 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           <div className="lucky-list-box none-backround">
+                                <li >50 KDG <span style={{color: '#fac800', fontWeight: 'bold', marginRight: 100}}>REWARD</span><span style={{fontWeight: 'bold'}}>10</span></li>
+                           </div>
+                           
+                          
+                       </ul>
+                   </div>
+               </div>
+            </div>
+        </div>
+
+
+        </div>
+        <div className="kdg-container">
+        <div className="kdg-row calendar-container">
+            <div className="kdg-col-9 calendar-left">
+                <div className="title">
+                    <p style={{fontSize: 20}}>ĐIỂM DANH <span style={{fontSize: 30}}>NHẬN THƯỞNG</span></p>
+                </div>
+               
+            </div>
+            <div className="kdg-col-3 calendar-right">
+                <div className="attendance-button-container kdg-row">
+                    <div className="kdg-col-8">
+                        <p style={{color: 'rgba(40,51,73,1)', fontWeight: 'bold', fontSize: 20}}>15,300</p>
+                        <p style={{color: 'rgba(40,51,73,0.8)', fontWeight: 'bold',  fontSize: 14}}>KDG Reward đang có</p>
+                    </div>
+                    <div className="kdg-col-4">
+                        <button className="attendance-button">Nhận thêm</button>
+                    </div>
+                
+                </div>
+                
+                <p style={{color: 'white', fontWeight: 'bold', fontSize: 18, marginTop: 20}}>LỊCH SỬ ĐIỂM DANH</p>
+                <div className="list-attendance">
+                    <ul > 
+                        <li style={{marginBottom: 10}}>
+                            <img src={btcIcon}/><div>
+                                <p className="line-1">Đăng nhập mỗi ngày</p>
+                                <p className="line-2">KDG Reward từ đăng nhập mỗi ngày</p>
+                                <p className="line-3">22-08-2020 08:03</p>
+                                <p className="line-4">+2 KDG Reward</p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <div className="list-attendance">
+                    <ul > 
+                        <li style={{marginBottom: 10}}>
+                            <img src={btcIcon}/><div>
+                                <p className="line-1">Đăng nhập mỗi ngày</p>
+                                <p className="line-2">KDG Reward từ đăng nhập mỗi ngày</p>
+                                <p className="line-3">22-08-2020 08:03</p>
+                                <p className="line-4">+2 KDG Reward</p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div className="list-attendance">
+                    <ul > 
+                        <li style={{marginBottom: 10}}>
+                            <img src={btcIcon}/><div>
+                                <p className="line-1">Đăng nhập mỗi ngày</p>
+                                <p className="line-2">KDG Reward từ đăng nhập mỗi ngày</p>
+                                <p className="line-3">22-08-2020 08:03</p>
+                                <p className="line-4">+2 KDG Reward</p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div className="list-attendance">
+                    <ul > 
+                        <li style={{marginBottom: 10}}>
+                            <img src={btcIcon}/><div>
+                                <p className="line-1">Đăng nhập mỗi ngày</p>
+                                <p className="line-2">KDG Reward từ đăng nhập mỗi ngày</p>
+                                <p className="line-3">22-08-2020 08:03</p>
+                                <p className="line-4">+2 KDG Reward</p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+        </div>
+
+        <Footer />
+        </>
+    )
+    
+}

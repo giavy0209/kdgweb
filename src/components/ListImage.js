@@ -9,7 +9,6 @@ export default function  App({data,...prop}) {
             setTimeout(() => {
                 listImg.forEach(img =>{
                     if(img.offsetHeight > heightest) heightest = img.offsetHeight
-                    console.log(heightest);
                 })
                 listImg.forEach(img =>{
                     img.style.height = (heightest + 46) + 'px'
@@ -24,8 +23,8 @@ export default function  App({data,...prop}) {
         <>
         <div className="kdg-row kdg-column-4 list-2 text-c">
             {
-                data && data.map(img =>
-                <div className="item">
+                data && data.map((img,index) =>
+                <div key={index} className="item">
                     <div className="list-2-item">
                         <div className="image">
                             <img src={img.url_img} alt="" />

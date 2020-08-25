@@ -7,7 +7,7 @@ export default function App({data}){
     
     return (
         <>
-            <div className="title-opacity">
+            <div id={title.id} className="title-opacity">
             <h2 className="">{checkLanguage(title, language)}</h2>
             <span>{checkLanguage(title, language)}</span>
             </div>

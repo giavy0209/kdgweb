@@ -32,14 +32,14 @@ export default function App({data,...prop}){
         if(data){
             setListLength(data.length)
         }
-    },data)
+    },[data])
     return (
         <>
             <div className="function-list-track">
-                <div style={{width: listFunctionWidth * ListLength }} {...prop} className="kdg-row kdg-column-3 function-list text-c">
+                <div style={{width: window.innerWidth < 767 ? listFunctionWidth * ListLength : '100%' }} {...prop} className="kdg-row kdg-column-3 function-list text-c">
                     {
-                        data && data.map(o=>
-                        <div  className="item">
+                        data && data.map((o,index)=>
+                        <div key={index} className="item">
                             <div className="list">
                                 <div className="block-img">
                                     <img alt="" src={o.icon} />

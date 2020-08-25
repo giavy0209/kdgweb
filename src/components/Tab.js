@@ -8,10 +8,10 @@ export default function App({data}){
     const [IsMultiTab, setIsMultiTab] = useState(true)
     useEffect(()=>{
         if(
-            data[0].title_tab2_vi == '' &&
-            data[0].title_tab2_en == '' &&
-            data[0].content2_vi == '' &&
-            data[0].content2_en == ''
+            data[0].title_tab2_vi === '' &&
+            data[0].title_tab2_en === '' &&
+            data[0].content2_vi === '' &&
+            data[0].content2_en === ''
         ) {
             setIsMultiTab(false)
         }

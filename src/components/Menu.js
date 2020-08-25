@@ -1,21 +1,32 @@
-import React , { useEffect, useState , useCallback} from 'react';
-import { useHistory, useLocation,Link } from 'react-router-dom';
+import React , { useEffect, useState , useCallback, useMemo} from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkLanguage } from '../helpers';
-import { atcChangeLanguage } from '../store/action'
-export default function App() {
+import { atcChangeLanguage,asyncGetUserData } from '../store/action'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+export default function App({type}) {
   const dispatch = useDispatch()
   const ROUTERS_LINK = useSelector(state => state.router)
   const [currentUrl, setCurrentUrl] = useState('/');
   const location = useLocation();
   const history = useHistory();
   const language = useSelector(state => state.lang)
+  useMemo(()=>{
+    dispatch(asyncGetUserData())
+  },[dispatch])
   useEffect(() => {
     setCurrentUrl(location.pathname);
   }, [location])
 
-  const handleClick = useCallback((selectedItem,event,isURL,{path, pathEN}) => {
+  const handleClick = useCallback((selectedItem,event,isURL,havepath) => {
+    var path, pathEN;
+    if(havepath) {
+      path = havepath.path;
+      pathEN = havepath.pathEN;
+    }
     if(pathEN){
+      console.log(path, pathEN);
       window.open(checkLanguage({vi:path, en: pathEN}, language),'_blank')
     }
     if(isURL){
@@ -23,12 +34,13 @@ export default function App() {
     }
     if(!isURL && !pathEN){
       if(selectedItem !== ''){
-        event.stopPropagation();
+        if(event) event.stopPropagation();
+        
         setCurrentUrl(selectedItem);
         history.push(selectedItem);
       }
     }
-  },[history]);
+  },[history,language]);
   const logoHeader = useSelector(state=>{
     return state && state.settings && state.settings.logo && state.settings.logo.logo_header
   })
@@ -68,6 +80,28 @@ export default function App() {
     dispatch(atcChangeLanguage(lang))
   },[dispatch])
 
+  const username = useSelector(state=>{
+    console.log(state);
+    return state.user && {first_name: state.user.first_name , last_name:state.user.last_name, email: state.user.email}
+  })
+  console.log(username);
+  const lastMenu = useCallback(()=>{
+    if(username){
+      return <li
+      className="account-menu"
+      onClick={()=>{handleClick('/account')}}
+      >
+        <FontAwesomeIcon color="#fac800" icon={faUser} />
+        <span style={{color: '#fac800'}}> { username ? `${username.first_name ? username.first_name : '' } ${username.last_name ? username.last_name : '' }` : username ? username.email : ''} </span>
+        <FontAwesomeIcon icon={faCaretDown}/>
+      </li>
+    }else{
+      return <>
+      <li className="login"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? loginBtn.url : ''}> {checkLanguage(loginBtn, language)} </a></li>
+      <li className="reg"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? regBtn.url : ''}> {checkLanguage(regBtn,language)} </a></li>
+      </>
+    }
+  },[username, handleClick, language,loginBtn, regBtn])
 
   return (
     <>
@@ -75,9 +109,8 @@ export default function App() {
       <ul className="menu">
         <a className="logo" href="/"><img alt="KingDomGame" src={logoHeader}/></a>
         {
-          ROUTERS_LINK && ROUTERS_LINK.map(router=>{
-            if(router.name && router.isShow && !router.parent){
-              return ( 
+          ROUTERS_LINK && ROUTERS_LINK.map(router=>
+            router.name && router.isShow && !router.parent && router.type === type &&
                 <li
                 className={`${currentUrl === router.path && 'active'} hover`}
                 onClick={(e)=>{handleClick(router.path,e, router.isURL,{path: router.path, pathEN : router.pathEN})}}
@@ -86,33 +119,25 @@ export default function App() {
                   {
                     ROUTERS_LINK && <ul>
                       {
-                        ROUTERS_LINK && ROUTERS_LINK.map(submenu=>{
-                          if(submenu.name && submenu){
-                            if(submenu.parent === router.id){
-                              return (
-                                <li onClick={(e)=>{handleClick(submenu.path,e,submenu.isURL)}} key={submenu.path}><span dangerouslySetInnerHTML={{__html: checkLanguage(submenu.name,language)}}></span></li>
-                              )
-                            }
-                            
-                          }
-                        })
+                        ROUTERS_LINK && ROUTERS_LINK.map(submenu=>
+                            submenu.name && submenu && submenu.parent === router.id && submenu.type === type &&
+                            <li onClick={(e)=>{handleClick(submenu.path,e,submenu.isURL,{path: submenu.path, pathEN : submenu.pathEN})}} key={submenu.path}><span dangerouslySetInnerHTML={{__html: checkLanguage(submenu.name,language)}}></span></li>
+                        )
                       }
                     </ul>
                   }
                 </li>
-              )
-            }
-          })
+          )
         }
-        <li className="login"><a target="_blank" href="http://161.35.2.43:4000/login"> {checkLanguage(loginBtn, language)} </a></li>
-        <li className="reg"><a target="_blank" href="http://161.35.2.43:4000/reg"> {checkLanguage(regBtn,language)} </a></li>
+        
+        {lastMenu()}
         <span className="button-mobile">
-            <li className="login"><a target="_blank" href="http://161.35.2.43:4000/login"> {checkLanguage(loginBtn, language)} </a></li>
-            <li className="reg"><a target="_blank" href="http://161.35.2.43:4000/reg"> {checkLanguage(regBtn,language)} </a></li>
+            <li className="login"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? loginBtn.url : ''}> {checkLanguage(loginBtn, language)} </a></li>
+            <li className="reg"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? regBtn.url : ''}> {checkLanguage(regBtn,language)} </a></li>
         </span>
         <span className='language'>
-          <li className={language === 'en' && 'active'} onClick={()=>handleChooseLang('en')}>EN</li>
-          <li className={language === 'vi' && 'active'} onClick={()=>handleChooseLang('vi')}>VI</li>
+          <li className={language === 'en' ? 'active' : ''} onClick={()=>handleChooseLang('en')}>EN</li>
+          <li className={language === 'vi' ? 'active' : ''} onClick={()=>handleChooseLang('vi')}>VI</li>
         </span>
       </ul>
     </>

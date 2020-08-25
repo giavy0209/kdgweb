@@ -10,8 +10,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { checkLanguage } from '../helpers'
 import { atcChangeLanguage } from '../store/action'
 import menubar from '../assets/img/menubar.png'
-export default function App({data}){
-    const VisibleBanner = data[0].visible_banner
+export default function App({data,type}){
+    const VisibleBanner = data && data[0] ? data[0].visible_banner : false
     const dispatch = useDispatch()
 
     const [html, sethtml] = useState('')
@@ -78,10 +78,11 @@ export default function App({data}){
     useEffect(()=>{
         if(bannerContent){
             if(window.innerWidth <767){
-                sethtml(checkLanguage({vi:bannerContent.text_vi , en: bannerContent.text_en},language))
-            }else sethtml(checkLanguage({vi:bannerContent.text_mobile_vi , en: bannerContent.text_mobile_en},language))
+                sethtml(checkLanguage({vi:bannerContent.text_mobile_vi , en: bannerContent.text_mobile_en},language))
+            }else sethtml(checkLanguage({vi:bannerContent.text_vi , en: bannerContent.text_en},language))
         }
     },[language,bannerContent])
+
     return(
         <>
         <header style={VisibleBanner ? {backgroundImage: 'url(/images/backgroundtop.png)'} : {}} className="header">
@@ -90,7 +91,7 @@ export default function App({data}){
                     <div className="social">
                         {
                             listIcon && listIcon.map((o, index)=>
-                            <a target="_blank" href={o.link} key={index}><img alt="" src={ o.img}/></a>
+                            <a target="_blank" rel="noopener noreferrer" href={o.link} key={index}><img alt="" src={ o.img}/></a>
                             )
                         }
                     </div>
@@ -99,7 +100,7 @@ export default function App({data}){
                         <span className="mail">{email}</span>
                     </div>
                     <div className="lang">
-                        <span>{language == 'vi' ? 'VI' : 'EN'}</span>
+                        <span>{language === 'vi' ? 'VI' : 'EN'}</span>
                         <FontAwesomeIcon icon={faCaretDown}/>
                         
                         <ul className="dropdown">
@@ -115,16 +116,14 @@ export default function App({data}){
                     <span className="menubar"><img src={menubar} alt="" /></span>
                     <a className="logo" href="/"><img alt="KingDomGame" src={logoHeader}/></a>
                     <h1>{checkLanguage(textLogo, language)}</h1>
-                    <Menu />
+                    <Menu type={type}/>
                 </div>
             </div>
             {VisibleBanner && <div className="banner">
                 <div className="kdg-container">
                     <div className="kdg-row">
                         <div className="kdg-col-6 va-m">
-                            <div dangerouslySetInnerHTML={{__html:checkLanguage(bannerContent, language)}}>
-
-                            </div>
+                            <div dangerouslySetInnerHTML={{__html:html}}></div>
                         </div>
                         <div className="kdg-col-6 va-m">
                             <div className="rotate-block">
@@ -133,7 +132,7 @@ export default function App({data}){
                                 <div className="icon">
                                     {
                                         listIcoinRotate && 
-                                        listIcoinRotate.map(o=><a href={o.link} target="_blank" className='icon-container'><img className="" src={o.img} alt=""/> </a>)
+                                        listIcoinRotate.map((o,index)=><a key={index} href={o.link} rel="noopener noreferrer" target="_blank" className='icon-container'><img className="" src={o.img} alt=""/> </a>)
                                     }
                                 </div>
                             </div>

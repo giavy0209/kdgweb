@@ -1,5 +1,8 @@
 /*=========== 00. RESET CSS ================ */	
-* {
+html{
+    scroll-behavior: smooth;
+}
+body * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -105,6 +108,9 @@ body {
 .kdg-col-9{
     width:75%;
 }
+.kdg-col-8{
+    width:66.6666%;
+}
 .kdg-col-7{
     width:58.333333%;
 }
@@ -203,8 +209,10 @@ header {
             a{
                 width: 30px;
                 margin-left: 15px;
+                vertical-align: top;
                 img{
-                    width: 50%;
+                    // width: 50%;
+                    max-width: 50%;
                 }
             }
         }
@@ -316,7 +324,7 @@ header {
                     font-weight: 500;
                     transition: all .3s ease;
                     span{
-                        padding: 10px 7px;
+                        padding: 10px 0;
                         position: relative;
                         z-index: 2;
                     }
@@ -377,13 +385,14 @@ header {
                     }
                     ul{
                         position: absolute;
-                        width: 300px;
                         top: 120%;
+                        width: 200px;
                         left: 0;
                         opacity: 0;
                         transition: all .3s ease;
                         pointer-events: none;
                         background-color: #fff;
+                        z-index: 9999;
                         li{
                             padding: 8px 22px;
                             color: #414042;
@@ -439,7 +448,7 @@ header {
                     
                     position: absolute;
                     cursor: pointer;
-                    background: linear-gradient(to bottom , rgba(250, 200,0, 1) ,rgba(250, 200,0, .3),rgba(250, 200,0, .2),rgba(250, 200,0, 0));
+                    background: linear-gradient(to bottom , rgba(250, 200,0, .8) ,rgba(250, 200,0, .3),rgba(250, 200,0, .2),rgba(250, 200,0, 0));
                     &:hover{
                         background: rgba(46,57,79, .82);
                     }
@@ -570,6 +579,7 @@ header {
         font-size: 35px;
         text-align: center;
         font-weight: 600;
+        color: #fff;
     }
     span{
         position: absolute;
@@ -752,6 +762,7 @@ header {
                         text-align: left;
                         h3{
                             font-size: 30px;
+                            color: #fff;
                         }
                         .slide-content{
                             margin-top: 30px;
@@ -839,7 +850,7 @@ footer{
                     top: 50%;
                     left: 50%;
                     transform: translate(-50% , -50%);
-                    width: 50%;
+                    max-width: 50%;
 
                 }
             }
@@ -974,6 +985,12 @@ footer{
         -webkit-text-fill-color: transparent;
         font-size: 35px;
         text-transform: uppercase;
+    }
+}
+
+@media only screen and (max-width: 1366px){
+    .kdg-container{
+        max-width: 1100px;
     }
 }
 
@@ -1250,6 +1267,7 @@ footer{
                 bottom: 0;
                 z-index: -1;
                 top: auto;
+                width: 50%;
             }
         }
     }
@@ -1258,6 +1276,9 @@ footer{
         .top-footer{
             .kdg-col-4{
                 width: 100%;
+                +.kdg-col-4{
+                    margin-top: 25px;
+                }
             }
         }
     }
@@ -1276,6 +1297,58 @@ footer{
             width: 50%;
             &:not(:nth-child(-n + 2)){
                 margin-top: 20px;
+            }
+        }
+    }
+}
+
+.ant-message{
+    top: 35px;
+    width: 260px;
+    right: 35px;
+    left: auto;
+    position: fixed;
+    >span{
+        width: 100% !important;
+        * {
+            text-align: left !important;
+        }
+        .ant-message-notice{
+            width: 100% !important;
+            .ant-message-notice-content{
+                width: 100% !important;
+                padding: 0;
+                .ant-message-custom-content{
+                    padding: 8px 11px;
+                    border-radius: 5px;
+                    box-shadow: 0 5px 0 0 rgba(0, 0, 0, 0.2);
+                    > span{
+                        &:first-child{
+                            width: 15px;
+                            height: 15px;
+                            background-position: center;
+                            background-size: contain;
+                            
+                        }
+                       *{
+                           display: none;
+                       }
+                    }
+                    color: #fff;
+                    font-size: 12px;
+                    &.ant-message-success{
+                        background-color: #41b37d;
+                        >span:first-child{
+                            background-image: url(../img/checked.png);
+                        }
+                    }
+                    &.ant-message-error{
+                        background-color: #f54336;
+                        >span:first-child{
+                            background-image: url(../img/rejected.png);
+                        }
+                    }
+                }
             }
         }
     }

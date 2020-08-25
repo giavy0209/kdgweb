@@ -9,7 +9,12 @@ import MainChart from './MainChart'
 import ListImage from './ListImage'
 import Ecosystem from './Ecosystem'
 import Footer from './Footer'
-
+import Account from './Account'
+import LuckySpin from './LuckySpin'
+import Staking from './Staking'
+import StakingHistory from './Staking/StakingHistory'
+import StakingEvent from './Staking/StakingEvent'
+import Wallet from './Wallet'
 export {
     Description, 
     Header, 
@@ -21,5 +26,11 @@ export {
     MainChart,
     ListImage,
     Footer,
-    Ecosystem
+    Ecosystem,
+    Account,
+    LuckySpin,
+    Staking,
+    StakingHistory,
+    StakingEvent,
+    Wallet
 }

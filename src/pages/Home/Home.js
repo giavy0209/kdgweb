@@ -1,21 +1,37 @@
 import React, { useMemo } from 'react'
-import { useDispatch } from 'react-redux'
-
-import {Description,Ecosystem,Header,Footer,List,ListImage,RoadMap,TitleOpacity,MainChart,Tab,HightlightTitle} from '../../components'
-
 import {checkComponent} from '../../helpers'
-
-export default function App({components}) {
-    console.log(components);
+import LazyLoad from 'react-lazyload';
+import { useHistory } from 'react-router-dom';
+import {storage} from '../../helpers'
+import { useDispatch } from 'react-redux';
+import { asyncGetUserData } from '../../store/action';
+export default function App({components,reqLogin,type}) {
+    const history = useHistory()
     const dispatch = useDispatch()
-    
+    useMemo(()=>{
+        if(reqLogin){
+            var token = storage.getToken()
+            console.log(token);
+            if(token){
+                dispatch(asyncGetUserData())
+                .catch(e=>{
+                    history.replace('/login')
+                })
+            }else{
+                history.replace('/login')
+            }
+        }
+    },[history])
     return (
         <>
         {
         components && components.map((page,index) =>{
             const Component = checkComponent(page.type)
+
             return (
-                Component.haveContainer ? <div className="kdg-container"><Component.component data={page.data}/></div> : <Component.component data={page.data}/>
+                Component.haveContainer ? 
+                <div key={index} type={type} className="kdg-container"><Component.component data={page.data}/></div> : 
+                <Component.component type={type} key={index} data={page.data}/>
             )
         })
         }   

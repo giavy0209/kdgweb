@@ -11,7 +11,7 @@ export default function App({data,...prop}){
             if(window.innerWidth < 767) sethtml(checkLanguage({vi: data[0].content_mobile_vi , en: data[0].content_mobile_en}, language))
         }
         else sethtml(checkLanguage({vi: data[0].content_vi , en: data[0].content_en}, language))
-    },[language])
+    },[language,data])
     return (
         <>
             <div {...prop} className="description" dangerouslySetInnerHTML={{__html: html}}></div>
