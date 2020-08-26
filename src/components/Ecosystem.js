@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux';
-import { checkLanguage } from '../helpers'
+import { checkLanguage, smoothscroll } from '../helpers'
 import bg from '../assets/img/background-ecosystem.png'
 import bge from '../assets/img/background-english-ecosystem.png'
 import bgem from '../assets/img/background-mobile-english-ecosystem.png'
@@ -12,15 +12,6 @@ export default function App({data,...prop}) {
     const [BG, setBG] = useState(bg)
     const language = useSelector(state=> state.lang)
     const [ButtonTrackWidth , setButtonTrackWidth] = useState(0)
-     useEffect((e)=>{
-        // setTimeout(() => {
-        //     var imgHeight = document.querySelector('.ecosystem .bg').offsetHeight
-        //     var contentHeight = document.querySelector('.ecosystem').offsetHeight
-        //     document.querySelector('.ecosystem').style.marginTop = (imgHeight - contentHeight) + 'px'
-        // }, 1000);
-        
-
-    },[])
     useEffect(()=>{
         if(window.innerWidth > 767){
             setButtonTrackWidth('100%')
@@ -38,11 +29,16 @@ export default function App({data,...prop}) {
             if(language === 'vi') setBG(bgm)
         }
     },[language])
+
+    useEffect(()=>{
+        var buttonTrack = document.querySelector('.button-track')
+        var buttonWidth = buttonTrack.querySelector('.item').offsetWidth
+        smoothscroll(buttonTrack,buttonTrack.scrollLeft,(SlideIndex - 1) * buttonWidth , 0 , 0 , 200)
+    },[SlideIndex])
     return(
         <>
         <div className="ecosystem">
             <img alt="" className="bg" src={BG}></img>
-            {/* <img alt="" className="eco" src={eco}></img> */}
             <div className="slide">
                 <div className="button-track">
                     <div style={{width: ButtonTrackWidth}} className="kdg-row kdg-column-4 list-button">

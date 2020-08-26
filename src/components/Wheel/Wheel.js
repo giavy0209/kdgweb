@@ -35,7 +35,7 @@ function Wheel({keyValue, setSpinValue,getValue, items}) {
       setSelectedItem(arrPlaces.orderNum)
       setSpinValue(null)
     }
-  },[keyValue])
+  },[keyValue,arrPlaces,setSpinValue])
 
   const reset = useCallback(()=>{
     if(selectedItem !== null){
@@ -54,7 +54,7 @@ function Wheel({keyValue, setSpinValue,getValue, items}) {
 
 
   return (
-    <div style={{width : '100%'}} className={"wheel-container " + "wheel-container-effect"}>
+    <div style={{width : '100%'}} className={"wheel-container wheel-container-effect"}>
       <div style={{
       pointerEvents: IsCanClick ? 'all' : 'none',
       cursor: IsCanClick ? 'pointer': 'not-allowed',
@@ -65,7 +65,7 @@ function Wheel({keyValue, setSpinValue,getValue, items}) {
       <div className={`wheel ${spinning}`} style={{...wheelVars, width: '100%'}}>
         {items.map((item, index) => (
           <div className="wheel-item" key={index} style={{ '--item-nb': index}}>
-            <p className={"title-place-lucky-spin " + "color-" + index}>{item.title}</p>
+            <p className={`title-place-lucky-spin color-${index}`}>{item.title}</p>
           </div>
           
         ))}

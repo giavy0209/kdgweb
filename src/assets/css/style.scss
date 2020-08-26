@@ -87,7 +87,7 @@ body {
 .kdg-container {
     max-width: 1366px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 35px;
 }
 /*=========== 00. General ================ */	
 .kdg-row{
@@ -658,8 +658,27 @@ header {
     }
 }
 
-.function-list{
+.block-function-list{
     margin-top: 93px;
+    position: relative;
+    .arrow-left{    
+        position: absolute;
+        top: 50%;
+        left: -15px;
+        transform: translate(0 , -50%);
+        display: none;
+    }
+
+    .arrow-right{
+        position: absolute;
+        top: 50%;
+        right: -15px;
+        transform: translate(0 , -50%);
+        display: none;
+    }
+}
+
+.function-list{
     .item{
         vertical-align: middle;
     }
@@ -1231,6 +1250,8 @@ footer{
                             top: 0;
                             right: 0;
                             z-index: -1;
+                            width: 40%;
+                            opacity: .5;
                         }
                     }
                 }
@@ -1253,17 +1274,39 @@ footer{
 
 
 @media only screen and (max-width: 767px){
-    .function-list-track{
-        width: 100%;
-        overflow-x: scroll;
-        &::-webkit-scrollbar{
-            display: none;
+    .block-function-list{
+        margin-top: 35px;
+        .arrow-left{    
+            position: absolute;
+            top: 50%;
+            left: -15px;
+            transform: translate(0 , -50%);
+            display: inline;
+            cursor: pointer;
         }
-        .function-list{
-            display: flex;
-            .item{
-                width: 100%;
-                margin-top: 0;
+    
+        .arrow-right{
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            transform: translate(0 , -50%);
+            display: inline;
+            cursor: pointer;
+        }
+        .function-list-track{
+            width: 100%;
+            overflow-x: scroll;
+            &::-webkit-scrollbar{
+                display: none;
+            }
+            .function-list{
+                display: flex;
+                margin-left: 0;
+                margin-right: 0;
+                .item{
+                    width: 100%;
+                    margin-top: 0;
+                }
             }
         }
     }

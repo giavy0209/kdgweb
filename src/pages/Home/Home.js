@@ -20,7 +20,7 @@ export default function App({components,reqLogin,type}) {
                 history.replace('/login')
             }
         }
-    },[history])
+    },[history,dispatch,reqLogin])
     return (
         <>
         {

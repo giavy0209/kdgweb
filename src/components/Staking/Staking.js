@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback} from 'react'
+import React from 'react'
 import staking from '../../assets/img/staking-img.png'
 import stakingDevelop from '../../assets/img/staking-develop.png'
 import stakingDevelop1 from '../../assets/img/staking-develop1.png'
@@ -27,7 +27,7 @@ export default function App({...prop}) {
                 </div>
                 <div className="kdg-col-6 va-t">
                     <div  className="kdg-img-description top-up">
-                        <img src={staking} />
+                        <img alt="" src={staking} />
                     </div> 
                 </div>
 
@@ -37,7 +37,7 @@ export default function App({...prop}) {
             <div className="kdg-col-6 va-t">
                 <div className="kdg-card"> 
                     <div className="kdg-card-img">
-                        <img src={stakingDevelop1} />
+                        <img alt="" src={stakingDevelop1} />
                     </div>
                     
                     <p className="text-card">Tham gia Stake trên nên tảng King wallet để nhận thêm nhiều đồng coin giá trị khác</p>
@@ -46,7 +46,7 @@ export default function App({...prop}) {
             <div className="kdg-col-6 va-t">
                 <div className="kdg-card"> 
                     <div className="kdg-card-img">
-                        <img src={stakingDevelop} />
+                        <img alt="" src={stakingDevelop} />
                     </div>
                     
                     <p className="text-card">Lãi suất tham chiếu hàng năm lên tới <span className="text-percent">50%</span></p>
@@ -54,12 +54,12 @@ export default function App({...prop}) {
             </div>
             </div>  
               <div className="kdg-link-history">
-                <a onClick={(e)=>{
+                <span onClick={(e)=>{
                   e.preventDefault()
                   history.push('/staking/history')
                 }}>
                   Lịch sử Staking
-                </a>
+                </span>
               </div>
               <div className="history">
                 <table className="stacking-history">

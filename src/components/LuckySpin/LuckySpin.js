@@ -1,23 +1,13 @@
-import React, {  useState, useCallback, useMemo } from 'react'
+import React, {  useState, useCallback } from 'react'
 import Wheel from '../Wheel'
 import './styles.css'
 import '../../assets/css/lucky-spin.scss'
 import btcIcon from '../../assets/img/btc_icon.png'
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import { asyncGetUserData } from '../../store/action'
 export default function App({ ...prop }) {
     const dispatch = useDispatch()
-    const history = useHistory()
-    useMemo(()=>{
-        dispatch(asyncGetUserData())
-        .then(res=>{
-            if(res === false){
-                history.push('/login')
-            }
-        })
-    },[])
     const places = [
         { title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 2 },
         { title: '1 KDG Reward', key: 1, orderNum: 3 },
@@ -36,12 +26,11 @@ export default function App({ ...prop }) {
         if(user){
             var res = (await axios.post('http://171.244.18.130:6001/api/get_lucky_spin', { userId: user._id, token: '5f27dfdc81d58518f022b054' })).data
             setSpinValue(res.spin_value);
-            console.log(res);
             setTimeout(() => {
                 dispatch(asyncGetUserData())
             }, 4000);
         }
-    }, [user])
+    }, [user,dispatch])
 
     return (
         

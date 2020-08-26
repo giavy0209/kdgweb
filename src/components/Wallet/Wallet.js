@@ -1,13 +1,11 @@
-import React, { useMemo, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ListChart from './ListChart'
 import ListCoin from './ListCoin'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { asyncGetUserData } from '../../store/action';
+import { faAngleLeft, faAngleRight} from '@fortawesome/free-solid-svg-icons'
+import { useSelector } from 'react-redux';
 import Axios from 'axios';
-import { InputNumber,Form } from 'antd';
+import { InputNumber } from 'antd';
 import '../../assets/css/wallet.scss'
 async function getHistoryUSDT (userWallet,skip,coin){
 
@@ -66,17 +64,6 @@ function App() {
   const [Page, setPage] = useState(1)
   const [History, setHistory] = useState([])
   
-  const history = useHistory()
-  const dispatch = useDispatch()
-  useMemo(()=>{
-    dispatch(asyncGetUserData())
-    .then(res=>{
-      if(res === false){
-        history.push('/login')
-      }
-    })
-  },[])
-
   const ercWallet = useSelector(state=>{
       return state.user && state.user.erc_address
   })

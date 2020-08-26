@@ -1,4 +1,4 @@
-import React, {useReducer, useState, useCallback, useMemo} from 'react'
+import React, { useState, useCallback} from 'react'
 import kdgIcon from '../../assets/img/kdg-icon.png'
 import timeline from '../../assets/img/timeline.png'
 import { useHistory } from 'react-router-dom'
@@ -6,23 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { Slider, message } from 'antd';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux'
-import { asyncGetUserData } from '../../store/action'
+import { useSelector } from 'react-redux'
 import '../../assets/css/staking.scss'
 
-Date.prototype.addDays = function(date,days) {
-  var d = new Date(this.valueOf());
-  d.setDate(date.getDate() + days);
-  return d;
+var addDate = function(date,days){
+  date.setDate(date.getDate() + days);
+  return date
 }
-
-Date.prototype.addMonths = function(date,month) {
-  var d = new Date(this.valueOf());
-  d.setDate(date.getMonths() + month);
-  console.log(d);
-  // return d;
-}
-
 
 
 
@@ -48,9 +38,7 @@ body {
 export default function App({...prop}) {
 const [checked, setchecked] = useState(false);
 const [ValueSlider, setValueSlider] = useState();
-const [KDGCoinStaking, setKDGCoinStaking] = useState();
 
-const dispatch = useDispatch()
 
 function formatter(value) {
   setValueSlider(value);
@@ -76,33 +64,22 @@ const handleStaking = useCallback( async ()=>{
 
 
 const history = useHistory();
-
-useMemo(()=>{
-  dispatch(asyncGetUserData())
-  .then(res=>{
-      if(res === false){
-          history.push('/login')
-      }
-  })
-},[])
-
-
     return(
         <>
           <style>{css}</style>
           <div className="staking-event-body">
             <div className="kdg-container">
               <div className="staking-link-back">
-                <a 
+                <span
                 onClick={(e)=>{
                 e.preventDefault()
                 history.push('/staking')
                 }}>
                   <FontAwesomeIcon color="#f9c700"  icon={faArrowLeft} />  
                   <span>Trở về</span>
-                </a>
+                </span>
                 <span className="header-mobile">Tham gia staking</span>
-                <img style={{marginLeft: 80}} src={kdgIcon} width="40" height="40" />
+                <img alt="" style={{marginLeft: 80}} src={kdgIcon} width="40" height="40" />
                 <span>KDG</span>
                 <p>
                   <span className="staking-span-text">30%</span>Lãi suất tham chiếu năm
@@ -112,19 +89,19 @@ useMemo(()=>{
           </div>
           <div className="kdg-container">
             <div>
-              <img src={timeline} width="100%" height="100%" />
+              <img alt="" src={timeline} width="100%" height="100%" />
               <div className="kdg-row timeline-container">
                  <div className="kdg-col-4 staking-timeline-title l1 text-l">
                   <h3>Thời gian bắt đầu</h3>
-                  <h4> {new Date().addDays(new Date(),2).getDate()}/{new Date().addDays(new Date(),2).getMonth() + 1}/{new Date().addDays(new Date(),2).getFullYear()} </h4>
+                  <h4> {addDate(new Date(), 2).getDate()}/{addDate(new Date(), 2).getMonth() + 1}/{addDate(new Date(), 2).getFullYear()} </h4>
                  </div>
                  <div className="kdg-col-4 staking-timeline-title l2 text-c">
                  <h3>Thời gian mở khóa</h3>
-                 <h4><h4> {new Date().addDays(new Date(),60).getDate()}/{new Date().addDays(new Date(),60).getMonth() + 1}/{new Date().addDays(new Date(),60).getFullYear()} </h4></h4>
+                 <h4><h4> {addDate(new Date(), 60).getDate()}/{addDate(new Date(), 2).getMonth() + 1}/{addDate(new Date(), 2).getFullYear()} </h4></h4>
                    </div>
                    <div className="kdg-col-4 staking-timeline-title l3 text-r">
                    <h3>Thời gian phân bố gốc và lãi</h3>
-                   <h4>{new Date().addDays(new Date(),62).getDate()}/{new Date().addDays(new Date(),62).getMonth() + 1}/{new Date().addDays(new Date(),62).getFullYear()}</h4>
+                   <h4>{addDate(new Date(), 62).getDate()}/{addDate(new Date(), 62).getMonth() + 1}/{addDate(new Date(), 62).getFullYear()}</h4>
                    </div>
                   
               </div>

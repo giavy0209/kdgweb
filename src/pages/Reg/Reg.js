@@ -18,7 +18,7 @@ export default function App({...rest}) {
                 history.push('/wallet')
             }
         })
-    },[])
+    },[dispatch,history])
     
     const language = useSelector(state => state.lang)
     const [check,setcheck] = useState(false)
@@ -30,7 +30,6 @@ export default function App({...rest}) {
         }
         dispatch(actChangeLoading(true))
         try {
-            
             const res = (await axios.post('http://171.244.18.130:6001/api/create_register_code',{email})).data
             console.log(res);
             if(res.status === 1){

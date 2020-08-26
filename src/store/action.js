@@ -76,23 +76,28 @@ export function actChangeListContries(contries){
 
 export function asyncGetBalance(tron_kdg_wallet, eth_usdt_wallet){
     return async dispatch =>{
+        dispatch(actChangeLoading(true))
         const res = (await axios.get(`http://171.244.18.130:6001/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
         const res2 = (await axios.get(`http://171.244.18.130:6001/api/tron_kdg/balance/${tron_kdg_wallet}`)).data
         const {eth_balance,usdt_balance} = res
         const {trx_balance,kdg_balance} = res2
         dispatch(actChangeBalance({eth_balance, usdt_balance, trx_balance,kdg_balance}))
+        dispatch(actChangeLoading(false))
     }
 }
 
 export function asyncLogin(submitData){
     return async dispatch =>{
         try {
+            dispatch(actChangeLoading(true))
             const res = ((await axios.post('http://171.244.18.130:6001/api/authorize',submitData)))
             dispatch(actChangeUser(res.data.data))
             dispatch(asyncGetBalance(res.data.data.trx_address, res.data.data.erc_address))
             Storage.setToken(res.data.data._id)
+            dispatch(actChangeLoading(false))
             return  {ok: true}
         } catch (error) {
+            dispatch(actChangeLoading(false))
             return  {ok:false}
         }
     }
@@ -103,12 +108,15 @@ export function asyncGetUserData(){
         const token = Storage.getToken()
         if(token){
             try {
+                dispatch(actChangeLoading(true))
                 const res = (await axios.get(`http://171.244.18.130:6001/api/user/${token}`))
                 console.log(res.data.data);
                 dispatch(actChangeUser(res.data.data))
                 dispatch(asyncGetBalance(res.data.data.trx_address, res.data.data.erc_address))
+                dispatch(actChangeLoading(false))
                 return  {msg:'login success'}
             } catch (error) {
+                dispatch(actChangeLoading(false))
                 return  {msg:'some error',error}
             }
         }else{
@@ -119,14 +127,17 @@ export function asyncGetUserData(){
 
 export function asyncGetListContries(){
     return async dispatch =>{
+        dispatch(actChangeLoading(true))
         const res = (await axios.get('https://restcountries.eu/rest/v2/all?fields=name;alpha2Code;flag')).data
         dispatch(actChangeListContries(res))
+        dispatch(actChangeLoading(false))
     }
 }
 
-export function asyncGetListCategories(){
+export function asyncGetListCategories(hasLoading = true){
     return async dispatch =>{
         try {
+            hasLoading && dispatch(actChangeLoading(true))
             var res = (await calAPI.get(`/categories`)).data
             dispatch(actChangeListCategories(res))
             const router = []
@@ -149,27 +160,32 @@ export function asyncGetListCategories(){
             })
             console.log(router);
             dispatch(actChangeRouter(router))
+            hasLoading && dispatch(actChangeLoading(false))
             return  res
         } catch (error) {
             console.log(error);
+            hasLoading && dispatch(actChangeLoading(false))
             return  error
         }
     }
 }
 
 
-export function asyncGetSettings(){
+export function asyncGetSettings(hasLoading = true){//goi data nay đầu tiên. data thu hai dau e? // Cai nay khong nen dat loading o nhieu noi. neu e goi chung thi loading 1 lan thoi chu.
+
     return async dispatch =>{
         try {
+            hasLoading && dispatch(actChangeLoading(true))
             var res = (await calAPI.get(`/setting`)).data
             const setting = {}
             res.forEach(el=>{
                 setting[el.key] = el.data
             })
             dispatch(actChangeSettings(setting))
-            
+            hasLoading && dispatch(actChangeLoading(false))
             return  res
         } catch (error) {
+            hasLoading && dispatch(actChangeLoading(false))
             return  error
         }
     }
@@ -178,7 +194,9 @@ export function asyncGetSettings(){
 export function asyncWithdraw(submitdata){
     return async dispatch =>{
         try {
+            dispatch(actChangeLoading(true))
             const res = (await axios.post(`http://171.244.18.130:6001/api/deposit`,submitdata)).data
+            dispatch(actChangeLoading(false))
             if(res.status === 1){
                 dispatch(asyncGetUserData())
                 return {msg:'success'}
@@ -186,6 +204,7 @@ export function asyncWithdraw(submitdata){
                 return {msg:'error'}
             }
         } catch (error) {
+            dispatch(actChangeLoading(false))
             return {msg:'error', error}
         }
 

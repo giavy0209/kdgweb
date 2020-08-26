@@ -1,4 +1,4 @@
-import React ,{useState, useCallback, useMemo} from 'react'
+import React ,{useState, useCallback} from 'react'
 import symbal from '../../assets/img/symbal.png'
 import TRX from '../../assets/img/TRX.png'
 import ETH from '../../assets/img/ETH.png'
@@ -10,11 +10,10 @@ import trade from '../../assets/img/trade.png'
 import stake from '../../assets/img/stake.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy} from '@fortawesome/free-solid-svg-icons'
-import qr from '../../assets/img/qrcode.jpg'
 
 import Modal from '../Modal'
 import { useSelector, useDispatch } from 'react-redux'
-import { asyncGetBalance, asyncWithdraw } from '../../store/action'
+import { asyncWithdraw } from '../../store/action'
 import { message } from 'antd'
 const handleCopy = e=>{
     var input = document.createElement('input');
@@ -61,7 +60,7 @@ export default function ListCoin(){
                 alert(`${res.msg} ${res.error && res.error}`)
             })
         }
-    },[ercWallet,trxWallet,Coin])
+    },[ercWallet,trxWallet,Coin,dispatch])
 
     return(
         <>

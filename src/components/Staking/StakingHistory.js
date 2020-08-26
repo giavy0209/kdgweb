@@ -1,18 +1,15 @@
-import React, {useState, useEffect, useMemo} from 'react'
-import {Header, Footer} from '../../components'
+import React, {useState, useMemo} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { DatePicker, Table } from 'antd';
+import { DatePicker } from 'antd';
 import { useHistory } from 'react-router-dom'
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { asyncGetUserData } from '../../store/action';
+import { useSelector } from 'react-redux';
 import nodata from '../../assets/img/nodata.png'
 
 const { RangePicker } = DatePicker;
 export default function App({...prop}) {
     const history = useHistory();
-    const dispatch = useDispatch()
     const [dates, setDates] = useState([]);
     const disabledDate = current => {
       if (!dates || dates.length === 0) {
@@ -22,16 +19,6 @@ export default function App({...prop}) {
       const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
       return tooEarly || tooLate;
     };
-
-    useMemo(()=>{
-        dispatch(asyncGetUserData())
-        .then(res=>{
-            if(res === false){
-                history.push('/login')
-            }
-        })
-    },[])
-
 
     const user = useSelector(state => state.user)
 
@@ -49,13 +36,12 @@ export default function App({...prop}) {
         <>
         <div className="kdg-container" style={{marginTop: 50}}> 
             <div className="kdg-link-back">
-              <a onClick={(e)=>{
-              e.preventDefault()
+              <span onClick={(e)=>{
               history.push('/staking')
               }}>
                 <FontAwesomeIcon color="#f9c700" icon={faArrowLeft} />  
                 Trở về
-              </a>
+              </span>
             </div> 
                 <div className="date-time-picker-container">
                 <RangePicker

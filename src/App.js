@@ -1,17 +1,24 @@
 import React, {useMemo, useCallback}  from 'react';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { asyncGetSettings, atcChangeLanguage,asyncGetListCategories} from './store/action'
+import { asyncGetSettings, atcChangeLanguage,asyncGetListCategories, actChangeLoading} from './store/action'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Reg from './pages/Reg'
+import Loading from './pages/Loading'
 function App() {
-  const ROUTERS_LINK = useSelector(state => state.router)
   const dispatch = useDispatch()
+  const ROUTERS_LINK = useSelector(state => state.router)
+  const isLoading = useSelector(state=>state.loading)
   useMemo(()=>{
-    dispatch(asyncGetSettings())
-    dispatch(asyncGetListCategories())
-    dispatch(atcChangeLanguage('en'))
+    dispatch(actChangeLoading(true));
+    Promise.all([
+      dispatch(asyncGetSettings(false)),
+      dispatch(asyncGetListCategories(false)),
+      dispatch(atcChangeLanguage('en'))
+    ]).then(() => {
+      dispatch(actChangeLoading(false));
+    })
   },[dispatch])
 
   const settings = useSelector(state => {
@@ -27,6 +34,7 @@ function App() {
   },[ROUTERS_LINK])
   return(
     <>
+    {isLoading && <Loading />}
     <BrowserRouter>
       <Switch>
         {ListRoute()}
