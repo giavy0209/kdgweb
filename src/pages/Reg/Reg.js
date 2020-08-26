@@ -8,6 +8,7 @@ import '../../assets/css/login-reg.scss'
 import { checkLanguage } from '../../helpers'
 
 export default function App({...rest}) {
+    
     const history = useHistory()
     const dispatch = useDispatch()
     useMemo(()=>{
@@ -29,8 +30,7 @@ export default function App({...rest}) {
         }
         dispatch(actChangeLoading(true))
         try {
-            console.log(email);
-
+            
             const res = (await axios.post('http://171.244.18.130:6001/api/create_register_code',{email})).data
             console.log(res);
             if(res.status === 1){

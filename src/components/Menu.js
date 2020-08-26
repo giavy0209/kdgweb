@@ -1,10 +1,10 @@
 import React , { useEffect, useState , useCallback, useMemo} from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { checkLanguage } from '../helpers';
+import { checkLanguage, storage } from '../helpers';
 import { atcChangeLanguage,asyncGetUserData } from '../store/action'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faCaretDown, faUserEdit, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 export default function App({type}) {
   const dispatch = useDispatch()
   const ROUTERS_LINK = useSelector(state => state.router)
@@ -70,7 +70,7 @@ export default function App({type}) {
         if(Array.from(menu.classList).indexOf('show') === -1) menu.classList.add('show')
         else menu.classList.remove('show')
       })
-      document.querySelector('.mask').addEventListener('click', ()=>{
+      document.querySelector('.mask-menu').addEventListener('click', ()=>{
         document.querySelector('header .bottom-header .logo-menu').classList.remove('show')
       })
     }
@@ -84,16 +84,49 @@ export default function App({type}) {
     console.log(state);
     return state.user && {first_name: state.user.first_name , last_name:state.user.last_name, email: state.user.email}
   })
-  console.log(username);
+
   const lastMenu = useCallback(()=>{
     if(username){
       return <li
+      onClick={e=>{
+        var dropdown = e.currentTarget.querySelector('.drop-down-account')
+        if(Array.from(dropdown.classList).includes('active')) dropdown.classList.remove('active')
+        else dropdown.classList.add('active')
+      }}
       className="account-menu"
-      onClick={()=>{handleClick('/account')}}
       >
         <FontAwesomeIcon color="#fac800" icon={faUser} />
-        <span style={{color: '#fac800'}}> { username ? `${username.first_name ? username.first_name : '' } ${username.last_name ? username.last_name : '' }` : username ? username.email : ''} </span>
+        <span style={{color: '#fac800'}}> 
+          { (username.first_name || username.last_name) ? 
+          `${username.first_name ? username.first_name : '' } ${username.last_name ? username.last_name : '' }` 
+          :  username.email} 
+        </span>
         <FontAwesomeIcon icon={faCaretDown}/>
+        
+        <div className="drop-down-account">
+          <div className="top-dropdown">
+            <FontAwesomeIcon style={{verticalAlign: 'middle'}} icon={faUser} size="2x"/>
+            <div>
+              <p>{ (username.first_name || username.last_name) && `${username.first_name ? username.first_name : '' } ${username.last_name ? username.last_name : '' }`}</p>
+              <p>{username.email &&  username.email}</p>
+            </div>
+          </div>
+          <div 
+          onClick={(e)=>{handleClick('/account',e)}}
+          className="bottom-dropdown">
+            <FontAwesomeIcon icon={faUserEdit} color="#283349" />
+            <span> {checkLanguage({vi:'Tài khoản', en: 'Account'}, language)} </span>
+          </div>
+          <div 
+          onClick={()=>{
+            storage.clearToken()
+            window.open('/', '_self')
+          }}
+          className="bottom-dropdown">
+            <FontAwesomeIcon icon={faSignOutAlt} color="#283349" />
+            <span> {checkLanguage({vi:'Đăng xuất', en: 'Logout'}, language)} </span>
+          </div>
+        </div>
       </li>
     }else{
       return <>
@@ -105,7 +138,7 @@ export default function App({type}) {
 
   return (
     <>
-      <span className="mask"></span>
+      <span className="mask-menu"></span>
       <ul className="menu">
         <a className="logo" href="/"><img alt="KingDomGame" src={logoHeader}/></a>
         {
@@ -131,10 +164,10 @@ export default function App({type}) {
         }
         
         {lastMenu()}
-        <span className="button-mobile">
+        {!username && <span className="button-mobile">
             <li className="login"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? loginBtn.url : ''}> {checkLanguage(loginBtn, language)} </a></li>
             <li className="reg"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? regBtn.url : ''}> {checkLanguage(regBtn,language)} </a></li>
-        </span>
+        </span>}
         <span className='language'>
           <li className={language === 'en' ? 'active' : ''} onClick={()=>handleChooseLang('en')}>EN</li>
           <li className={language === 'vi' ? 'active' : ''} onClick={()=>handleChooseLang('vi')}>VI</li>

@@ -73,8 +73,6 @@ function App() {
     .then(res=>{
       if(res === false){
         history.push('/login')
-      }else{
-        history.push('/kdg-wallet')
       }
     })
   },[])
