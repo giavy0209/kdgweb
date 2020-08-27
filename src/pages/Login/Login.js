@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
-import { asyncGetUserData,asyncLogin} from '../../store/action'
+import { useDispatch, useSelector } from 'react-redux'
+import { asyncGetUserData,asyncLogin, actChangeLoading} from '../../store/action'
 import { useHistory } from 'react-router-dom'
 import {message} from 'antd'
 import '../../assets/css/login-reg.scss'
@@ -8,13 +8,17 @@ export default function App({...rest}) {
     const history = useHistory()
     const dispatch = useDispatch()
     useMemo(()=>{
+        dispatch(actChangeLoading(true))
         dispatch(asyncGetUserData())
         .then(res=>{
+            dispatch(actChangeLoading(false))
             if(res === !false){
                 history.push('/kdg-wallet')
             }
         })
     },[dispatch,history])
+
+    const email = useSelector(state => state.user && state.user.email)
 
     const handleLogin = useCallback( async(e)=>{
         e.preventDefault()
@@ -48,7 +52,9 @@ export default function App({...rest}) {
                     <span>Bạn chưa có tài khoản? <span onClick={()=>history.push('/reg')}>Đăng ký</span></span>
                     <div className="form-group">
                         <p>Email</p>
-                        <input name="email"/>
+                        <input 
+                        defaultValue = {email ? email : ''}
+                        name="email"/>
                     </div>
                     <div className="form-group">
                         <p>Mật khẩu</p>
@@ -57,7 +63,9 @@ export default function App({...rest}) {
                     <div className="form-group half">
                         <button className="button">Đăng nhập</button>
                     </div>
-                    <span><span onClick={()=>history.push('/forgot-password')}>Quên mật khẩu</span></span>
+                    <div>
+                        <span onClick={()=>history.push('/forgot-password')}>Quên mật khẩu</span>
+                    </div>
                 </form>
             </div>
         </div>

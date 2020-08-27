@@ -68,6 +68,28 @@
                     font-size: 14px;
                     color: #414042;
                 }
+                .input-password{
+                    margin-top: 7px;
+                    position: relative;
+                    .validate-error{
+                        position: absolute;
+                        top: calc(100% + 5px);
+                        left: 0;
+                        white-space: nowrap;
+                    }
+                    input{
+                        margin-top: 0;
+                        padding-right: 15px;
+                    }
+                    .eye{
+                        position: absolute;
+                        cursor: pointer;
+                        top: 50%;
+                        right: 10px;
+                        transform: translate(0 , -50%);
+                        font-size: 14px;
+                    }
+                }
                 input{
                     padding:10px;
                     background-color: #f1f3f4;
@@ -77,6 +99,17 @@
                     border: none;
                     width: 100%;
                     margin-top: 7px;
+                }
+                .validate-error{
+                    font-size: 12px;
+                    color: #ff0000;
+                    font-style: italic;
+                    opacity: 0;
+                    pointer-events: none;
+                    &.show{
+                        opacity: 1;
+                        pointer-events: all;
+                    }
                 }
                 &.half{
                     width: 50%;
@@ -95,6 +128,13 @@
                     cursor: pointer;
                     font-size: 14px;
                     text-align: center;
+                    position: relative;
+                    .count-down{
+                        position: absolute;
+                        top: 50%;
+                        right: 10px;
+                        transform: translate(0 , -50%);
+                    }
                 }
                 &.checkbox{
                     text-align: left;

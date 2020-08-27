@@ -40,7 +40,7 @@ function App() {
         {ListRoute()}
         {settings &&
         <>
-        <Route exact={true} path={settings.login}>
+        <Route exact={true} path={`${settings.login}/:email?`}>
           <Login/>
         </Route>
         <Route exact={true} path={settings.reg}>

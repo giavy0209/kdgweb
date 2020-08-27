@@ -106,14 +106,13 @@ export function asyncLogin(submitData){
 export function asyncGetUserData(){
     return async dispatch =>{
         const token = Storage.getToken()
+        console.log(token);
         if(token){
             try {
-                dispatch(actChangeLoading(true))
                 const res = (await axios.get(`http://171.244.18.130:6001/api/user/${token}`))
                 console.log(res.data.data);
                 dispatch(actChangeUser(res.data.data))
                 dispatch(asyncGetBalance(res.data.data.trx_address, res.data.data.erc_address))
-                dispatch(actChangeLoading(false))
                 return  {msg:'login success'}
             } catch (error) {
                 dispatch(actChangeLoading(false))
@@ -194,9 +193,7 @@ export function asyncGetSettings(hasLoading = true){//goi data nay đầu tiên.
 export function asyncWithdraw(submitdata){
     return async dispatch =>{
         try {
-            dispatch(actChangeLoading(true))
             const res = (await axios.post(`http://171.244.18.130:6001/api/deposit`,submitdata)).data
-            dispatch(actChangeLoading(false))
             if(res.status === 1){
                 dispatch(asyncGetUserData())
                 return {msg:'success'}
@@ -204,7 +201,6 @@ export function asyncWithdraw(submitdata){
                 return {msg:'error'}
             }
         } catch (error) {
-            dispatch(actChangeLoading(false))
             return {msg:'error', error}
         }
 
