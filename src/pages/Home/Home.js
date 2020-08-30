@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import {checkComponent} from '../../helpers'
 import { useHistory } from 'react-router-dom';
 import {storage} from '../../helpers'
@@ -7,10 +7,10 @@ import { asyncGetUserData } from '../../store/action';
 export default function App({components,reqLogin,type}) {
     const history = useHistory()
     const dispatch = useDispatch()
+
     useMemo(()=>{
         if(reqLogin){
             var token = storage.getToken()
-            console.log(token);
             if(token){
                 dispatch(asyncGetUserData())
                 .catch(e=>{

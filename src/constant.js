@@ -1,2 +1,2 @@
-export const API_DOMAIN = 'http://161.35.2.43:5000'
+export const API_DOMAIN = 'https://kdg-api.kingdomgame.co'
 export const ITEM_PER_PAGE = 50

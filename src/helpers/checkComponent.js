@@ -14,7 +14,9 @@ import {
     Staking,
     StakingHistory,
     StakingEvent,
-    Wallet
+    Wallet,
+    News,
+    HomeWallet
 } from '../components'
 
 export default function checkComponents(type){
@@ -50,5 +52,9 @@ export default function checkComponents(type){
         return {component: StakingEvent, haveContainer : false}
     }else if(type === 16){
         return {component: Wallet, haveContainer : false}
+    }else if(type === 17){
+        return {component: News, haveContainer : true}
+    }else if(type === 18){
+        return {component: HomeWallet, haveContainer : true}
     }
 }

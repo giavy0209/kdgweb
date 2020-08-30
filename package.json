@@ -14,6 +14,7 @@
     "babel-plugin-import": "^1.13.0",
     "customize-cra": "^0.9.1",
     "node-sass": "^4.14.0",
+    "qrcode": "^1.4.4",
     "react": "^16.12.0",
     "react-app-rewired": "^2.1.6",
     "react-charts": "^2.0.0-beta.7",

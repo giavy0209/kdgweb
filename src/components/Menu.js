@@ -2,9 +2,9 @@ import React , { useEffect, useState , useCallback, useMemo} from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkLanguage, storage } from '../helpers';
-import { atcChangeLanguage,asyncGetUserData } from '../store/action'
+import { atcChangeLanguage } from '../store/action'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCaretDown, faUserEdit, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faCaretDown, faUserEdit, faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 export default function App({type}) {
   const dispatch = useDispatch()
   const ROUTERS_LINK = useSelector(state => state.router)
@@ -12,9 +12,7 @@ export default function App({type}) {
   const location = useLocation();
   const history = useHistory();
   const language = useSelector(state => state.lang)
-  useMemo(()=>{
-    dispatch(asyncGetUserData())
-  },[dispatch])
+ 
   useEffect(() => {
     setCurrentUrl(location.pathname);
   }, [location])
@@ -78,10 +76,11 @@ export default function App({type}) {
 
   const handleChooseLang = useCallback(lang=>{
     dispatch(atcChangeLanguage(lang))
+    localStorage.setItem('lang', lang)
+    console.log(localStorage.getItem('lang'));
   },[dispatch])
 
   const username = useSelector(state=>{
-    console.log(state);
     return state.user && {first_name: state.user.first_name , last_name:state.user.last_name, email: state.user.email}
   })
 
@@ -89,21 +88,19 @@ export default function App({type}) {
     if(username){
       return <li
       onClick={e=>{
-        var dropdown = e.currentTarget.querySelector('.drop-down-account')
-        if(Array.from(dropdown.classList).includes('active')) dropdown.classList.remove('active')
-        else dropdown.classList.add('active')
+        if(window.innerWidth > 992){
+          var dropdown = e.currentTarget.querySelector('.drop-down-account')
+          if(Array.from(dropdown.classList).includes('active')) dropdown.classList.remove('active')
+          else dropdown.classList.add('active')
+        }else{
+          handleClick('/account', e)
+        }
       }}
       className="account-menu"
       >
-        <FontAwesomeIcon color="#fac800" icon={faUser} />
-        <span style={{color: '#fac800'}}> 
-          { (username.first_name || username.last_name) ? 
-          `${username.first_name ? username.first_name : '' } ${username.last_name ? username.last_name : '' }` 
-          :  username.email} 
-        </span>
-        <FontAwesomeIcon icon={faCaretDown}/>
-        
-        <div className="drop-down-account">
+        <FontAwesomeIcon color="#fac800" icon={faUserCircle} />
+        <div 
+        className="drop-down-account">
           <div className="top-dropdown">
             <FontAwesomeIcon style={{verticalAlign: 'middle'}} icon={faUser} size="2x"/>
             <div>
@@ -153,7 +150,7 @@ export default function App({type}) {
                     ROUTERS_LINK && <ul>
                       {
                         ROUTERS_LINK && ROUTERS_LINK.map(submenu=>
-                            submenu.name && submenu && submenu.parent === router.id && submenu.type === type &&
+                            submenu.name && submenu.parent === router.id && 
                             <li onClick={(e)=>{handleClick(submenu.path,e,submenu.isURL,{path: submenu.path, pathEN : submenu.pathEN})}} key={submenu.path}><span dangerouslySetInnerHTML={{__html: checkLanguage(submenu.name,language)}}></span></li>
                         )
                       }

@@ -4,12 +4,14 @@ import ListCoin from './ListCoin'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight} from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux';
-import Axios from 'axios';
 import { InputNumber } from 'antd';
 import '../../assets/css/wallet.scss'
+import nodata from '../../assets/img/nodata.png'
+import { checkLanguage } from '../../helpers';
+import callapi from '../../axios';
 async function getHistoryUSDT (userWallet,skip,coin){
 
-  const res = (await Axios.get(`http://171.244.18.130:6001/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=20`)).data
+  const res = (await callapi.get(`/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=10`)).data
 
   if(res.status === 1){
     console.log(res);
@@ -23,14 +25,12 @@ async function getHistoryUSDT (userWallet,skip,coin){
       }
       return data
     })
-    console.log(result);
-
     return result
   }
 }
 
 async function getHistoryTRX (userWallet,skip,coin){
-  const res = (await Axios.get(`http://171.244.18.130:6001/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=20`)).data
+  const res = (await callapi.get(`/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=10`)).data
   if(res.status === 1){
     var result = res.data.data
     if(coin === 'KDG'){
@@ -63,7 +63,7 @@ function App() {
   const [CurrentHistory, setCurrentHistory] =useState('KDG')
   const [Page, setPage] = useState(1)
   const [History, setHistory] = useState([])
-  
+  const language = useSelector(state=>state.lang)
   const ercWallet = useSelector(state=>{
       return state.user && state.user.erc_address
   })
@@ -74,7 +74,7 @@ function App() {
   useEffect(()=>{
     if(CurrentHistory === 'KDG' || CurrentHistory === 'TRON'){
       if(ercWallet) {
-        getHistoryTRX(trxWallet, (Page - 1) * 20, CurrentHistory)
+        getHistoryTRX(trxWallet, (Page - 1) * 10, CurrentHistory)
         .then(result=>{
           setHistory([...result])
         })
@@ -82,7 +82,7 @@ function App() {
     }
     if(CurrentHistory === 'ETH' || CurrentHistory === 'USDT'){
       if(trxWallet) {
-        getHistoryUSDT(ercWallet, (Page - 1) * 20, CurrentHistory)
+        getHistoryUSDT(ercWallet, (Page - 1) * 10, CurrentHistory)
         .then(result=>{
           console.log(result);
           setHistory([...result])
@@ -137,20 +137,26 @@ function App() {
                   </tr>
 
                   {
-                    History && History.map(({time, type, value , hash},index) =>
+                    (History && History.length > 0 )?  History.map(({time, type, value , hash},index) =>
                       <tr>
                         <td className="date-time">
-                          <span className="date"> {time.getDate()} /{time.getMonth()}/{time.getFullYear()}</span>
+                          <span className="date"> {time.getDate()} /{time.getMonth() + 1}/{time.getFullYear()}</span>
                           <span className="time">{time.getHours()}:{time.getMinutes()}:{time.getSeconds()}</span>
                         </td>
                         <td className={`quantity ${type === 0 ? 'red' : 'green'}`} >
                           {value}
                         </td>
-                        <td>USDT</td>
+                        <td>{CurrentHistory}</td>
                         <td>{type === 0 ? 'Rút tiền' : 'Nạp tiền'}</td>
                         <td> {hash} </td>
                       </tr>
-                    )
+                    ): 
+                    <tr>
+                    <td colSpan="5">
+                      <img src={nodata} alt="" /> <br></br>
+                      {checkLanguage({vi: 'Không có dữ liệu', en: 'No data'}, language)}
+                    </td>
+                  </tr>  
                   }
 
                 </tbody>
@@ -160,7 +166,7 @@ function App() {
             <div className="pagination">
               <span style={{pointerEvents: Page === 1 ? 'none' : 'all'}} onClick={()=>setPage(Page - 1)} className="arrow"><FontAwesomeIcon icon={faAngleLeft}/></span>
                   <InputNumber onPressEnter={e=>setPage(Number(e.target.value))} style={{width:60}}/>
-              <span style={{pointerEvents: History.length < 20 ? 'none' : 'all'}}  onClick={()=>setPage(Page + 1)} className="arrow"><FontAwesomeIcon icon={faAngleRight}/></span>
+              <span style={{pointerEvents: History.length < 10 ? 'none' : 'all'}}  onClick={()=>setPage(Page + 1)} className="arrow"><FontAwesomeIcon icon={faAngleRight}/></span>
             </div>
           </section>
 

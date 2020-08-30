@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { asyncGetUserData, actChangeLoading, actChangeUser} from '../../store/action'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import {message} from 'antd'
 import '../../assets/css/login-reg.scss'
 import { checkLanguage, validateForm } from '../../helpers'
@@ -10,12 +10,10 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import callapi from '../../axios'
 
 export default function App({...rest}) {
-    const {ref} = useParams()
-    console.log(ref);
     const [CountDownSendMail, setCountDownSendMail] = useState(null)
     const [CountDownSendMailTimeOut, setCountDownSendMailTimeOut] = useState(null)
-    const [ValidForm , setValidForm] = useState({email:false, password: false, repassword: false, register_code: false,})
-    const [Eye, setEye] = useState({password: false , repassword: false})
+    const [ValidForm , setValidForm] = useState({email:false, password: false, new_password: false, forgot_password_code: false,})
+    const [Eye, setEye] = useState({password: false , new_password: false})
     const history = useHistory()
     const dispatch = useDispatch()
 
@@ -28,9 +26,8 @@ export default function App({...rest}) {
         dispatch(asyncGetUserData())
         .then(res=>{
             dispatch(actChangeLoading(false))
-            if(res !== false){
-                console.log(res);
-                history.push('/wallet')
+            if(res === !false){
+                history.push('/kdg-wallet')
             }
         })
     },[dispatch,history])
@@ -51,18 +48,17 @@ export default function App({...rest}) {
     },[CountDownSendMail])
     
     const language = useSelector(state => state.lang)
-    const [check,setcheck] = useState(false)
 
     async function getCode(email){
         dispatch(actChangeLoading(true))
         try {
-            const res = (await callapi.post('/api/create_register_code',{email})).data
+            const res = (await callapi.post('/api/create_forgot_password_code',{email})).data
             console.log(res);
             if(res.status === 1){
                 setCountDownSendMail(120)
-                message.success(checkLanguage({vi: 'Mã code đã được gửi vào email của bạn!', en: 'Code has just sent to your email. Please check!'}, language))
+                message.success(checkLanguage({vi: 'Chúng tôi vừa gửi mã code qua email của bạn. Vui lòng nhập vào ô bên dưới.', en: `We've sent a reset code via your email. Please enter in below.`}, language))
             }else{
-                message.error(checkLanguage({vi: 'Email đã tồn tại trong hệ thống hoặc bạn vừa yêu cầu gửi mail, vui lòng chờ 120 giây', en: `Email is already exist or you've just requested, please wait for 120 seconds`}, language))
+                message.error(checkLanguage({vi: 'Email không tồn tại trong hệ thống hoặc bạn vừa yêu cầu gửi mail, vui lòng chờ 120 giây', en: `Email is not exist or you've just requested, please wait for 120 seconds`}, language))
             }
         } catch (error) {
             console.log(error);
@@ -70,7 +66,7 @@ export default function App({...rest}) {
         dispatch(actChangeLoading(false))
     }
 
-    const handleReg = async (e) =>{
+    const handleResetPass = async (e) =>{
         e.preventDefault()
         const data = new FormData(e.target)
         const submitData = {}
@@ -78,31 +74,30 @@ export default function App({...rest}) {
             submitData[pair[0]] = pair[1]
         }
         dispatch(actChangeLoading(true))
-        const res = (await callapi.post('/api/register_user',submitData)).data
+        const res = (await callapi.post('/api/forgot_password',submitData)).data
         console.log(res);
         dispatch(actChangeLoading(false))
         if(res.status === 1){
-            message.success(checkLanguage({vi: "Đăng ký thành công", en: 'Register success'},language))
+            message.success(checkLanguage({vi: "Đổi mật khẩu thành công thành công", en: 'Reset password success'},language))
             dispatch(actChangeUser({email: submitData.email}))
             setTimeout(() => {
                 history.push(loginURL)
             }, 1000);
         }else{
-            if(res.msg === 'register code is wrong'){
-                message.error(checkLanguage({vi: "Mã xác minh Email không chính xác", en: 'Incorrect verification code'},language))
-            }
+            message.error(checkLanguage({vi: "Mã reset password không chính xác hoặc email không hợp lệ", en: 'Incorrect reset password code or email is not exist'},language))
         }
     }
 
 
     return (
         <>
+        {checkLanguage({vi: '', en: ''}, language)}
         <div className="form-block">
             <div className="left"><img alt="" src="/images/img-login.png"></img></div>
             <div className="right">
-                <form onSubmit={handleReg}>
-                    <h3>{checkLanguage({vi: "Đăng ký", en: 'Register'},language)}</h3>
-                    <span>{checkLanguage({vi: "Đã có tài khoản?", en: 'Already have an account?'},language)} <span onClick={()=>history.push('/login')}>{checkLanguage({vi: "Đăng nhập", en: 'Log in'},language)}</span></span>
+                <form onSubmit={handleResetPass}>
+                    <h3>{checkLanguage({vi: "Đặt lại mật khẩu", en: 'Reset password'},language)}</h3>
+                    <span>{checkLanguage({vi: "Đã nhớ mật khẩu?", en: 'Remember your password?'},language)} <span onClick={()=>history.push('/login')}>{checkLanguage({vi: "Đăng nhập", en: 'Log in'},language)}</span></span>
                     <div className="form-group">
                         <p>Email</p>
                         <input 
@@ -123,8 +118,47 @@ export default function App({...rest}) {
                         name="email" id="email"/>
                         <span className="validate-error"></span>
                     </div>
-                    <div className="form-group half va-t">
-                        <p>{checkLanguage({vi: "Mật khẩu", en: 'Password'},language)}</p>
+                    
+                    <div className="form-group half">
+                        <p>{checkLanguage({vi: "Mã reset password", en: 'Reset password code'},language)}</p>
+                        <input
+                        onChange={e=>{
+                            if(!Number(e.target.value) || e.target.value.length !== 6){
+                                e.target.nextElementSibling.classList.add('show')
+                                e.target.nextElementSibling.innerText = checkLanguage({vi: 'Mã reset password không đúng định dạng',en: 'Reset password code is not valid'},language)
+                                setValidForm({...ValidForm, forgot_password_code: false})
+                            }else{
+                                e.target.nextElementSibling.classList.remove('show')
+                                e.target.nextElementSibling.innerText = ''
+                                setValidForm({...ValidForm, forgot_password_code: true})
+                            }
+                        }}
+                        name="forgot_password_code" />
+                        <span className="validate-error"></span>
+                    </div>
+                    <div className="form-group half va-b">
+                        <span 
+                        
+                        style={
+                            (CountDownSendMail === null && ValidForm.email) ?
+                            {
+                                opacity: 1 ,
+                                pointerEvents:  'all'
+                            } : 
+                            { 
+                                opacity: .5 ,
+                                pointerEvents:  'none'
+                            }
+                        }
+                        onClick={()=>{getCode(document.getElementById('email').value)}} 
+                        className="button">
+                            {checkLanguage({vi: "Nhấp để nhận", en: 'Reset code'},language)}
+                            <span className="count-down">{CountDownSendMail !== null && CountDownSendMail}</span>
+                        </span>
+                    </div>
+
+                    <div className="form-group va-t">
+                        <p>{checkLanguage({vi: "Mật khẩu mới", en: 'New password'},language)}</p>
                         <div className="input-password">
                             <FontAwesomeIcon 
                             onClick={e =>{
@@ -148,91 +182,44 @@ export default function App({...rest}) {
                             <span className="validate-error"></span>
                         </div>
                     </div>
-                    <div className="form-group half va-t">
+                    <div className="form-group va-t">
                         <p>{checkLanguage({vi: "Xác nhận mật khẩu", en: 'Repeat password'},language)}</p>
                         <div className="input-password">
                             <FontAwesomeIcon 
                             onClick={() =>{
-                                setEye({...Eye , repassword: !Eye.repassword})
+                                setEye({...Eye , new_password: !Eye.new_password})
                             }}
-                            size="1x" color="#000" className="eye" icon={Eye.repassword ? faEye : faEyeSlash}/>
+                            size="1x" color="#000" className="eye" icon={Eye.new_password ? faEye : faEyeSlash}/>
                             <input 
-                            type={Eye.repassword ? '' : 'password'}
+                            type={Eye.new_password ? '' : 'password'}
                             onChange={e=>{
                                 if(!e.target.value.match(validateForm.password)){
                                     e.target.nextElementSibling.classList.add('show')
                                     e.target.nextElementSibling.innerText = checkLanguage({vi: 'Password phải ít nhất 8 ký tự cả chữ và số',en: 'At least 8 digits, include word and number'},language)
-                                    setValidForm({...ValidForm, repassword: false})
+                                    setValidForm({...ValidForm, new_password: false})
                                 }else if(e.target.value !== document.querySelector('input[name="password"]').value){
                                     e.target.nextElementSibling.classList.add('show')
                                     e.target.nextElementSibling.innerText = checkLanguage({vi: 'Password không khớp',en: 'Password not match'},language)
-                                    setValidForm({...ValidForm, repassword: false})
+                                    setValidForm({...ValidForm, new_password: false})
                                 }else{
                                     e.target.nextElementSibling.classList.remove('show')
                                     e.target.nextElementSibling.innerText = ''
-                                    setValidForm({...ValidForm, repassword: true})
+                                    setValidForm({...ValidForm, new_password: true})
                                 }
                             }}
-                            name="repassword"/>
+                            name="new_password"/>
                             <span className="validate-error"></span>
                         </div>
                     </div>
-                    <div className="form-group half">
-                        <p>{checkLanguage({vi: "Mã xác minh email", en: 'Sign up code'},language)}</p>
-                        <input
-                        onChange={e=>{
-                            if(!Number(e.target.value) || e.target.value.length !== 6){
-                                e.target.nextElementSibling.classList.add('show')
-                                e.target.nextElementSibling.innerText = checkLanguage({vi: 'Mã xác minh Email không đúng định dạng',en: 'Sign up code is not valid'},language)
-                                setValidForm({...ValidForm, register_code: false})
-                            }else{
-                                e.target.nextElementSibling.classList.remove('show')
-                                e.target.nextElementSibling.innerText = ''
-                                setValidForm({...ValidForm, register_code: true})
-                            }
-                        }}
-                        name="register_code" />
-                        <span className="validate-error"></span>
-                    </div>
-                    <div className="form-group half va-b">
-                        <span 
-                        
-                        style={
-                            (CountDownSendMail === null && ValidForm.email) ?
-                            {
-                                opacity: 1 ,
-                                pointerEvents:  'all'
-                            } : 
-                            { 
-                                opacity: .5 ,
-                                pointerEvents:  'none'
-                            }
-                        }
-                        onClick={()=>{getCode(document.getElementById('email').value)}} 
-                        className="button">
-                            {checkLanguage({vi: "Nhấp để nhận", en: 'Get code'},language)}
-                            <span className="count-down">{CountDownSendMail !== null && CountDownSendMail}</span>
-                        </span>
-                    </div>
-                    <div className="form-group">
-                        <p>{checkLanguage({vi: "Mã mời (tuỳ chọn)", en: 'Referral code (optional)'},language)}</p>
-                        <input 
-                        disabled={!!ref}
-                        defaultValue={ref ? ref : ''}
-                        name="parent_ref_code" />
-                    </div>
-                    <div className="form-group checkbox">
-                        <input onChange={e=>setcheck(e.target.checked)} id="confirm" type="checkbox" name="confirm"/>
-                        <label htmlFor="confirm">{checkLanguage({vi: "Tôi đồng ý với ", en: 'I agree with'},language)} <a style={{display: 'inline'}} href="/">{checkLanguage({vi: "Thỏa thuận người dùng | Chính sách bảo mật của KDG", en: 'provisions of User Agreement | Privacy Policy of KDG'},language)}</a></label>
-                    </div>
+
                     <div className="form-group half">
                         <button 
                         style={
-                            (ValidForm.email && ValidForm.password && ValidForm.register_code && ValidForm.repassword && check) ? 
+                            (ValidForm.email && ValidForm.password && ValidForm.forgot_password_code && ValidForm.new_password) ? 
                             {opacity:  1 , pointerEvents:  'all'} :
                             {opacity: .6 , pointerEvents: 'none'} 
                         } 
-                        className="button">{checkLanguage({vi: "Đăng ký", en: 'Register'},language)}</button>
+                        className="button">{checkLanguage({vi: "Xác nhận", en: 'Confirm'},language)}</button>
                     </div>
                 </form>
             </div>

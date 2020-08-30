@@ -15,6 +15,8 @@ import Staking from './Staking'
 import StakingHistory from './Staking/StakingHistory'
 import StakingEvent from './Staking/StakingEvent'
 import Wallet from './Wallet'
+import News from './News'
+import HomeWallet from './HomeWallet'
 export {
     Description, 
     Header, 
@@ -32,5 +34,7 @@ export {
     Staking,
     StakingHistory,
     StakingEvent,
-    Wallet
+    News,
+    Wallet,
+    HomeWallet
 }

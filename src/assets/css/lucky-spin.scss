@@ -272,3 +272,153 @@
         }
     }
 }
+
+
+.timeline {
+    margin: 50px 60px;
+    height: 4px;
+    background-color: #ccc;
+  }
+  
+  .timeline-progress {
+      width: 0;
+      height: 100%;
+      background-color: #f4ca04;
+  }
+  
+  .timeline-items {
+      margin-left: -10px;
+      margin-right: -10px;
+      margin-top: -25px;
+      display: flex;
+      justify-content: space-between;
+  }
+  
+  .timeline-item {
+      position: relative;
+  }
+  
+  .timeline-item::before {
+      content: '';
+      width: 50px;
+      height: 50px;
+      background-color: #ccc;
+      display: block;
+      border-radius: 100%;
+  }
+  
+  .timeline-item.active::before {
+      background-color: #f4ca04;
+  }
+  .timeline-content {
+      width: 100%;
+      justify-content: center;
+      padding-top: 20px;
+  }
+  
+  .timeline-item.active .timeline-content {
+      color: #f4ca04;
+  }
+  
+  .timeline-item.active .timeline-content::before {
+      background-color: #f4ca04;
+  }
+
+.attendance-container{
+    background-image: url(../img/attendance.png);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    margin-top: 90px;
+    > * {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .attendance-left{
+        width: 75%;
+        padding: 25px 64px;
+        .button-row{
+            text-align: center;
+            padding-top: 10px;
+            padding-bottom: 30px;
+            border-bottom: 0.5px solid rgba(145,145,145,0.8);
+            .button{
+                border: none;
+                background-color: #fdf2c5;
+                padding: 9px 30px;
+                border-radius: 5px;
+                color: rgba(0,0,0,0.7);
+                font-weight: 600;
+            }
+        }
+
+        .title{
+            font-size: 30px;
+            font-weight: 600;
+            color: #fac800;
+            text-align: center;
+        }
+
+        .main-content{
+            margin-top: 35px;
+            margin: 0 -15px;
+            > * {
+                display: inline-block;
+                vertical-align: top;
+            }
+            .text{
+                font-size: 20px;
+                font-weight: 600;
+                color: #fff;
+                text-align: center;
+                padding: 25px 0;
+            }
+            .timeline-container {
+                width: 100%;
+                justify-content: center;
+            }
+
+          
+        }
+        
+        .receive-btn{
+            width: 100%;
+            text-align: center;
+            margin-top: 30px;
+            button {
+                background: linear-gradient(to bottom, #eac45d, #eac45d,#a77f08,#c39500);
+                border: none;
+                color: white;
+                padding: 13px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 16px;
+                cursor: pointer;    
+                border-radius: 20px;
+                opacity: 0.7;
+            }
+            button:hover {
+                opacity: 1;
+            }
+        }
+    }
+    .attendance-right{
+        width: 25%;
+        padding: 65px 14px 0 19px;
+
+    }
+}
+@media only screen and (max-width: 900px){
+    .timeline {
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+    }
+    .timeline {
+        margin: 250px 0;
+    }
+
+}

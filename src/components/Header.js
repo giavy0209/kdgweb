@@ -10,10 +10,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { checkLanguage } from '../helpers'
 import { atcChangeLanguage } from '../store/action'
 import menubar from '../assets/img/menubar.png'
+import { useHistory } from 'react-router-dom'
 export default function App({data,type}){
     const VisibleBanner = data && data[0] ? data[0].visible_banner : false
     const dispatch = useDispatch()
-
+    const history = useHistory()
     const [html, sethtml] = useState('')
 
     const email = useSelector(state=>{
@@ -53,6 +54,8 @@ export default function App({data,type}){
 
     const handleChooseLang = useCallback(lang=>{
         dispatch(atcChangeLanguage(lang))
+        localStorage.setItem('lang', lang)
+        console.log(localStorage.getItem('lang'));
     },[dispatch])
 
     const listIcoinRotate = useSelector(state =>{
@@ -114,8 +117,12 @@ export default function App({data,type}){
             <div className="bottom-header">
                 <div className="kdg-container logo-menu">
                     <span className="menubar"><img src={menubar} alt="" /></span>
-                    <a className="logo" href="/"><img alt="KingDomGame" src={logoHeader}/></a>
-                    <h1>{checkLanguage(textLogo, language)}</h1>
+                    <a 
+                    onClick={e=>{e.preventDefault();history.push('/')}}
+                    className="logo" href="/"><img alt="KingDomGame" src={logoHeader}/></a>
+                    <h1
+                    onClick={e=>{e.preventDefault();history.push('/')}}
+                    >{checkLanguage(textLogo, language)}</h1>
                     <Menu type={type}/>
                 </div>
             </div>

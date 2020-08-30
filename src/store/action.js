@@ -1,5 +1,4 @@
-import calAPI from '../axios'
-import axios from 'axios'
+import callapi from '../axios'
 import Home from '../pages/Home'
 import Storage from '../helpers/storage'
 export const CHANGE_LOADING = 'CHANGE_LOADING';
@@ -76,13 +75,19 @@ export function actChangeListContries(contries){
 
 export function asyncGetBalance(tron_kdg_wallet, eth_usdt_wallet){
     return async dispatch =>{
-        dispatch(actChangeLoading(true))
-        const res = (await axios.get(`http://171.244.18.130:6001/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
-        const res2 = (await axios.get(`http://171.244.18.130:6001/api/tron_kdg/balance/${tron_kdg_wallet}`)).data
+        const res = (await callapi.get(`/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
+        const res2 = (await callapi.get(`/api/tron_kdg/balance/${tron_kdg_wallet}`)).data
         const {eth_balance,usdt_balance} = res
         const {trx_balance,kdg_balance} = res2
         dispatch(actChangeBalance({eth_balance, usdt_balance, trx_balance,kdg_balance}))
-        dispatch(actChangeLoading(false))
+
+        setInterval(async() => {
+            const res = (await callapi.get(`/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
+            const res2 = (await callapi.get(`/api/tron_kdg/balance/${tron_kdg_wallet}`)).data
+            const {eth_balance,usdt_balance} = res
+            const {trx_balance,kdg_balance} = res2
+            dispatch(actChangeBalance({eth_balance, usdt_balance, trx_balance,kdg_balance}))
+        }, 10000);
     }
 }
 
@@ -90,13 +95,15 @@ export function asyncLogin(submitData){
     return async dispatch =>{
         try {
             dispatch(actChangeLoading(true))
-            const res = ((await axios.post('http://171.244.18.130:6001/api/authorize',submitData)))
+            const res = ((await callapi.post('/api/authorize',submitData)))
+            console.log(res);
             dispatch(actChangeUser(res.data.data))
             dispatch(asyncGetBalance(res.data.data.trx_address, res.data.data.erc_address))
             Storage.setToken(res.data.data._id)
             dispatch(actChangeLoading(false))
             return  {ok: true}
         } catch (error) {
+            console.log(error.response);
             dispatch(actChangeLoading(false))
             return  {ok:false}
         }
@@ -106,16 +113,18 @@ export function asyncLogin(submitData){
 export function asyncGetUserData(){
     return async dispatch =>{
         const token = Storage.getToken()
-        console.log(token);
         if(token){
             try {
-                const res = (await axios.get(`http://171.244.18.130:6001/api/user/${token}`))
-                console.log(res.data.data);
-                dispatch(actChangeUser(res.data.data))
-                dispatch(asyncGetBalance(res.data.data.trx_address, res.data.data.erc_address))
+                const res = (await callapi.get(`/api/user/${token}`)).data
+                console.log(res);
+                if(res.status === 1){
+                    dispatch(actChangeUser(res.data))
+                    dispatch(asyncGetBalance(res.data.trx_address, res.data.erc_address))
+                }else{
+                    Storage.clearToken()
+                }
                 return  {msg:'login success'}
             } catch (error) {
-                dispatch(actChangeLoading(false))
                 return  {msg:'some error',error}
             }
         }else{
@@ -127,7 +136,7 @@ export function asyncGetUserData(){
 export function asyncGetListContries(){
     return async dispatch =>{
         dispatch(actChangeLoading(true))
-        const res = (await axios.get('https://restcountries.eu/rest/v2/all?fields=name;alpha2Code;flag')).data
+        const res = (await callapi.get('https://restcountries.eu/rest/v2/all?fields=name;alpha2Code;flag')).data
         dispatch(actChangeListContries(res))
         dispatch(actChangeLoading(false))
     }
@@ -137,7 +146,7 @@ export function asyncGetListCategories(hasLoading = true){
     return async dispatch =>{
         try {
             hasLoading && dispatch(actChangeLoading(true))
-            var res = (await calAPI.get(`/categories`)).data
+            var res = (await callapi.get(`/categories`)).data
             dispatch(actChangeListCategories(res))
             const router = []
             res.forEach(el=>{
@@ -175,7 +184,7 @@ export function asyncGetSettings(hasLoading = true){//goi data nay đầu tiên.
     return async dispatch =>{
         try {
             hasLoading && dispatch(actChangeLoading(true))
-            var res = (await calAPI.get(`/setting`)).data
+            var res = (await callapi.get(`/setting`)).data
             const setting = {}
             res.forEach(el=>{
                 setting[el.key] = el.data
@@ -193,12 +202,13 @@ export function asyncGetSettings(hasLoading = true){//goi data nay đầu tiên.
 export function asyncWithdraw(submitdata){
     return async dispatch =>{
         try {
-            const res = (await axios.post(`http://171.244.18.130:6001/api/deposit`,submitdata)).data
+            const res = (await callapi.post(`/api/deposit`,submitdata)).data
+            console.log(res);
             if(res.status === 1){
                 dispatch(asyncGetUserData())
-                return {msg:'success'}
+                return res
             }else{
-                return {msg:'error'}
+                return res
             }
         } catch (error) {
             return {msg:'error', error}

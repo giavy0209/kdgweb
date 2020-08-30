@@ -8,6 +8,7 @@ import { Slider, message } from 'antd';
 import axios from 'axios';
 import { useSelector } from 'react-redux'
 import '../../assets/css/staking.scss'
+import callapi from '../../axios'
 
 var addDate = function(date,days){
   date.setDate(date.getDate() + days);
@@ -49,7 +50,8 @@ const user = useSelector(state=>state.user)
 
 const handleStaking = useCallback( async ()=>{
   if(checked){
-    const res = (await axios.post('http://171.244.18.130:6001/api/create_staking',{userId: user._id, kdg_coin: ValueSlider})).data
+    const res = (await callapi.post('/api/create_staking',{userId: user._id, kdg_coin: ValueSlider})).data
+    console.log(res);
     if(res.status !== 1){
       message.error('Không đủ KDG')
     } 
@@ -71,6 +73,9 @@ const history = useHistory();
             <div className="kdg-container">
               <div className="staking-link-back">
                 <span
+                style={{
+                  cursor:'pointer'
+                }}
                 onClick={(e)=>{
                 e.preventDefault()
                 history.push('/staking')
@@ -161,11 +166,18 @@ const history = useHistory();
                   checked={checked}
                 />
               </label>
-              <span className="title-checkbox">Tôi đã đọc và hiểu rõ cảnh báo rủi ro trước khi tham gia</span>
+              <span className="title-checkbox">Tôi đã đọc và hiểu rõ <span 
+              
+              style={{display: 'inline' , cursor: 'pointer', textDecoration:'underline', padding: 0, fontStyle: 'italic'}}>
+                cảnh báo rủi ro</span> trước khi tham gia</span>
             </div>
           </div>
           <div className="checkbox-container">
-              <button onClick={handleStaking}>Tham gia ngay</button>
+              <button
+              style={
+                checked ? {opacity: 1, pointerEvents: 'all'} : {opacity : .6 , pointerEvents: "none"}
+              }
+              onClick={handleStaking}>Tham gia ngay</button>
           </div>
           </div>
 

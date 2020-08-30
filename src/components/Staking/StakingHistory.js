@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { DatePicker } from 'antd';
 import { useHistory } from 'react-router-dom'
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import nodata from '../../assets/img/nodata.png'
+import { checkLanguage } from '../../helpers';
+import KDG from '../../assets/img/kdg-icon.png'
+import callapi from '../../axios';
 
 const { RangePicker } = DatePicker;
 export default function App({...prop}) {
@@ -27,31 +29,35 @@ export default function App({...prop}) {
 
     useMemo(async ()=>{
       if(user){
-        const res = (await axios.get(`http://171.244.18.130:6001/api/get_staking_transaction/${user._id}?skip=1&take=99`)).data
+        const res = (await callapi.get(`/api/get_staking_transaction/${user._id}?skip=1&take=99`)).data
+        console.log(res);
         setStakingHistory([...res.data])
       }
     },[user])
 
+    const language = useSelector(state=>state.lang)
     return(
         <>
         <div className="kdg-container" style={{marginTop: 50}}> 
             <div className="kdg-link-back">
-              <span onClick={(e)=>{
+              <span 
+              style={{cursor: 'pointer'}}
+              onClick={(e)=>{
               history.push('/staking')
               }}>
                 <FontAwesomeIcon color="#f9c700" icon={faArrowLeft} />  
-                Trở về
+                {checkLanguage({vi: 'Trở về', en: 'Back'}, language)}
               </span>
             </div> 
                 <div className="date-time-picker-container">
-                <RangePicker
+                {/* <RangePicker
                 disabledDate={disabledDate}
                 onCalendarChange={value => {
                 setDates(value);
                 }}
                 style={{backgroundColor: 'rgba(255,255,255, 0)'}}
                 
-                />
+                /> */}
             </div>
         </div>
         <div className="kdg-container account">
@@ -61,24 +67,24 @@ export default function App({...prop}) {
             <table className="stacking-history">
               <thead>
                 <tr>
-                  <th style={{fontSize: 30, fontWeight:600}} colSpan="9">Lịch sử staking</th>
+                  <th style={{fontSize: 30, fontWeight:600}} colSpan="9">{checkLanguage({vi: 'LỊCH SỬ STAKING', en: 'MY STAKING RECORD'}, language)}</th>
                 </tr>
                 <tr>
                   <th>Coin/Token</th>
-                  <th>Thời gian bắt đầu khóa</th>
-                  <th>Thời gian mở khóa</th>
-                  <th>Số lượng khóa</th>
-                  <th>Tỷ lệ lợi nhuận hàng năm dự kiến</th>
-                  <th>Tiến độ</th>
+                  <th>{checkLanguage({vi: 'Thời gian bắt đầu', en: ''}, language)}</th>
+                  <th>{checkLanguage({vi: 'Thời gian mở khoá', en: ''}, language)}</th>
+                  <th>{checkLanguage({vi: 'Số tiền staking', en: 'Staking quantity'}, language)}</th>
+                  <th>{checkLanguage({vi: 'Tỷ lệ lợi nhuận hàng năm dự kiến', en: 'Estimated annual interest rate'}, language)}</th>
+                  {/* <th>Tiến độ</th>
                   <th>Năng suất khóa tại thời điểm này</th>
                   <th>Tình trạng</th>
-                  <th>Hoạt động</th>
+                  <th>Hoạt động</th> */}
                 </tr>
               </thead>
               <tbody>
                 {StakingHistory.length > 0? StakingHistory.map(stake =>
                   <tr>
-                    <td>KDG</td>                  
+                    <td><img width="30px" src={KDG} alt="" />  KDG</td>                  
                     <td> {new Date(stake.start_date).getDate()}/{new Date(stake.start_date).getMonth()+1}/{new Date(stake.start_date).getFullYear()} </td>
                     <td> <td> {new Date(stake.end_date).getDate()}/{new Date(stake.end_date).getMonth()+1}/{new Date(stake.end_date).getFullYear()} </td> </td>
                     <td> {stake.kdg_coin_send} </td>
@@ -88,7 +94,7 @@ export default function App({...prop}) {
                   <tr>
                     <td colSpan="9">
                       <img src={nodata} alt="" /> <br></br>
-                      Không có dữ liệu
+                      {checkLanguage({vi: 'Không có dữ liệu', en: 'No data'}, language)}
                     </td>
                   </tr>  
                 }

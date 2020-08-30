@@ -7,11 +7,21 @@ import bg from '../assets/img/background-ecosystem.png'
 import bge from '../assets/img/background-english-ecosystem.png'
 import bgem from '../assets/img/background-mobile-english-ecosystem.png'
 import bgm from '../assets/img/background-mobile-ecosystem.png'
+import { useParams } from 'react-router-dom';
 export default function App({data,...prop}) {
-    const [SlideIndex, setSlideIndex] = useState(0)
+    const {type} = useParams()
+    const [SlideIndex, setSlideIndex] = useState(type === 'kingpay' ? 1 : type === 'defi' ? 2 : type === 'kingswap' ? 3 : 0)
     const [BG, setBG] = useState(bg)
     const language = useSelector(state=> state.lang)
     const [ButtonTrackWidth , setButtonTrackWidth] = useState(0)
+
+    useEffect(()=>{
+        if(type){
+            var elmTop = document.querySelector('.slide').getBoundingClientRect().top
+            var scrollTop = window.pageYOffset 
+            smoothscroll(window, 0 ,0 ,scrollTop , scrollTop + elmTop , 300)
+        }
+    },[type])
     useEffect(()=>{
         if(window.innerWidth > 767){
             setButtonTrackWidth('100%')

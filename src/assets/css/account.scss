@@ -134,6 +134,30 @@
                 width: 100%;
                 padding: 0 7px;
                 font-size: 16px;
+                .input-password{
+                    position: relative;
+                    .validate-error{
+                        position: absolute;
+                        top: calc(100% + 5px);
+                        left: 0;
+                        white-space: nowrap;
+                        color: #ff0000;
+                        font-size: 12px;
+                        font-style: italic;
+                    }
+                    input{
+                        margin-top: 0;
+                        padding-right: 15px;
+                    }
+                    .eye{
+                        position: absolute;
+                        cursor: pointer;
+                        top: 50%;
+                        right: 10px;
+                        transform: translate(0 , -50%);
+                        font-size: 14px;
+                    }
+                }
                 &.checkbox{
                     input{
                         &:checked{
@@ -211,10 +235,12 @@
                                     img{
                                         width: 27px;
                                     }
-                                    span{
+                                    input{
                                         width: calc(100% - 30px - 27px);
+                                        padding: 0;
                                         font-size: 16px;
                                         padding-left: 8px;
+                                        border: none;
                                     }
                                 }
                                 span{
@@ -317,6 +343,7 @@
                     background-color: #1a2032;
                     color: #fac800;
                     font-size: 16px;
+                    z-index: 9;
                 }
                 input{
                     background-color: transparent;
@@ -438,4 +465,76 @@
         }
         
     }
+}
+
+@media only screen and (max-width: 767px){
+    body .account {
+        .sidebar{
+            padding: 15px 0;
+            .bottom-sidebar{
+                margin-top: 26px;
+            }
+        }
+
+        .main{
+            .ref{
+                >div{
+                    >span:first-child{
+                        width: 80px;
+                        vertical-align: top;
+                        font-size: 14px;
+                    }
+                    >span:last-child{
+                        width: calc(100% - 80px);
+                        vertical-align: top;
+                    }
+                }
+            }
+            .input-group.haft.select{
+                width: 100%;
+                + .select{
+                    margin-top: 48px;
+                }
+            }
+            form{
+                .upload{
+                    font-size: 0;
+                    .text{
+                        width: 100%;
+                        font-size: 12px;
+                        text-align: center;
+                        padding: 0;
+                    }
+                    .upload-block{
+                        width: 100%;
+                        padding: 10px;
+                    }
+                }
+            }
+        }
+        .kdg-col-3{
+            width: 100%;
+            *{
+                text-align: center;
+            }
+        }
+        .kdg-col-9{
+            width: 100%;
+            margin-top: 7px;
+        }
+        
+    }
+}
+
+.button-gradiant{
+    border-radius: 10px;
+    background-image: linear-gradient(to bottom , #e9c258 , #ecd98a, #a57d04 ,#c39500);
+    color: #fff;
+    padding: 17px 0;
+    width: 195px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
 }

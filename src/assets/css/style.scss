@@ -181,7 +181,52 @@ body {
     text-align: center;
 }
 
+.img {
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+
+.img img, .img video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+        object-fit: cover;
+}
+
+.img-3-2::before {
+    content: '';
+    display: block;
+    padding-top: 66.6666%;
+    background-color: transparent;
+}
+.img-1-1::before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+    background-color: transparent;
+}
+
+.back-top{
+    position: fixed;
+    bottom: 40px;
+    right: 45px;
+    width: 45px;
+    z-index: 9999999999;
+    opacity: .3;
+    transition: all .3s ease;
+    cursor: pointer;
+    &:hover{
+        opacity: 1;
+    }
+}
+
 header {
+    background-color: #14192a;
     background-size: cover;
     background-repeat: no-repeat;
     .top-header{
@@ -268,6 +313,7 @@ header {
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 align-self: flex-end;
+                cursor: pointer;
             }
             .menubar{
                 cursor: pointer;
@@ -972,6 +1018,7 @@ footer{
                     padding: 15px;
                     border-radius: 5px;
                     background-color: #fff;
+                    color: #000;
                     width: 100%;
                     border: none;
                     +input{
@@ -1170,13 +1217,38 @@ footer{
                 padding: 0;
                 span{padding: 0;}
                 &.account-menu{
+                    position: relative;
+                    > svg ~ svg {
+                        display: none;
+                    }
                     .drop-down-account{
-                        left: 0;
-                        right: auto;
-                        top: 30px;
+                        opacity: 1;
+                        position: relative;
+                        top: auto;
+                        left: auto;
+                        width: 100%;
+                        pointer-events: all;
+                        margin-top: 20px;
+                        padding: 0;
+                        background-color: transparent;
                         &::before{
-                            left: 15px;
-                            right: auto;
+                            display: none;
+                        }
+                        .top-dropdown{
+                            display: none;
+                        }
+                        .bottom-dropdown{
+                            display: none;
+                            +.bottom-dropdown{
+                                display: inline-block;
+                                margin-top: 0;
+                                svg{
+                                    display: none;
+                                }
+                                span{
+                                    padding-left: 0;
+                                }
+                            }
                         }
                     }
                 }

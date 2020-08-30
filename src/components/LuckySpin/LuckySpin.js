@@ -3,11 +3,48 @@ import Wheel from '../Wheel'
 import './styles.css'
 import '../../assets/css/lucky-spin.scss'
 import btcIcon from '../../assets/img/btc_icon.png'
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux'
 import { asyncGetUserData } from '../../store/action'
+import callapi from '../../axios'
+
+const items = [
+    {
+        name: 'Ngày 1',
+        active: true,
+    },
+    {
+        name: 'Ngày 2'  ,
+        active: false,
+    },
+    {
+        name: 'Ngày 3',
+        active: true,
+    },
+    {
+        name: 'Ngày 4',
+        active: true,
+    },
+    {
+        name: 'Ngày 5',
+        active: false,
+    },
+    {
+        name: 'Ngày 6',
+        active: true,
+    },
+    {
+        name: 'Ngày 7',
+        active: true,
+    },
+]
+
+const totalItems = items.length;
+const numberOfActiveItems = items.filter(item => item.active).length;
+const progressBarWidth = totalItems > 1 ? (numberOfActiveItems - 1) / (totalItems - 1) * 100 : 0;
 export default function App({ ...prop }) {
     const dispatch = useDispatch()
+    
+
     const places = [
         { title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 2 },
         { title: '1 KDG Reward', key: 1, orderNum: 3 },
@@ -24,7 +61,7 @@ export default function App({ ...prop }) {
     const user = useSelector(state => state.user)
     const Spin = useCallback(async () => {
         if(user){
-            var res = (await axios.post('http://171.244.18.130:6001/api/get_lucky_spin', { userId: user._id, token: '5f27dfdc81d58518f022b054' })).data
+            var res = (await callapi.post('/api/get_lucky_spin', { userId: user._id, token: '5f27dfdc81d58518f022b054' })).data
             setSpinValue(res.spin_value);
             setTimeout(() => {
                 dispatch(asyncGetUserData())
@@ -117,6 +154,43 @@ export default function App({ ...prop }) {
                                 <span>10</span>
                             </li>
                         </ul>
+                    </div>
+                </div>
+
+                <div className="attendance-container">
+                    <div className="attendance-left">
+                        <div style={{width: '100%', justifyContent: 'center'}}>
+                            <p className="title">ĐIỂM DANH NHẬN THƯỞNG</p>
+                        </div>
+                        <div className="button-row">
+                            <button className="button">15,300 KDG Reward</button>
+                        </div>
+                        <div className="main-content">
+                            <div style={{justifyContent: 'center', width: '100%'}}>
+                                <p className="text">Nhận Thưởng Hôm Nay</p>
+                            </div>
+                            <div  style={{width: '100%'}}>
+                                {/* <Timeline items={items}/> */}
+                                <div className="timeline">
+                                    <div className="timeline-progress" style={{ width: `${progressBarWidth}%`}}></div>
+                                    <div className="timeline-items">
+                                        {items.map((item, i) => (
+                                            <div key={i} className={"timeline-item" + (item.active ? ' active' : '')}>
+                                                <div className="timeline-content">
+                                                    {item.name}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="receive-btn">
+                            <button className="button">Nhấn để nhận ngay 2 KDG Reward</button>
+                        </div>
+                    </div>
+                    <div className="attendance-right">
+                        
                     </div>
                 </div>
 

@@ -1,25 +1,35 @@
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { asyncGetUserData,asyncLogin, actChangeLoading} from '../../store/action'
 import { useHistory } from 'react-router-dom'
 import {message} from 'antd'
 import '../../assets/css/login-reg.scss'
+import { checkLanguage, validateForm } from '../../helpers'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 export default function App({...rest}) {
     const history = useHistory()
     const dispatch = useDispatch()
+
+    const [ValidForm , setValidForm] = useState({email:false, password: true})
+    const [Eye, setEye] = useState({password: false})
+
     useMemo(()=>{
         dispatch(actChangeLoading(true))
         dispatch(asyncGetUserData())
         .then(res=>{
             dispatch(actChangeLoading(false))
-            if(res === !false){
-                history.push('/kdg-wallet')
+            if(res !== false){
+                console.log(res);
+                history.push('/home-wallet')
             }
         })
     },[dispatch,history])
 
     const email = useSelector(state => state.user && state.user.email)
-
+    useEffect(()=>{
+        if(email) setValidForm({...ValidForm , email :true})
+    },[email])
     const handleLogin = useCallback( async(e)=>{
         e.preventDefault()
         const data = new FormData(e.target)
@@ -29,8 +39,9 @@ export default function App({...rest}) {
         }
         dispatch(asyncLogin(submitData))
         .then(res=>{
+            console.log(res);
             if(res.ok){
-                history.push('/account')
+                history.push('/home-wallet')
             }else{
                 message.error('Sai email nhập hoặc mật khẩu')
             }
@@ -39,37 +50,75 @@ export default function App({...rest}) {
             console.log(res);
         })
     },[dispatch,history])
-
-
-
+    const language = useSelector(state => state.lang)
     return (
         <>
         <div className="form-block">
             <div className="left"><img alt="" src="/images/img-login2.png"></img></div>
             <div className="right">
                 <form onSubmit={handleLogin}>
-                    <h3>Đăng nhập</h3>
-                    <span>Bạn chưa có tài khoản? <span onClick={()=>history.push('/reg')}>Đăng ký</span></span>
+                    <h3>{checkLanguage({vi: 'ĐĂNG NHẬP', en: 'LOG IN'}, language)}</h3>
+                    <span>{checkLanguage({vi: 'Bạn chưa có tài khoản?', en: 'Have not account yet?'}, language)} <span onClick={()=>history.push('/reg')}>{checkLanguage({vi: 'Đăng ký', en: 'Register now'}, language)}</span></span>
                     <div className="form-group">
                         <p>Email</p>
                         <input 
-                        defaultValue = {email ? email : ''}
-                        name="email"/>
+                        onChange={e =>{
+                            e.target.value = e.target.value.toLowerCase()
+                            if(!e.target.value.match(validateForm.email)){
+                                e.target.nextElementSibling.classList.add('show')
+                                e.target.nextElementSibling.innerText = checkLanguage({vi: 'Email không đúng định dạng',en: 'Email is not valid'},language)
+                                setValidForm({...ValidForm, email: false})
+                            }else{
+                                e.target.nextElementSibling.classList.remove('show')
+                                e.target.nextElementSibling.innerText = ''
+                                setValidForm({...ValidForm, email: true})
+                            }
+                        }}
+                        defaultValue={email}
+                        name="email" id="email"/>
+                        <span className="validate-error"></span>
                     </div>
                     <div className="form-group">
-                        <p>Mật khẩu</p>
-                        <input placeholder="Ít nhất 8 ký tự, bao gồm cả chữ và số" name="password"/>
+                        <p>{checkLanguage({vi: 'Mật khẩu', en: 'Password'}, language)}</p>
+                        <div className="input-password">
+                            <FontAwesomeIcon 
+                            onClick={e =>{
+                                setEye({...Eye , password: !Eye.password})
+                            }}
+                            size="1x" color="#000" className="eye" icon={Eye.password ? faEye : faEyeSlash}/>
+                            <input 
+                            type={Eye.password ? '' : 'password'}
+                            // onChange={e=>{
+                            //     if(!e.target.value.match(validateForm.password)){
+                            //         e.target.nextElementSibling.classList.add('show')
+                            //         e.target.nextElementSibling.innerText = checkLanguage({vi: 'Password phải ít nhất 8 ký tự cả chữ và số',en: 'At least 8 digits, include word and number'},language)
+                            //         setValidForm({...ValidForm, password: false})
+                            //     }else{
+                            //         e.target.nextElementSibling.classList.remove('show')
+                            //         e.target.nextElementSibling.innerText = ''
+                            //         setValidForm({...ValidForm, password: true})
+                            //     }
+                            // }}
+                            placeholder={ checkLanguage({vi: 'Password phải ít nhất 8 ký tự cả chữ và số',en: 'At least 8 digits, include word and number'},language)}
+                            name="password" />
+                            <span className="validate-error"></span>
+                        </div>
                     </div>
                     <div className="form-group half">
-                        <button className="button">Đăng nhập</button>
+                        <button 
+                        style={
+                            (ValidForm.email && ValidForm.password) ? 
+                            {opacity:  1 , pointerEvents:  'all'} :
+                            {opacity: .6 , pointerEvents: 'none'} 
+                        } 
+                        className="button">{checkLanguage({vi: 'Đăng nhập', en: 'Log in'}, language)}</button>
                     </div>
                     <div>
-                        <span onClick={()=>history.push('/forgot-password')}>Quên mật khẩu</span>
+                        <span style={{fontSize: 14, cursor: 'pointer', color: "#fac800", paddingLeft: 8}} onClick={()=>history.push('/forgot-password')}>{checkLanguage({vi: 'Quên mật khẩu', en: 'Forgot password?'}, language)}</span>
                     </div>
                 </form>
             </div>
         </div>
         </>
     )
-    
 }

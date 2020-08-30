@@ -95,7 +95,7 @@ main{
             border-radius: 5px;
             overflow: hidden;
             .top-info{
-                background-color: #e4a027;
+                background-color: #fac500;
                 padding: 30px 37px;
                 font-size: 0;
                 >*{
@@ -205,7 +205,8 @@ main{
             display: none;
         }
         table{
-            width: 1090px;
+            min-width: 1090px;
+            width: 100%;
             margin: 0 -1px;
             border-collapse:collapse;
             tr{
@@ -492,6 +493,7 @@ main{
 
 @media only screen and (max-width: 992px){
     .section-prices{
+        margin-top: 50px;
         .kdg-column-4 .item{
             width: 50%;
         }
@@ -506,6 +508,51 @@ main{
         }
         >.kdg-column-2 .item:not(:nth-child(-n + 1)){
             margin-top: 20px;
+        }
+        .list-coin{
+            .coin{
+                .top-info{
+                    padding: 10px;
+                    >*{
+                        width: 100%;
+                        text-align: center;
+                    }
+                    .coin-image-name{
+                        img{
+                            width: 30px;
+                        }
+                        .name{
+                            text-align: left;
+                            width: fit-content;
+                            
+                        }
+                    }
+                    .balance{
+                        text-align: center;
+                        margin-top: 10px;
+                        p{
+                            span{
+                                width: fit-content;
+                                font-size: 14px;
+                                + span{
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                    }
+                }
+                .button-group{
+                    padding: 10px;
+                    .item{
+                        margin: 0;
+                    }
+                    .button{
+                        p{
+                            font-size: 10px;
+                        }
+                    }
+                }
+            }
         }
     }
     .account {
