@@ -55,7 +55,6 @@ export default function App({data,type}){
     const handleChooseLang = useCallback(lang=>{
         dispatch(atcChangeLanguage(lang))
         localStorage.setItem('lang', lang)
-        console.log(localStorage.getItem('lang'));
     },[dispatch])
 
     const listIcoinRotate = useSelector(state =>{

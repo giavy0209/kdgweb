@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { asyncGetSettings, atcChangeLanguage,asyncGetListCategories, actChangeLoading, asyncGetUserData} from './store/action'
 import Home from './pages/Home'
+import Term from './pages/Term'
 import Login from './pages/Login'
 import Reg from './pages/Reg'
 import ForgotPassword from './pages/ForgotPassword'
@@ -81,6 +82,9 @@ function App() {
         </Route>
         <Route exact={true} path='/forgot-password'>
           <ForgotPassword/>
+        </Route>
+        <Route exact={true} path='/terms-of-service/:index?'>
+          <Term/>
         </Route>
         <Route exact={true} path='/news/:id?'>
           <NewsDetail/>
