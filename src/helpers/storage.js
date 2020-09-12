@@ -1,5 +1,6 @@
 
 const keyToken = "user";
+const keyJWT = "jwt";
 
 const Storage = {
   setToken(token) {
@@ -10,7 +11,17 @@ const Storage = {
   },
   clearToken(){
     localStorage.clear(keyToken)
+  },
+  setJWT(token) {
+    localStorage.setItem(keyJWT, token)
+  },
+  getJWT() {
+    return localStorage.getItem(keyJWT);
+  },
+  clearJWT(){
+    localStorage.clear(keyJWT)
   }
+
 }
 
 export default Storage

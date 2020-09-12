@@ -33,6 +33,44 @@
         @media only screen and (max-width: 767px){
             width: 100%;
         }
+        .choose-lang{
+            position: absolute;
+            bottom: 100%;
+            right: 0%;
+            cursor: pointer;
+            color: #8a8c8e;
+            font-size: 14px;
+            img{
+                width: 20px;
+            }
+            span{
+                margin: 0 5px;
+            }
+            &:hover{
+                .drop-down{
+                    pointer-events: all;
+                    opacity: 1;
+                }
+            }
+            .drop-down{
+                position: absolute;
+                top: 100%;
+                right: 0;
+                transition: all .3s ease;
+                border-radius: 8px;
+                background-color: #f1f3f4;
+                opacity: 0;
+                pointer-events: none;
+                li{
+                    cursor: pointer;
+                    padding: 10px 15px;
+                    width: 100px;
+                    &.active{
+                        background-color: #fff6d0;
+                    }
+                }
+            }
+        }
         form{
             position: absolute;
             top: 50%;

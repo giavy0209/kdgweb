@@ -56,7 +56,7 @@ export default function App({...prop}) {
             </div>
             </div>  
               <div className="kdg-link-history">
-                <a href="/" onClick={(e)=>{
+                <a href="/staking/history" onClick={(e)=>{
                   e.preventDefault()
                   history.push('/staking/history')
                 }}>

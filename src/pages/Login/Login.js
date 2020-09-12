@@ -7,24 +7,35 @@ import '../../assets/css/login-reg.scss'
 import { checkLanguage, validateForm } from '../../helpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { ChooseLanguage } from '../../components'
 export default function App({...rest}) {
     const history = useHistory()
     const dispatch = useDispatch()
+    const token = useSelector(state => state.token)
+    const JWT = useSelector(state => state.JWT)
+    const language = useSelector(state => state.lang)
 
     const [ValidForm , setValidForm] = useState({email:false, password: true})
     const [Eye, setEye] = useState({password: false})
 
+    useEffect(()=>{
+        document.title = checkLanguage({vi: 'Đăng nhập', en: 'Login'}, language)
+    },[language])
+
     useMemo(()=>{
         dispatch(actChangeLoading(true))
-        dispatch(asyncGetUserData())
-        .then(res=>{
-            dispatch(actChangeLoading(false))
-            if(res !== false){
-                console.log(res);
-                history.push('/home-wallet')
-            }
-        })
-    },[dispatch,history])
+        if(token && JWT) {
+            dispatch(asyncGetUserData(token))
+            .then(res=>{
+                dispatch(actChangeLoading(false))
+                if(res !== false){
+                    history.push('/home-wallet')
+                }
+            })
+        }
+        dispatch(actChangeLoading(false))
+
+    },[dispatch,history,token,JWT])
 
     const email = useSelector(state => state.user && state.user.email)
     useEffect(()=>{
@@ -39,24 +50,26 @@ export default function App({...rest}) {
         }
         dispatch(asyncLogin(submitData))
         .then(res=>{
-            console.log(res);
             if(res.ok){
                 history.push('/home-wallet')
             }else{
-                message.error('Sai email nhập hoặc mật khẩu')
+                if(res.res.data.status === 103){
+                    message.error(checkLanguage({vi: 'Email không tồn tại', en: 'Email is not exist'},language))
+                }else if(res.res.data.status === 104){
+                    message.error(checkLanguage({vi: 'Sai mật khẩu', en: 'Wrong password'},language))
+                }
             }
         })
         .catch(res=>{
-            console.log(res);
         })
     },[dispatch,history])
-    const language = useSelector(state => state.lang)
     return (
         <>
         <div className="form-block">
             <div className="left"><img alt="" src="/images/img-login2.png"></img></div>
             <div className="right">
                 <form onSubmit={handleLogin}>
+                    <ChooseLanguage />
                     <h3>{checkLanguage({vi: 'ĐĂNG NHẬP', en: 'LOG IN'}, language)}</h3>
                     <span>{checkLanguage({vi: 'Bạn chưa có tài khoản?', en: 'Have not account yet?'}, language)} <span onClick={()=>history.push('/reg')}>{checkLanguage({vi: 'Đăng ký', en: 'Register now'}, language)}</span></span>
                     <div className="form-group">
@@ -99,7 +112,7 @@ export default function App({...rest}) {
                             //         setValidForm({...ValidForm, password: true})
                             //     }
                             // }}
-                            placeholder={ checkLanguage({vi: 'Password phải ít nhất 8 ký tự cả chữ và số',en: 'At least 8 digits, include word and number'},language)}
+                            placeholder={ checkLanguage({vi: 'Mật khẩu phải ít nhất 8 ký tự cả chữ và số',en: 'At least 8 digits, include word and number'},language)}
                             name="password" />
                             <span className="validate-error"></span>
                         </div>

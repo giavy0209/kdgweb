@@ -76,7 +76,10 @@
     .main{
         background-color: rgba(40, 51,73 , .4);
         padding: 32px 39px;
-        
+        overflow-y: scroll;
+        &::-webkit-scrollbar{
+            display: none;
+        }
         form{
             font-size: 0;
             margin: 0 -7px;
@@ -104,6 +107,16 @@
                     color: #8a8c8e;
                     background-color: #fff;
                     width: 250px;
+                    overflow: hidden;
+                    position: relative;
+                    .placeholder{
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        z-index: 99;
+                        transform: translate(-50% , -50%);
+                        width: 100%;
+                    }
                 }
             }
             ul{
@@ -159,37 +172,12 @@
                     }
                 }
                 &.checkbox{
-                    input{
-                        &:checked{
-                            ~label{
-                                >span:first-child{
-                                    &::before{
-                                        position: absolute;
-                                        content: '';
-                                        width: 15px;
-                                        height: 25px;
-                                        border-right: 2px solid #fac800;
-                                        border-bottom: 2px solid #fac800;
-                                        bottom: 0;
-                                        right: 0;
-                                        transform: rotate(30deg) translate(-7px, -2px);
-                                    }
-                                }
-                            }
-                        }
-                    }
                     label{
                         position: relative;
                         
                         > span{
                             display: inline-block;
                             vertical-align: middle;
-                            &:first-child{
-                                width: 25px;
-                                position: relative;
-                                height: 25px;
-                                background-color: #8e919c;
-                            }
                             &:last-child{
                                 display: inline;
                             }
@@ -404,6 +392,29 @@
                     [class*="fa-"]{
                         color: #fff;
                         cursor: pointer;
+                    }
+                }
+            }
+        }
+        .rule{
+            margin-top: 35px;
+            padding: 20px 15px;
+            border-radius: 5px;
+            background-color: #121827;
+            p{
+
+                &:first-child{
+                    font-size: 16px;
+                    color: #fac800;
+                    text-decoration: underline;
+                    font-style: italic
+                }
+                + p{
+                    margin-top: 25px;
+                    font-size: 14px;
+                    color: #8a8c8e;
+                    +p{
+                        margin-top: 5px;
                     }
                 }
             }

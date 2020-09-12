@@ -39,6 +39,9 @@
     .item{
         .news{
             .title{
+                margin-top: 12px;
+                height: 42px;
+                overflow: hidden;
                 a{
                     margin-top: 20px;
                     color: #0f0f25;
@@ -48,9 +51,11 @@
             .des{
                 color: #484859;
                 font-size: 14px;
-                margin-top: 5px;
+                margin-top: 12px;
                 line-height: 16px;
                 max-height: 48px;
+                overflow: hidden;
+                height: 50px;
                 overflow: hidden;
             }
             .viewmore{
@@ -59,6 +64,7 @@
                 background-color: #fac800;
                 color: #fff;
                 margin-top: 11px;
+                cursor: pointer;
             }
         }
     }
@@ -158,6 +164,11 @@
 .news-content{
     margin-top: 85px;
     .main-content{
+        +.main-content{
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #ccc;
+        }
         .header{
             padding-bottom: 15px;
             border-bottom: 1px solid #8a8c8e;
@@ -179,10 +190,26 @@
                 font-size: 20px;
                 margin: 25px 0;
             }
+            .maincontent{
+                font-size: 16px;
+                color: #0f0f25;
+            }
         }
     }
     aside{
+        position: relative;
+        height: 100%;
         .block-aside{
+            overflow: scroll;
+            &::-webkit-scrollbar {
+                display: none
+            }
+            position: absolute;
+            left: 0;
+            width: 100%;
+            @media only screen and (max-width : 768px){
+                position: relative;
+            }
             .block-title{
                 color: #fac800;
                 font-size: 20px;
@@ -191,6 +218,7 @@
             .list-othernews{
                 li{
                     padding-top: 20px;
+                    cursor: pointer;
                     .othernew-title{
                         font-size: 16px;
                         color: #484859;

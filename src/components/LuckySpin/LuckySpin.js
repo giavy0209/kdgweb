@@ -1,12 +1,19 @@
-import React, {  useState, useCallback } from 'react'
+import React, {  useState, useCallback, useMemo } from 'react'
 import Wheel from '../Wheel'
 import './styles.css'
 import '../../assets/css/lucky-spin.scss'
 import btcIcon from '../../assets/img/btc_icon.png'
 import { useSelector, useDispatch } from 'react-redux'
-import { asyncGetUserData } from '../../store/action'
+import { asyncGetUserData, actChangeLoading } from '../../store/action'
 import callapi from '../../axios'
+import { checkLanguage } from '../../helpers'
+import popupspin from '../../assets/img/popupspin.png'
+import { message } from 'antd'
 
+var addDate = function(date,days){
+    date.setDate(date.getDate() + days);
+    return date
+}
 const items = [
     {
         name: 'Ngày 1',
@@ -42,13 +49,59 @@ const totalItems = items.length;
 const numberOfActiveItems = items.filter(item => item.active).length;
 const progressBarWidth = totalItems > 1 ? (numberOfActiveItems - 1) / (totalItems - 1) * 100 : 0;
 export default function App({ ...prop }) {
-    const dispatch = useDispatch()
-    
+    const dispatch = useDispatch()  
+    const language = useSelector(state => state.lang)
+
+    const userid = useSelector(state => state.user && state.user._id)
+
+    const [IsRewardToday, setIsRewardToday] = useState(true)
+
+    const getTransaction = useCallback(async()=>{
+        const res = (await callapi().get(`/api/get_transaction?id=${userid}&skip=0&take=7&type=lucky-spin-daily`)).data 
+        
+        if(res.data[0]){
+            if(res.data[0].create_date){
+                var lastd = new Date(res.data[0].create_date)
+                var d = new Date()
+                if(lastd.getFullYear() < d.getFullYear){
+                    setIsRewardToday(false)
+                }
+                if(lastd.getFullYear() === d.getFullYear()){
+                    if(lastd.getMonth() < d.getMonth()){
+                        setIsRewardToday(false)
+                    }
+                    if(lastd.getMonth() === d.getMonth() && lastd.getDate() < d.getDate()){
+                        setIsRewardToday(false)
+                    }
+                }
+            }
+        }else{  
+            setIsRewardToday(false)
+        }
+    },[userid])
+
+    const handleGetRewardDaily = useCallback(async ()=>{
+        dispatch(actChangeLoading(true))
+        const res = (await callapi().post('/api/create_transaction' , {from : 'admin' , to: userid, userId : userid, type : 'lucky-spin-daily'})).data
+        if(res.status === 1){
+            message.success(checkLanguage({vi: 'Chúc mừng bạn nhận được 2 KDG Reward', en: 'You receive 2 KDG Reward'},language))
+            getTransaction()
+        }
+        if(res.status === 0 ){
+            message.error(checkLanguage({vi: 'Bạn đã nhận thưởng hôm nay rồi', en: 'Already got reward'},language))
+        }
+        setIsRewardToday(true)
+        dispatch(actChangeLoading(false))
+    },[userid])
+
+    useMemo(()=>{
+        getTransaction()
+    },[userid,getTransaction])
 
     const places = [
-        { title: 'Chúc bạn may mắn lần sau', key: 0, orderNum: 2 },
+        { title: checkLanguage({vi: 'Thêm lượt', en: 'One more turn'}, language), key: 2, orderNum: 2 },
         { title: '1 KDG Reward', key: 1, orderNum: 3 },
-        { title: '2 KDG Reward', key: 2, orderNum: 4 },
+        { title: '3 KDG Reward', key: 3, orderNum: 4 },
         { title: '5 KDG Reward', key: 5, orderNum: 5 },
         { title: '25 KDG Reward', key: 25, orderNum: 6 },
         { title: '50 KDG Reward', key: 50, orderNum: 7 },
@@ -57,44 +110,70 @@ export default function App({ ...prop }) {
     ]
 
     const [SpinValue, setSpinValue] = useState(null);
+    const [RewardValue, setRewardValue] = useState('');
 
     const user = useSelector(state => state.user)
     const Spin = useCallback(async () => {
         if(user){
-            var res = (await callapi.post('/api/get_lucky_spin', { userId: user._id, token: '5f27dfdc81d58518f022b054' })).data
+            var res = (await callapi().post('/api/get_lucky_spin', { userId: user._id, token: '5f27dfdc81d58518f022b054' })).data
             setSpinValue(res.spin_value);
-            setTimeout(() => {
-                dispatch(asyncGetUserData())
-            }, 4000);
+            var rewardvalue = places.find( o => o.key === res.spin_value)
+            setRewardValue(rewardvalue.title)
         }
     }, [user,dispatch])
 
+
+    const kdg_reward = useSelector(state=>state && state.user && state.user.kdg_reward)    
+
     return (
-        
         <>
+            <div
+            style={{display: 'none',paddingBottom: 26,width: 360, position: 'fixed', top: '50%' , left: '50%', transform: 'translate(-50% , -50%)', zIndex : 99, backgroundColor : '#fff', borderRadius: 5}}
+            className='popupspin'>
+                <span
+                onClick={e=>{
+                    e.target.parentElement.style.display = 'none'
+                }}
+                style={{position: 'absolute', top: 5, right: 5, fontSize: 20, width: 25, height: 25, borderRadius: '50%', color: '#fff' , backgroundColor : '#8a8c8e', textAlign : 'center', cursor: 'pointer'}}
+                >x</span>
+                <img src={popupspin} alt="" />
+                <p
+                style={{fontSize: 20, color : '#283349', textAlign : 'center',fontWeight: 500}}
+                > {checkLanguage({vi: 'Chúc Mừng Bạn!', en: 'Congrats!'},language)} </p>
+                <p
+                style={{color : '#414042', fontSize: 16 , textAlign: 'center', width: 260, margin: '0 auto', marginTop: 15, marginBottom: 20}}
+                > {checkLanguage({vi: `Bạn đã nhận được ${RewardValue} cho lượt quay này`, en: `You got ${RewardValue} for this spin`},language)} </p>
+                <p
+                onClick={e=>{
+                    e.target.parentElement.style.display = 'none'
+                }}
+                style={{cursor: 'pointer',width: 130, borderRadius: 50, textAlign: 'center', margin: '0 auto' , padding: '10px 0', fontSize: 16, color : '#ffffff', backgroundImage: 'linear-gradient(to bottom , #e9c259 ,#e4cf7c , #aa8411 , #c59700)'}}
+                >{checkLanguage({vi: 'Tiếp tục', en: 'Continue'},language)}</p>
+            </div>
             <div className="kdg-container">
                 <div className="container-wheel">
                     <div className="wheel-left">
                         <div className="button-row">
-                            <button className="button">Danh Sách Trúng Thưởng</button>
+                            {/* <button className="button">Danh Sách Trúng Thưởng</button> */}
                         </div>
-                        <p className="title">VÒNG XOAY MAY MẮN</p>
+                        <p className="title"> {checkLanguage({vi: 'VÒNG XOAY MAY MẮN', en:'LUCKY SPIN'},language)} </p>
                         <div className="main-content">
                             <div className="text">
                                 <div className="sub-title">
-                                    <p>Quay ngay bây giờ </p>
-                                    <p>và chiến thắng!</p>
+                                    
+                                    <p>{checkLanguage({vi: 'Quay ngay bây giờ ', en: 'Join now '},language)}</p>
+                                    <p>{checkLanguage({vi: 'và chiến thắng!', en: 'and win!'},language)}</p>
                                 </div>
                                 <div className="fee"> 
                                     <div className="fee-content">
                                         <div className="coin-img">
                                             <img src={btcIcon} alt=""/> 
                                         </div>
-                                        <span>Phí: </span> 
-                                        <span>2 KDG Reward/lượt</span> 
+                                        <span>{checkLanguage({vi: 'Phí', en: 'Fee'},language)}: </span> 
+                                        <span>2 KDG Reward/{checkLanguage({vi: 'lượt', en: 'turn'},language)}</span> 
                                     </div>
                                 </div>
-                                <p className="total-coin"><span>Số KDG Reward:</span> <span> {user && user.kdg_reward ? user.kdg_reward : 0} </span></p>
+                                <p className="total-coin"><span>{checkLanguage({vi: 'Số', en: 'Total'},language)} KDG Reward:</span> <span> {user && user.kdg_reward ? user.kdg_reward : 0} </span></p>
                             </div>
 
                             <div className="wheel-block">
@@ -104,54 +183,30 @@ export default function App({ ...prop }) {
                     </div>
                     <div className="wheel-right">
                         <div className="sub-title">
-                            <p>CÁC GIẢI THƯỞNG</p>
-                            <p>CỦA THÁNG NÀY</p>
-                            <p>THẮNG GIẢI</p>
+                            <p>{checkLanguage({vi: 'CÁC GIẢI THƯỞNG', en: 'WINNER'},language)}</p>
+                            <p>{checkLanguage({vi: 'CỦA THÁNG NÀY', en: 'OF THIS MONTH'},language)}</p>
+                            <p>{checkLanguage({vi: 'THẮNG GIẢI', en: 'WIN THE PRIZE'},language)}</p>
                         </div>
                         <ul className="list-reward">
                             <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
+                                <span>Phương Linh</span>
+                                <span>1,025 KDG Reward</span>
                             </li>
                             <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
+                                <span>An Dĩ Thái</span>
+                                <span>1,000 KDG Reward</span>
                             </li>
                             <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
+                                <span>Hoàng Ân</span>
+                                <span>800 KDG Reward</span>
                             </li>
                             <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
+                                <span>Châu Thi</span>
+                                <span>600 KDG Reward</span>
                             </li>
                             <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
-                            </li>
-                            <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
-                            </li>
-                            <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
-                            </li>
-                            <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
-                            </li>
-                            <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
-                            </li>
-                            <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
-                            </li>
-                            <li>
-                                <span>1 KDG Reward</span>
-                                <span>10</span>
+                                <span>Phước Lài</span>
+                                <span>500 KDG Reward</span>
                             </li>
                         </ul>
                     </div>
@@ -160,18 +215,18 @@ export default function App({ ...prop }) {
                 <div className="attendance-container">
                     <div className="attendance-left">
                         <div style={{width: '100%', justifyContent: 'center'}}>
-                            <p className="title">ĐIỂM DANH NHẬN THƯỞNG</p>
+                            <p className="title">{checkLanguage({vi: 'ĐIỂM DANH NHẬN THƯỞNG', en: 'CHECK IN TODAY TO GET KDG REWARD'},language)}</p>
                         </div>
                         <div className="button-row">
-                            <button className="button">15,300 KDG Reward</button>
+                            <button className="button">{kdg_reward} KDG Reward</button>
                         </div>
                         <div className="main-content">
                             <div style={{justifyContent: 'center', width: '100%'}}>
-                                <p className="text">Nhận Thưởng Hôm Nay</p>
+                                <p className="text">{checkLanguage({vi: 'Nhận Thưởng Hôm Nay', en: 'Get KDG Reward today'},language)}</p>
                             </div>
                             <div  style={{width: '100%'}}>
                                 {/* <Timeline items={items}/> */}
-                                <div className="timeline">
+                                {/* <div className="timeline">
                                     <div className="timeline-progress" style={{ width: `${progressBarWidth}%`}}></div>
                                     <div className="timeline-items">
                                         {items.map((item, i) => (
@@ -182,11 +237,16 @@ export default function App({ ...prop }) {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className="receive-btn">
-                            <button className="button">Nhấn để nhận ngay 2 KDG Reward</button>
+                            <button 
+                            onClick={handleGetRewardDaily}
+                            style={
+                                IsRewardToday ? {opacity: .5 , pointerEvents :'none'} : {opacity: 1 , pointerEvents :'all'}
+                            }
+                            className="button">{checkLanguage({vi: 'Nhấn để nhận ngay 2 KDG Reward', en: 'Click here to get 2 KDG Reward'},language)}</button>
                         </div>
                     </div>
                     <div className="attendance-right">

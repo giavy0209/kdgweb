@@ -65,8 +65,8 @@ export default function App({...prop}) {
             <footer>
                 <div className="kdg-container">
                     <div className="kdg-row top-footer">
-                        <div className="kdg-col-4">
-                            <a href="/"><img alt="KingDomGame" src={logoFooter} /></a>
+                        <div className="kdg-col-4 left">
+                            <a className="logo" href="/"><img alt="KingDomGame" src={logoFooter} /></a>
                             <p style={{fontSize: 23, fontWeight: 600, marginTop: 30}}>{checkLanguage(titleFooter, lang)}</p>
                             <p style={{fontSize:14, marginTop: 27}}><FontAwesomeIcon color="#fac800" icon={faMapMarker}/> {checkLanguage(address, lang)} </p>
                             <p style={{fontSize:14, marginTop: 14}}><FontAwesomeIcon color="#fac800" icon={faEnvelope}/> {email} </p>

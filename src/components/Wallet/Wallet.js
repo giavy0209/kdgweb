@@ -3,63 +3,15 @@ import ListChart from './ListChart'
 import ListCoin from './ListCoin'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight} from '@fortawesome/free-solid-svg-icons'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { InputNumber } from 'antd';
 import '../../assets/css/wallet.scss'
 import nodata from '../../assets/img/nodata.png'
 import { checkLanguage } from '../../helpers';
-import callapi from '../../axios';
-async function getHistoryUSDT (userWallet,skip,coin){
-
-  const res = (await callapi.get(`/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=10`)).data
-
-  if(res.status === 1){
-    console.log(res);
-    var result = res.data.result
-    result = result.map(o=>{
-      var data ={
-        time: new Date(o.timeStamp * 1000),
-        type: o.form === userWallet ? 0 : 1,
-        value: o.value / 1e6,
-        hash: o.hash
-      }
-      return data
-    })
-    return result
-  }
-}
-
-async function getHistoryTRX (userWallet,skip,coin){
-  const res = (await callapi.get(`/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=10`)).data
-  if(res.status === 1){
-    var result = res.data.data
-    if(coin === 'KDG'){
-      result = result.map(o=>{
-        var data ={
-          time: new Date(o.timestamp),
-          type: o.transferFromAddress === userWallet ? 0 : 1,
-          value: o.amount / 1e18,
-          hash: o.transactionHash
-        }
-        return data
-      })
-    }
-    if(coin === 'TRON'){
-      result = result.map(o=>{
-        var data ={
-          time: new Date(o.block_timestamp),
-          type: o.transferFromAddress === userWallet ? 0 : 1,
-          value: o.raw_data.contract[0].parameter.value.amount / 1e6,
-          hash: o.txID
-        }
-        return data
-      })
-    }
-    return result
-  }
-}
+import { asyncGetHistoryTRX, asyncGetHistoryUSDT } from '../../store/action';
 
 function App() {
+  const dispatch = useDispatch()
   const [CurrentHistory, setCurrentHistory] =useState('KDG')
   const [Page, setPage] = useState(1)
   const [History, setHistory] = useState([])
@@ -72,19 +24,20 @@ function App() {
   })
 
   useEffect(()=>{
+    setHistory([...[]])
     if(CurrentHistory === 'KDG' || CurrentHistory === 'TRON'){
       if(ercWallet) {
-        getHistoryTRX(trxWallet, (Page - 1) * 10, CurrentHistory)
+        dispatch(asyncGetHistoryTRX(trxWallet, (Page - 1) * 10, CurrentHistory))
         .then(result=>{
+          result = result.slice((Page - 1) * 10,(Page - 1) * 10 + 10)
           setHistory([...result])
         })
       }
     }
     if(CurrentHistory === 'ETH' || CurrentHistory === 'USDT'){
       if(trxWallet) {
-        getHistoryUSDT(ercWallet, (Page - 1) * 10, CurrentHistory)
+        dispatch(asyncGetHistoryUSDT(ercWallet, (Page - 1) * 10, CurrentHistory))
         .then(result=>{
-          console.log(result);
           setHistory([...result])
         })
       }
@@ -93,34 +46,47 @@ function App() {
 
   return (
     <>
+      
       <main>
         <div className="kdg-container">
           <section className="section-prices">
-            <h2 className="title">Giá thị trường</h2>
+            <h2 className="title"> {checkLanguage({vi : 'Giá thị trường', en: 'MARKET'}, language)}</h2>
             <div className="kdg-row kdg-column-4 list-price">
               <ListChart/>
             </div>
           </section>
           <section className="section-wallet">
-            <h2 className="title">thông tin số dư</h2>
+            <h2 className="title">{checkLanguage({vi : 'thông tin số dư', en: 'BALANCE INFORMATION'}, language)}</h2>
             <div className="kdg-row kdg-column-2 list-coin">
               <ListCoin/>
             </div>
           </section>
 
           <section className="section-history">
-            <h2 className="title">LỊCH SỬ GIAO DỊCH</h2>
+            <h2 className="title">{checkLanguage({vi : 'LỊCH SỬ GIAO DỊCH', en: 'HISTORY'}, language)}</h2>
             <div className="list-tab">
-              <div onClick={()=>setCurrentHistory('KDG')} className={`tab ${CurrentHistory === 'KDG' && 'active'}`}>
+              <div onClick={()=>{
+                setCurrentHistory('KDG')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'KDG' && 'active'}`}>
                 <p>KDG</p>
               </div>
-              <div onClick={()=>setCurrentHistory('TRON')} className={`tab ${CurrentHistory === 'TRON' && 'active'}`}>
+              <div onClick={()=>{
+                setCurrentHistory('TRON')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'TRON' && 'active'}`}>
                 <p>TRX</p>
               </div>
-              <div onClick={()=>setCurrentHistory('ETH')} className={`tab ${CurrentHistory === 'ETH' && 'active'}`}>
+              <div onClick={()=>{
+                setCurrentHistory('ETH')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'ETH' && 'active'}`}>
                 <p>ETH</p>
               </div>
-              <div onClick={()=>setCurrentHistory('USDT')} className={`tab ${CurrentHistory === 'USDT' && 'active'}`}>
+              <div onClick={()=>{
+                setCurrentHistory('USDT')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'USDT' && 'active'}`}>
                 <p>USDT</p>
               </div>
             </div>
@@ -129,10 +95,10 @@ function App() {
               <table>
                 <tbody>
                   <tr>
-                    <th>Thời gian</th>
-                    <th>Số lượng</th>
+                    <th>{checkLanguage({vi : 'Thời gian', en: 'Date'}, language)}</th>
+                    <th>{checkLanguage({vi : 'Số lượng', en: 'Volume'}, language)}</th>
                     <th>Token</th>
-                    <th>Kiểu</th>
+                    <th>{checkLanguage({vi : 'Kiểu', en: 'Type'}, language)}</th>
                     <th>Hash(Txid)</th>
                   </tr>
 
@@ -147,7 +113,7 @@ function App() {
                           {value}
                         </td>
                         <td>{CurrentHistory}</td>
-                        <td>{type === 0 ? 'Rút tiền' : 'Nạp tiền'}</td>
+                        <td>{type === 0 ? checkLanguage({vi : 'Rút tiền', en: 'Withdraw'}, language) : checkLanguage({vi : 'Nạp tiền', en: 'Deposit'}, language)}</td>
                         <td> {hash} </td>
                       </tr>
                     ): 
@@ -165,8 +131,13 @@ function App() {
             </div>
             <div className="pagination">
               <span style={{pointerEvents: Page === 1 ? 'none' : 'all'}} onClick={()=>setPage(Page - 1)} className="arrow"><FontAwesomeIcon icon={faAngleLeft}/></span>
-                  <InputNumber onPressEnter={e=>setPage(Number(e.target.value))} style={{width:60}}/>
-              <span style={{pointerEvents: History.length < 10 ? 'none' : 'all'}}  onClick={()=>setPage(Page + 1)} className="arrow"><FontAwesomeIcon icon={faAngleRight}/></span>
+                  <InputNumber onPressEnter={e=>{
+                    setPage(Number(e.target.value))
+                  }} value={Page} style={{width:60}}/>
+              <span style={{pointerEvents: History.length < 10 ? 'none' : 'all'}}  onClick={()=>{
+                setPage(Page + 1)
+                console.log('Page + 1');
+              }} className="arrow"><FontAwesomeIcon icon={faAngleRight}/></span>
             </div>
           </section>
 

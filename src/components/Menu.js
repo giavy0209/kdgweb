@@ -24,7 +24,6 @@ export default function App({type}) {
       pathEN = havepath.pathEN;
     }
     if(pathEN){
-      console.log(path, pathEN);
       window.open(checkLanguage({vi:path, en: pathEN}, language),'_blank')
     }
     if(isURL){
@@ -32,10 +31,13 @@ export default function App({type}) {
     }
     if(!isURL && !pathEN){
       if(selectedItem !== ''){
-        if(event) event.stopPropagation();
-        
-        setCurrentUrl(selectedItem);
-        history.push(selectedItem);
+        if(selectedItem !=='null'){
+          if(event) event.stopPropagation();
+          
+          setCurrentUrl(selectedItem);
+          history.push(selectedItem);
+
+        }
       }
     }
   },[history,language]);
@@ -77,7 +79,6 @@ export default function App({type}) {
   const handleChooseLang = useCallback(lang=>{
     dispatch(atcChangeLanguage(lang))
     localStorage.setItem('lang', lang)
-    console.log(localStorage.getItem('lang'));
   },[dispatch])
 
   const username = useSelector(state=>{
@@ -117,6 +118,7 @@ export default function App({type}) {
           <div 
           onClick={()=>{
             storage.clearToken()
+            storage.clearJWT()
             window.open('/', '_self')
           }}
           className="bottom-dropdown">

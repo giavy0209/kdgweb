@@ -8,6 +8,7 @@ import { checkLanguage, validateForm } from '../../helpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import callapi from '../../axios'
+import { ChooseLanguage } from '../../components'
 
 export default function App({...rest}) {
     const [CountDownSendMail, setCountDownSendMail] = useState(null)
@@ -16,21 +17,34 @@ export default function App({...rest}) {
     const [Eye, setEye] = useState({password: false , new_password: false})
     const history = useHistory()
     const dispatch = useDispatch()
+    const token = useSelector(state => state.token)
+    const JWT = useSelector(state => state.JWT)
+    const language = useSelector(state => state.lang)
 
     const loginURL = useSelector(state => {
         return state.settings && state.settings.login_button.url 
     })
 
+    useEffect(()=>{
+        document.title = checkLanguage({vi: 'Quên mật khẩu', en: 'Forgot password'}, language)
+    },[language])
+
     useMemo(()=>{
         dispatch(actChangeLoading(true))
-        dispatch(asyncGetUserData())
-        .then(res=>{
-            dispatch(actChangeLoading(false))
-            if(res === !false){
-                history.push('/kdg-wallet')
-            }
-        })
-    },[dispatch,history])
+        console.log(JWT);
+        if(token && JWT) {
+            dispatch(asyncGetUserData(token))
+            .then(res=>{
+                console.log(res);
+                dispatch(actChangeLoading(false))
+                if(res !== false){
+                    history.push('/home-wallet')
+                }
+            })
+            .catch(console.log())
+        }
+        dispatch(actChangeLoading(false))
+    },[dispatch,history,token,JWT])
 
 
     useEffect(()=>{
@@ -47,12 +61,11 @@ export default function App({...rest}) {
         }
     },[CountDownSendMail])
     
-    const language = useSelector(state => state.lang)
 
     async function getCode(email){
         dispatch(actChangeLoading(true))
         try {
-            const res = (await callapi.post('/api/create_forgot_password_code',{email})).data
+            const res = (await callapi().post('/api/create_forgot_password_code',{email})).data
             console.log(res);
             if(res.status === 1){
                 setCountDownSendMail(120)
@@ -74,7 +87,7 @@ export default function App({...rest}) {
             submitData[pair[0]] = pair[1]
         }
         dispatch(actChangeLoading(true))
-        const res = (await callapi.post('/api/forgot_password',submitData)).data
+        const res = (await callapi().post('/api/forgot_password',submitData)).data
         console.log(res);
         dispatch(actChangeLoading(false))
         if(res.status === 1){
@@ -96,6 +109,7 @@ export default function App({...rest}) {
             <div className="left"><img alt="" src="/images/img-login.png"></img></div>
             <div className="right">
                 <form onSubmit={handleResetPass}>
+                    <ChooseLanguage />
                     <h3>{checkLanguage({vi: "Đặt lại mật khẩu", en: 'Reset password'},language)}</h3>
                     <span>{checkLanguage({vi: "Đã nhớ mật khẩu?", en: 'Remember your password?'},language)} <span onClick={()=>history.push('/login')}>{checkLanguage({vi: "Đăng nhập", en: 'Log in'},language)}</span></span>
                     <div className="form-group">

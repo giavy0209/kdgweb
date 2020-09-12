@@ -25,9 +25,6 @@ export default function App(){
 
     const email = useSelector(state=>state.user && state.user.email)
     
-    useEffect(()=>{
-        console.log(ValidateForm);
-    },[ValidateForm])
 
     const idtype=useMemo(()=>{
         return [{value: 0, name:checkLanguage({vi: 'Chứng minh nhân dân/ Bằng lái xe ', en: "Identity Card / Driver's License"}, language)}, {value: 1, name:checkLanguage({vi: 'Hộ chiếu', en: 'Passport'}, language)}]
@@ -76,8 +73,8 @@ export default function App(){
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var label = input.nextElementSibling
-                    label.querySelector('img').setAttribute('src' , e.target.result)
-                    label.querySelector('p').style.display = 'none'
+                    label.querySelector('img.placeholder').setAttribute('src' , e.target.result)
+                    // label.querySelector('p').style.display = 'none'
                 }
                 reader.readAsDataURL(input.files[0]); // convert to base64 string
             }
@@ -98,18 +95,18 @@ export default function App(){
         const uploadFont = new FormData()
         uploadFont.append('file', submitData.font)
         uploadFont.append('userId' , userId)
-        arrayUpload.push(callapi.post('/api/upload_kyc_image', uploadFont))
+        arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadFont))
 
         const uploadSelf = new FormData()
         uploadSelf.append('file', submitData.self)
         uploadSelf.append('userId' , userId)
-        arrayUpload.push(callapi.post('/api/upload_kyc_image', uploadSelf))
+        arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadSelf))
 
         if(SelectedID === 0){
             const uploadBack = new FormData()
             uploadBack.append('file', submitData.back)
             uploadBack.append('userId' , userId)
-            arrayUpload.push(callapi.post('/api/upload_kyc_image', uploadBack))
+            arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadBack))
         }
         
         dispatch(actChangeLoading(true))
@@ -128,10 +125,11 @@ export default function App(){
                 var kycInfo = {
                     kyc_country : SelectedContry,
                     kyc_number : submitData.id,
+                    kyc_name : submitData.name,
                     kyc : '2',
                     id : userId,
                 }
-                const resUpdate = (await callapi.put(`/api/user`,kycInfo)).data 
+                const resUpdate = (await callapi().put(`/api/user`,kycInfo)).data 
                 if(resUpdate.status === 1){
                     dispatch(asyncGetUserData(false))
                     dispatch(actChangeLoading(false))
@@ -213,7 +211,6 @@ export default function App(){
                                 onClick={(e)=>{
                                     setSelectedContry(el.alpha2Code)
                                     setListContrySearch(findValueContry().name)
-                                    console.log(findValueContry().name);
                                     e.target.parentElement.parentElement.classList.remove('show')
                                 }}
                                 className={SelectedContry === el.alpha2Code ? 'selected-value' : ''} key={idx}>
@@ -253,9 +250,10 @@ export default function App(){
                     readURL(e);
                     (e.target.files && e.target.files[0]) ? setValidateForm({...ValidateForm, img1: true}) : setValidateForm({...ValidateForm, img1: false})
                 }}
-                type="file" name="font" id="font" style={{display: 'none'}} />
+                type="file" accept="image/*" name="font" id="font" style={{display: 'none'}} />
                 <label htmlFor="font" className="upload-block">
                     <img alt="" src={frontid} />
+                    <img alt="" src="" className="placeholder" />
                     <p>Nhấn vào đây để tải lên ảnh mặt trước</p>
                 </label>
             </div>
@@ -266,9 +264,10 @@ export default function App(){
                     readURL(e);
                     (e.target.files && e.target.files[0]) ? setValidateForm({...ValidateForm, img2: true}) : setValidateForm({...ValidateForm, img2: false})
                 }}
-                type="file" id="back" name="back" style={{display: 'none'}} />
+                type="file" accept="image/*" id="back" name="back" style={{display: 'none'}} />
                 <label htmlFor="back" className="upload-block">
                     <img alt="" src={backid} />
+                    <img alt="" src="" className="placeholder" />
                     <p>Nhấn vào đây để tải lên ảnh mặt sau</p>
                 </label>
             </div>}
@@ -279,23 +278,26 @@ export default function App(){
                     readURL(e);
                     (e.target.files && e.target.files[0]) ? setValidateForm({...ValidateForm, img3: true}) : setValidateForm({...ValidateForm, img3: false})
                 }}
-                type="file" id="self" name="self" style={{display: 'none'}} />
+                type="file" accept="image/*" id="self" name="self" style={{display: 'none'}} />
                 <label htmlFor="self" className="upload-block">
                     <img alt="" src={self} />
+                    <img alt="" src="" className="placeholder" />
                     <p>Nhấn vào đây để tải lên</p>
                 </label >
             </div>
             <div className="input-group checkbox">
                 <input 
+                className="checkbox"
                 onChange={e =>setValidateForm({...ValidateForm, check: e.target.checked})}
                 type="checkbox" name="confirm" id="confirm"/> 
-                <label for="confirm"><span></span> <span>{checkLanguage({vi: 'Tôi xác nhận các thông tin trên là đúng sự thật', en: 'I certify that the above information is true'}, language)}</span></label>
+                <label className="checkbox-label" for="confirm"><span className="checkbox-box"></span> <span>{checkLanguage({vi: 'Tôi xác nhận các thông tin trên là đúng sự thật', en: 'I certify that the above information is true'}, language)}</span></label>
             </div>
             
             <div className="input-group">
             <button 
             style={
-                (isKYC === '0' || isKYC === '3')?(SelectedID === 0 ? 
+                (isKYC !== '1' && isKYC !== '2')?
+                (SelectedID === 0 ? 
                 (
                     (ValidateForm.check && ValidateForm.id && ValidateForm.name && ValidateForm.img1 && ValidateForm.img2 && ValidateForm.img3) ?
                     {opacity: 1, pointerEvents: 'all'} : {opacity: .6, pointerEvents: 'none'}

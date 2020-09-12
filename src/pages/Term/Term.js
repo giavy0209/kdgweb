@@ -13,6 +13,12 @@ import '../../assets/css/term.scss'
 export default function App(){
     const dispatch = useDispatch()
     const history = useHistory()
+
+    const language = useSelector(state=>state && state.lang)
+    useEffect(()=>{
+        document.title = checkLanguage({vi: 'Điều khoản dịch vụ', en: 'Terms of services'}, language)
+    },[language])
+
     const listIcon = useSelector(state =>{
         if(state.settings && state.settings.top_icon){
             var top_icon = state.settings.top_icon
@@ -33,13 +39,11 @@ export default function App(){
 
     const {index} = useParams()
 
-    const [CurrentTerm, setCurrentTerm] = useState(index ? index : 0)
 
     const logoHeader = useSelector(state=>{
         return state && state.settings && state.settings.logo && state.settings.logo.logo_header
     })
 
-    const language = useSelector(state=>state && state.lang)
 
     const textLogo = useSelector(state => {
         return state && state.settings && state.settings.text_next_logo
@@ -83,13 +87,17 @@ export default function App(){
             }
         }
     })
+    const [CurrentTerm, setCurrentTerm] = useState((index && Number(index) < terms.length) ? Number(index) : 0)
 
     useEffect(()=>{
         if(window.innerWidth > 992){
             setTimeout(() => {
+                var windowHeight = window.innerHeight
+                var headerHeight = document.querySelector('header').offsetHeight
                 var sidebar = document.querySelector('.sidebar-term')
-                var contentHeight = document.querySelector('.term-content').offsetHeight
-                sidebar.style.height = contentHeight + 'px'
+                var contentHeight = document.querySelector('.term-content')
+                sidebar.style.height = (windowHeight - headerHeight - 50) + 'px'
+                contentHeight.style.height = (windowHeight - headerHeight - 50) + 'px'
             }, 500);
         }
 
@@ -139,8 +147,8 @@ export default function App(){
             </div>
             <div className="banner" style={{paddingTop: 10, paddingBottom: 18}}>
                 <div className="kdg-container">
-                    <p style={{color: '#ddd9d8', fontSize: 24, fontWeight: 600}}>QUY TẮC</p>
-                    <p style={{marginTop: 10, fontSize: 16}}>Phần này giới thiệu cho bạn tất cả các tài liệu liên quan đến các điều khoản và điều kiện Kingdom Game. Chúng tôi cố gắng hết sức để bảo vệ quyền lợi của bạn.</p>
+                    <p style={{color: '#ddd9d8', fontSize: 24, fontWeight: 600}}>{checkLanguage({vi: 'QUY TẮC', en:'RULES'},language)}</p>
+                    <p style={{marginTop: 10, fontSize: 16}}>{checkLanguage({vi: 'Phần này giới thiệu cho bạn tất cả các tài liệu liên quan đến các điều khoản và điều kiện Kingdom Game. Chúng tôi cố gắng hết sức để bảo vệ quyền lợi của bạn.', en:'This part introduces you all document related to terms and provisions of Kingdom Game 4.0. We always try to protect your assets'},language)}</p>
                 </div>
             </div>
         </header>
@@ -149,7 +157,7 @@ export default function App(){
             <div className="kdg-row term">
                 <div className="kdg-col-3 va-t">
                     <div className="sidebar-term">
-                        <h2>NỘI DUNG</h2>
+                        <h2>{checkLanguage({vi: 'NỘI DUNG', en:'CONTENTS'},language)}</h2>
                         {
                             terms && terms.map((o,index) =><p onClick={()=>setCurrentTerm(index)} className={CurrentTerm === index ? 'active' : ''} key={index}>{checkLanguage(o.title,language)}</p>)
                         }

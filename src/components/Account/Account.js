@@ -7,21 +7,24 @@ import Tab2 from './Tab2'
 import Tab3 from './Tab3'
 
 import '../../assets/css/account.scss'
-
+import { useLocation } from 'react-router-dom'
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 export default function App({...prop}) {
-    const [Tab, setTab] = useState(0)
+    const query  = useQuery()
+    const [Tab, setTab] = useState(query.get('tab') ? Number(query.get('tab')) : 0)
 
     useEffect(()=>{
         if(window.innerWidth > 992){
-            const main = document.querySelector('.main')
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const windowHeight = window.innerHeight
             const sidebar = document.querySelector('.sidebar')
-            sidebar.style.height = null
-            main.style.height = null
-            const mainHeight = main.offsetHeight;
-            const sidebarHeight = sidebar.offsetHeight;
-            console.log(mainHeight , sidebarHeight);
-            if(mainHeight > sidebarHeight) sidebar.style.height = mainHeight + 'px'
-            else main.style.height = sidebarHeight + 'px'
+            const main = document.querySelector('.main')
+
+            sidebar.style.height = (windowHeight - headerHeight) + 'px'
+            main.style.height = (windowHeight - headerHeight) + 'px'
+
         }
     },[Tab])
     return(

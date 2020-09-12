@@ -8,16 +8,23 @@ import { checkLanguage, validateForm } from '../../helpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import callapi from '../../axios'
+import { ChooseLanguage } from '../../components'
 
 export default function App({...rest}) {
     const {ref} = useParams()
-    console.log(ref);
     const [CountDownSendMail, setCountDownSendMail] = useState(null)
     const [CountDownSendMailTimeOut, setCountDownSendMailTimeOut] = useState(null)
     const [ValidForm , setValidForm] = useState({email:false, password: false, repassword: false, register_code: false,})
     const [Eye, setEye] = useState({password: false , repassword: false})
     const history = useHistory()
     const dispatch = useDispatch()
+    const token = useSelector(state => state.token)
+    const JWT = useSelector(state => state.JWT)
+    const language = useSelector(state => state.lang)
+
+    useEffect(()=>{
+        document.title = checkLanguage({vi: 'Đăng ký', en: 'Register'}, language)
+    },[language])
 
     const loginURL = useSelector(state => {
         return state.settings && state.settings.login_button.url 
@@ -25,15 +32,17 @@ export default function App({...rest}) {
 
     useMemo(()=>{
         dispatch(actChangeLoading(true))
-        dispatch(asyncGetUserData())
-        .then(res=>{
-            dispatch(actChangeLoading(false))
-            if(res !== false){
-                console.log(res);
-                history.push('/wallet')
-            }
-        })
-    },[dispatch,history])
+        if(token && JWT) {
+            dispatch(asyncGetUserData(token))
+            .then(res=>{
+                dispatch(actChangeLoading(false))
+                if(res !== false){
+                    history.push('/home-wallet')
+                }
+            })
+        }
+        dispatch(actChangeLoading(false))
+    },[dispatch,history,token,JWT])
 
 
     useEffect(()=>{
@@ -50,13 +59,12 @@ export default function App({...rest}) {
         }
     },[CountDownSendMail])
     
-    const language = useSelector(state => state.lang)
     const [check,setcheck] = useState(false)
 
     async function getCode(email){
         dispatch(actChangeLoading(true))
         try {
-            const res = (await callapi.post('/api/create_register_code',{email})).data
+            const res = (await callapi().post('/api/create_register_code',{email})).data
             console.log(res);
             if(res.status === 1){
                 setCountDownSendMail(120)
@@ -78,8 +86,7 @@ export default function App({...rest}) {
             submitData[pair[0]] = pair[1]
         }
         dispatch(actChangeLoading(true))
-        const res = (await callapi.post('/api/register_user',submitData)).data
-        console.log(res);
+        const res = (await callapi().post('/api/register_user',submitData)).data
         dispatch(actChangeLoading(false))
         if(res.status === 1){
             message.success(checkLanguage({vi: "Đăng ký thành công", en: 'Register success'},language))
@@ -101,6 +108,7 @@ export default function App({...rest}) {
             <div className="left"><img alt="" src="/images/img-login.png"></img></div>
             <div className="right">
                 <form onSubmit={handleReg}>
+                    <ChooseLanguage />
                     <h3>{checkLanguage({vi: "Đăng ký", en: 'Register'},language)}</h3>
                     <span>{checkLanguage({vi: "Đã có tài khoản?", en: 'Already have an account?'},language)} <span onClick={()=>history.push('/login')}>{checkLanguage({vi: "Đăng nhập", en: 'Log in'},language)}</span></span>
                     <div className="form-group">
@@ -217,13 +225,21 @@ export default function App({...rest}) {
                     <div className="form-group">
                         <p>{checkLanguage({vi: "Mã mời (tuỳ chọn)", en: 'Referral code (optional)'},language)}</p>
                         <input 
-                        disabled={!!ref}
                         defaultValue={ref ? ref : ''}
                         name="parent_ref_code" />
                     </div>
                     <div className="form-group checkbox">
-                        <input onChange={e=>setcheck(e.target.checked)} id="confirm" type="checkbox" name="confirm"/>
-                        <label htmlFor="confirm">{checkLanguage({vi: "Tôi đồng ý với ", en: 'I agree with'},language)} <a style={{display: 'inline'}} href="/">{checkLanguage({vi: "Thỏa thuận người dùng | Chính sách bảo mật của KDG", en: 'provisions of User Agreement | Privacy Policy of KDG'},language)}</a></label>
+                        <input onChange={e=>setcheck(e.target.checked)} id="confirm" type="checkbox" className="checkbox" name="confirm"/>
+                        <label className="checkbox-label" htmlFor="confirm">
+                            <span className="checkbox-box"></span>
+                            {checkLanguage({vi: "Tôi đồng ý với ", en: 'I agree with'},language)} 
+                            <a style={{display: 'inline'}} target="_blank" href="/terms-of-service/0">
+                                {checkLanguage({vi: " Thỏa thuận người dùng ", en: ' User Agreement '},language)}
+                            </a>
+                            <a style={{display: 'inline'}} target="_blank" href="/terms-of-service/2">
+                                {checkLanguage({vi: "| Chính sách bảo mật của KDG", en: '| Privacy Policy of KDG'},language)}
+                            </a>
+                        </label>
                     </div>
                     <div className="form-group half">
                         <button 

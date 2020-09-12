@@ -32,6 +32,10 @@
     .term-content{
         background-color: #1b2335;
         padding: 35px 20px;
+        overflow-y: scroll;
+        &::-webkit-scrollbar{
+            display: none;
+        }
     }
 }
 @media only screen and (max-width : 992px){

@@ -10,6 +10,7 @@ import bgm from '../assets/img/background-mobile-ecosystem.png'
 import { useParams } from 'react-router-dom';
 export default function App({data,...prop}) {
     const {type} = useParams()
+    console.log(type);
     const [SlideIndex, setSlideIndex] = useState(type === 'kingpay' ? 1 : type === 'defi' ? 2 : type === 'kingswap' ? 3 : 0)
     const [BG, setBG] = useState(bg)
     const language = useSelector(state=> state.lang)
@@ -20,6 +21,7 @@ export default function App({data,...prop}) {
             var elmTop = document.querySelector('.slide').getBoundingClientRect().top
             var scrollTop = window.pageYOffset 
             smoothscroll(window, 0 ,0 ,scrollTop , scrollTop + elmTop , 300)
+            setSlideIndex(type === 'kingpay' ? 1 : type === 'defi' ? 2 : type === 'kingswap' ? 3 : 0)
         }
     },[type])
     useEffect(()=>{

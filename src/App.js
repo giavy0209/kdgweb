@@ -1,7 +1,7 @@
 import React, {useMemo, useCallback, useEffect, useState}  from 'react';
 import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { asyncGetSettings, atcChangeLanguage,asyncGetListCategories, actChangeLoading, asyncGetUserData} from './store/action'
+import { asyncGetSettings, atcChangeLanguage,asyncGetListCategories, actChangeLoading, asyncGetUserData, asyncLogin} from './store/action'
 import Home from './pages/Home'
 import Term from './pages/Term'
 import Login from './pages/Login'
@@ -11,7 +11,7 @@ import Loading from './pages/Loading'
 import NewsDetail from './pages/NewsDetail'
 
 import backtop from './assets/img/back-top.svg'
-import { smoothscroll } from './helpers';
+import { smoothscroll, storage } from './helpers';
 function App() {
   const dispatch = useDispatch()
   const [ShowScrollTop, setShowScrollTop] = useState(false)
@@ -36,12 +36,9 @@ function App() {
       dispatch(asyncGetListCategories(false)),
       dispatch(asyncGetUserData())
     ]).then(() => {
+      console.log(123);
       dispatch(actChangeLoading(false));
     })
-
-    // setInterval(() => {
-    //   dispatch(asyncGetUserData())
-    // }, 2000);
   },[dispatch])
 
   useEffect(()=>{
@@ -52,13 +49,45 @@ function App() {
         setShowScrollTop(false)
       }
     })
+    var logintime = localStorage.getItem('login_time')
+    if(logintime){
+      var loginDate = new Date(logintime)
+      var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
+      if(timeFromLastLogin >= 1800000){
+        console.log(timeFromLastLogin);
+        var email = localStorage.getItem('email')
+        var password = localStorage.getItem('password')
+        dispatch(asyncLogin({email, password}))
+      }else{
+      }
+    }
+    var id = setInterval(() => {
+      var logintime = localStorage.getItem('login_time')
+      if(logintime){
+        var loginDate = new Date(logintime)
+        var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
+        if(timeFromLastLogin >= 1800000){
+          var email = localStorage.getItem('email')
+          var password = localStorage.getItem('password')
+          dispatch(asyncLogin({email, password}))
+        }else{
+        }
+      }else{
+        clearInterval(id)
+      }
+    }, 5000);
+
+    setInterval(() => {
+      dispatch(asyncGetUserData())
+    }, 5000);
   },[])
+
 
   
   const ListRoute = useCallback(()=>{
     return ROUTERS_LINK && ROUTERS_LINK.map(route => 
       route.path && !route.isURL && !route.pathEN && <Route key={route.path} exact={true} path={route.path}>
-        <Home type={route.type} reqLogin={route.reqLogin} components={route.page.components}/>
+        <Home name={route.name} type={route.type} reqLogin={route.reqLogin} components={route.page.components}/>
       </Route>
     )
   },[ROUTERS_LINK])

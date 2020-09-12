@@ -15,7 +15,6 @@ export default function App({Tab, setTab,...prop}) {
     const language = useSelector(state=>state.lang)
     const username = useSelector(state=>state.user && {first_name: state.user.first_name , last_name:state.user.last_name})
     const isKYC = useSelector(state=> state && state.user && state.user.kyc)
-    console.log(isKYC === '3');
     return (<div className="kdg-col-3 va-t">
         <div className="sidebar">
             <div className="top-sidebar">

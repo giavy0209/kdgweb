@@ -17,6 +17,8 @@ import StakingEvent from './Staking/StakingEvent'
 import Wallet from './Wallet'
 import News from './News'
 import HomeWallet from './HomeWallet'
+import ChooseLanguage from './ChooseLanguage'
+import GameHub from './GameHub'
 export {
     Description, 
     Header, 
@@ -36,5 +38,7 @@ export {
     StakingEvent,
     News,
     Wallet,
-    HomeWallet
+    HomeWallet,
+    ChooseLanguage,
+    GameHub
 }

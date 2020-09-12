@@ -33,7 +33,7 @@ export default function App(){
 
         submitData.birth_day = `${month}/${day}/${year}`
         
-        const res = (await callapi.put(`/api/user`,submitData)).data
+        const res = (await callapi().put(`/api/user`,submitData)).data
         if(res){}
         dispatch(asyncGetUserData())
         message.success('Cập nhật thông tin thành công')
@@ -91,7 +91,14 @@ export default function App(){
                             e.target.nextElementSibling.innerText = ''
                         }
                     }}
-                    placeholder="DD/MM/YYYY" defaultValue={(user && user.birth_day) ? `${new Date(user.birth_day).toLocaleString().slice(10, 19)}`   : '' } name="birth_day"/>
+                    placeholder="DD/MM/YYYY" 
+                    defaultValue={
+                        (user && user.birth_day) ? 
+                        `${new Date(user.birth_day).getDate()}/${new Date(user.birth_day).getMonth() + 1}/${new Date(user.birth_day).getFullYear()}`   
+                        : '' 
+
+                    }
+                    name="birth_day"/>
                     <span className="validate-error"></span>
                 </div>
             </div>

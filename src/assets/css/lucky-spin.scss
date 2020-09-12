@@ -129,9 +129,9 @@
                 span{
                     display: inline-block;
                     vertical-align: middle;
-                    width: calc(100% - 18px);
+                    width: calc(100% - 80px);
                     &:last-child{
-                        width: 18px;
+                        width: 80px;
                     }
                 }
                 &:nth-child(odd){
@@ -325,7 +325,7 @@
   }
 
 .attendance-container{
-    background-image: url(../img/attendance.png);
+    background-image: url(../img/attendance.jpg);
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: cover;
@@ -396,9 +396,6 @@
                 font-size: 16px;
                 cursor: pointer;    
                 border-radius: 20px;
-                opacity: 0.7;
-            }
-            button:hover {
                 opacity: 1;
             }
         }

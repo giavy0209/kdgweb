@@ -1,9 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import './index.css'
 import SpinButton from './spinButton';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { message } from 'antd';
+import { asyncGetUserData } from '../../store/action';
 function Wheel({keyValue, setSpinValue,getValue, items}) {
+    const dispatch = useDispatch()
   const [selectedItem, setSelectedItem] = useState(null);
 
   const [IsCanClick, setIsCanClick] = useState(true);
@@ -12,23 +14,21 @@ function Wheel({keyValue, setSpinValue,getValue, items}) {
   const arrPlaces = items.find((item) => item.key === keyValue )
   const user = useSelector(state => state.user)
 
-  const selectItem = () => {
+  const selectItem = async () => {
     if(user && user.kdg_reward > 1){
-      getValue();
+      await getValue();
       setButtonName('')
       setIsCanClick(false)
       setTimeout(() => {
         setIsCanClick(true)
         setButtonName('RESET')
+        dispatch(asyncGetUserData())
+        document.querySelector('.popupspin').style.display  = 'block'
       }, 4000);
     }else{
       message.error('Bạn không đủ KDG Reward')
     }
   }
-
-  useEffect(()=>{
-    console.log(ButtonName);
-  },[ButtonName])
 
   useEffect(()=>{
     if(keyValue !== null){

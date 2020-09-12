@@ -29,7 +29,7 @@ export default function App({...prop}) {
 
     useMemo(async ()=>{
       if(user){
-        const res = (await callapi.get(`/api/get_staking_transaction/${user._id}?skip=1&take=99`)).data
+        const res = (await callapi().get(`/api/get_staking_transaction/${user._id}?skip=0&take=99`)).data
         console.log(res);
         setStakingHistory([...res.data])
       }
@@ -71,8 +71,8 @@ export default function App({...prop}) {
                 </tr>
                 <tr>
                   <th>Coin/Token</th>
-                  <th>{checkLanguage({vi: 'Thời gian bắt đầu', en: ''}, language)}</th>
-                  <th>{checkLanguage({vi: 'Thời gian mở khoá', en: ''}, language)}</th>
+                  <th>{checkLanguage({vi: 'Thời gian bắt đầu', en: 'Start date'}, language)}</th>
+                  <th>{checkLanguage({vi: 'Thời gian mở khoá', en: 'End date'}, language)}</th>
                   <th>{checkLanguage({vi: 'Số tiền staking', en: 'Staking quantity'}, language)}</th>
                   <th>{checkLanguage({vi: 'Tỷ lệ lợi nhuận hàng năm dự kiến', en: 'Estimated annual interest rate'}, language)}</th>
                   {/* <th>Tiến độ</th>

@@ -2,21 +2,23 @@ import React, { useEffect } from 'react'
 
 export default function  App({data,...prop}) {
     useEffect(()=>{
-        var listImgBlock = document.querySelectorAll('.list-2')
-        listImgBlock.forEach(el=>{
-            var listImg = el.querySelectorAll('.list-2-item')
-            var heightest = 0
-            setTimeout(() => {
-                listImg.forEach(img =>{
-                    if(img.offsetHeight > heightest) heightest = img.offsetHeight
-                })
-                listImg.forEach(img =>{
-                    img.style.height = (heightest + 46) + 'px'
-                })
-            }, 3000);
+        if(window.innerWidth > 768) {
+            var listImgBlock = document.querySelectorAll('.list-2')
+            listImgBlock.forEach(el=>{
+                var listImg = el.querySelectorAll('.list-2-item')
+                var heightest = 0
+                setTimeout(() => {
+                    listImg.forEach(img =>{
+                        if(img.offsetHeight > heightest) heightest = img.offsetHeight
+                    })
+                    listImg.forEach(img =>{
+                        img.style.height = (heightest) + 'px'
+                    })
+                }, 3000);
 
-            
-        })
+                
+            })
+        }
 
     },[])
     return(

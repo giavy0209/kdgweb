@@ -85,6 +85,18 @@ export default function App({data,type}){
         }
     },[language,bannerContent])
 
+    const setFixMenu = useCallback(()=>{
+        
+        var menu = document.querySelector('.header .bottom-header')
+        document.addEventListener('scroll', e=>{
+            if(window.scrollY > 200){
+                menu.classList.add('fixed')
+            }else{
+                menu.classList.remove('fixed')
+            }
+        })
+    },[])
+
     return(
         <>
         <header style={VisibleBanner ? {backgroundImage: 'url(/images/backgroundtop.png)'} : {}} className="header">
@@ -113,7 +125,9 @@ export default function App({data,type}){
                 </div>
 
             </div>
-            <div className="bottom-header">
+            <div 
+            onLoad={setFixMenu}
+            className="bottom-header">
                 <div className="kdg-container logo-menu">
                     <span className="menubar"><img src={menubar} alt="" /></span>
                     <a 
