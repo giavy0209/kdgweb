@@ -130,10 +130,13 @@ export default function App(){
                     id : userId,
                 }
                 const resUpdate = (await callapi().put(`/api/user`,kycInfo)).data 
+                dispatch(actChangeLoading(false))
+
                 if(resUpdate.status === 1){
                     dispatch(asyncGetUserData(false))
-                    dispatch(actChangeLoading(false))
                     message.success(checkLanguage({vi: 'Gửi KYC thành công, bạn vui lòng chờ xét duyệt', en: 'Send KYC info to admin success. Please wait!'},language))
+                }else if (resUpdate.status === 100){
+                    message.error(checkLanguage({vi: 'Số chứng minh/passport đã được sử dụng cho tài khoản khác', en: 'Your ID is used for another account'},language))
                 }else{
                     message.error(checkLanguage({vi: 'Gửi KYC không thành công, vui lòng thử lại', en: 'Send KYC fail, please try again!'},language))
                 }
@@ -233,7 +236,7 @@ export default function App(){
                 <span> {findValueID()} </span>
                 <input 
                  onChange={e => e.target.value !== '' ? setValidateForm({...ValidateForm, id: true}) : setValidateForm({...ValidateForm, id: false})}
-                name="id" placeholder={findValueID()}/>
+                name="id" placeholder={checkLanguage({vi : 'Số ', en: ''},language) + findValueID()}/>
             </div>
             <div className="input-group">
                 <span>Email</span>
@@ -258,7 +261,7 @@ export default function App(){
                 </label>
             </div>
             {SelectedID === 0 && <div className="upload">
-                <div className="text">{checkLanguage({vi: 'Mặt sau CMND/ Bằng lái xe', en: `2. ID card / Driver's license back image`}, language)}</div>
+                <div className="text">{checkLanguage({vi: '2. Mặt sau CMND/ Bằng lái xe', en: `2. ID card / Driver's license back image`}, language)}</div>
                 <input 
                 onChange={e=>{
                     readURL(e);

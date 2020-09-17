@@ -4,7 +4,7 @@ import '../../assets/css/news.scss'
 import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { asyncGetNews, actChangeLoading } from '../../store/action'
+import { asyncGetNews} from '../../store/action'
 import { useHistory } from 'react-router-dom'
 const css = `
 body {
@@ -53,7 +53,6 @@ export default function App(){
     // },[Page,TotalPage])
 
     const handleGetNews = useCallback(async ()=>{
-        console.log((Page - 1) * 3);
         dispatch(asyncGetNews((Page - 1) * 3, 3,Search,language))
         .then(res=>{
             setTotalPage(Math.ceil(res.totalPost / 3))
@@ -75,48 +74,10 @@ export default function App(){
 
     useMemo(()=>{
         handleGetNews()
-    },[Page,dispatch,prelang,PreSearch])
-
+    },[Page,prelang,PreSearch])
 
     
 
-    var checkNews = useCallback((o, lang)=>{
-        var vi  = [
-            'thumbURL_vi',
-            'title_vi',
-            'meta_vi',
-            'content_vi'
-        ]
-
-        var en  = [
-            'thumbURL_en',
-            'title_en',
-            'meta_en',
-            'content_en'
-        ]
-
-        var arrNews = Object.keys(o)
-
-        if(lang === 'vi') {
-            for (let index = 0; index < vi.length; index++) {
-                const element = vi[index]; 
-                if(!arrNews.includes(element)){
-                    return false
-                }
-            }
-            return true
-        }
-
-        if(lang === 'en') {
-            for (let index = 0; index < en.length; index++) {
-                const element = en[index]; 
-                if(!arrNews.includes(element)){
-                    return false
-                }
-            }
-            return true
-        }
-    },[])
     return (
         <>
         <style>{css}</style>
@@ -179,28 +140,6 @@ export default function App(){
             }
             
         </div>
-        {/* <div className="pagination">
-            <span>
-                {checkLanguage({vi: 'Trang', en: 'Page'},language)}
-            </span>
-            <ul>
-                {
-                    ArrayPage.map((o, index) =>
-                        <li 
-                        className={Page === o ? 'active' : ''}
-                        onClick={()=>setPage(o)}
-                        >{o}</li>
-                    )
-                } */}
-                {/* <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li> */}
-            {/* </ul>
-
-        </div> */}
-
         </>
     )
 }

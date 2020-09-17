@@ -99,7 +99,7 @@ export default function App({type}) {
       }}
       className="account-menu"
       >
-        <FontAwesomeIcon color="#fac800" icon={faUserCircle} />
+        <FontAwesomeIcon size="2x" color="#fac800" icon={faUserCircle} />
         <div 
         className="drop-down-account">
           <div className="top-dropdown">

@@ -97,11 +97,93 @@
 }
 .highline-function{
     margin-top: 80px;
+    &.top{
+        .bottom{
+            margin-top: 35px;
+            @media only screen and (max-width : 768px){
+                .kdg-col-6{
+                    width: 100%;
+                }
+            }
+        }
+        .arrow{
+            display: inline-block;
+        }
+        .image{
+            width: 375px;
+            max-width: 100%;
+            @media only screen and (max-width : 768px){
+                width: 215px;
+                max-width: 100%;
+            }
+        }
+        .block-list-track{
+            position: relative;
+            .arrow{
+                display: inline-block;
+                position: absolute;
+                top: 50%;
+                transform: translate(0 , -50%);
+                color: #ddd9d8;
+                &.left{
+                    left: -15px;
+                }
+                &.right{
+                    right: -15px;
+                }
+            }
+            .list-track{
+                width: 100%;
+                overflow-x: scroll;
+                &::-webkit-scrollbar{
+                    display: none;
+                }
+                margin-top: 0;
+                padding: 0;
+                position: relative;
+                
+            }
+        }
+        .list-something{
+            margin-top: 0;
+            display: flex;
+            width: 400%;
+            margin-left: 0;
+            margin-right: 0;
+            .title{
+                text-transform: capitalize;
+            }
+            .item{
+                @media only screen and (max-width : 768px){
+                    padding: 0 0px;
+                }
+                padding: 0 40px;
+                width: 100%;
+                &:not(:nth-child(-n + 2)){
+                    margin-top: 0;
+                }
+                .something{
+                    border: none;
+                }
+            }
+            .des{
+                line-height: 30px;
+                white-space: 4px;
+                font-size: 16px;
+                margin-top: 20px;
+                text-align: center;
+            }
+        }
+    }
     .arrow{
         display: none;
+        cursor: pointer;
     }
     .top{
         text-align: center;
+        width: 954px;
+        max-width: 100%;
+        margin: auto;
         h2{
             font-size: 30px;
             font-weight: 500;

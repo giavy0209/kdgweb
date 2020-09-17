@@ -55,23 +55,10 @@
                 
                 .fee{
                     border-radius: 25px;
+                    margin-top: 30px;
                     position: relative;
-                    margin-top: 90px;
-                    &::before{
-                        content: "";
-                        position: absolute;
-                        width: calc(100% + 8px);
-                        height: calc(100% + 8px);
-                        background-color: #000;
-                        top: -4px;
-                        left: -4px;
-                        border-radius: 25px;
-                        background-image: linear-gradient(to bottom , #e9c259 ,#edda8b,#a47b00,);
-                    }
                     .fee-content{
                         position: relative;
-                        padding: 10px 13px;
-                        background-color: #fff;
                         z-index: 99;
                         border-radius: 25px;
                         > * {
@@ -86,7 +73,7 @@
                         }
                         span{
                             margin-left: 3px;
-                            color: #283349;
+                            color: #fff;
                             font-size: 18px;
                             font-weight: 500;
                             display: inline;
@@ -98,12 +85,39 @@
 
                 }
                 .total-coin{
-                    margin-top: 30px;
                     color: #fff;
+                    position: relative;
+                    font-size: 0 ;
+                    margin-top: 90px;
+                    &::before{
+                        content: "";
+                        position: absolute;
+                        width: calc(100% + 8px);
+                        height: calc(100% + 8px);
+                        background-color: #000;
+                        top: -4px;
+                        left: -4px;
+                        border-radius: 25px;
+                        background-image: linear-gradient(to bottom , #e9c259 ,#edda8b,#a47b00,);
+                    }
                     >span{
+                        position: relative;
+                        padding: 10px 13px;
+                        background-color: #fff;
+                        color: #283349;
+                        z-index: 9;
+                        border-top-left-radius: 25px;
+                        border-bottom-left-radius: 25px;
+                        font-size: 20px;
+                        width: 70%;
                         &:last-child{
                             color: #fac800;
                             font-weight: 500;
+                            border-top-left-radius: 0;
+                            border-bottom-left-radius: 0;
+                            border-top-right-radius: 25px;
+                            border-bottom-right-radius: 25px;
+                            width: 30%;
                         }
                     }
                 }
@@ -153,125 +167,7 @@
     }
 }
 
-@media only screen and (max-width: 767px){
-    .list-number{
-        h4{
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-        }
-        h3{
-            font-size: 12px;
-            width: 100px;
-        }
-        .dash{
-            width: calc(100% - 20px - 100px - 32px);
-            font-size: 18px;
-        }
-    }
-    .container-wheel{
-        .wheel-left{
-            .button-row{
-                text-align: center;
-            }
-            .title{
-                text-align: center;
-            }
-            .main-content{
-                .text{
-                    width: 100%;
-                    *{
-                        text-align: center;
-                    }
-                    .fee{
-                        margin-top: 20px;
-                    }
-                }
-                .wheel-block{
-                    width: 100%;
-                }
-            }
-        }
-        .wheel-right{
-            padding-top: 20px;
-        }
-    }
-    .des-staking{
-        .kdg-col-6{
-            width: 100%;
-        }
-    }
-}
 
-@media only screen and (max-width: 550px){
-    .staking-event-body{
-        .kdg-icon{
-            p{
-                display: none;
-            }
-            .staking-link-back{
-                .header-mobile{
-                    display: inline;
-                    margin-left: 15px;
-                    text-transform: uppercase;
-                    color: #fac800;
-                }
-                a{
-                    span{
-                        font-size: 0;
-                    }
-                }
-                img{
-                    display: none;
-                }
-                span{
-                    display: none
-                }
-            }
-        }
-    }
-    .number-staking-container{
-        width: 100%;
-        border-right: none;
-        .range{
-            position: relative;
-            margin-bottom: 20px;
-            .kdg-col-8{
-                width: 100%;
-            }
-            .kdg-col-2{
-                position: absolute;
-                top: 100%;
-                &:first-child{
-                    left: 0;
-                }
-                &:last-child{
-                    right: 0;
-                }
-            }
-        }
-    }
-    .amount-per-year{
-        width: 100%;
-        margin-top: 20px;
-    }
-    .stake-des{
-        .kdg-col-6{
-            width: 100%;
-        }
-    }
-    .title-place-lucky-spin{
-        width: auto;
-        height: auto;
-        padding-left: 0;
-        font-size: 10px;
-    }
-    .container-wheel{
-        .wheel-left{
-            padding: 10px 20px;
-        }
-    }
-}
 
 
 .timeline {
@@ -418,4 +314,134 @@
         margin: 250px 0;
     }
 
+}
+
+@media only screen and (max-width: 767px){
+    .container-wheel .wheel-left .main-content .text .total-coin span{
+        font-size: 14px;
+    }
+    .attendance-container .attendance-left .title{
+        font-size: 16px;
+    }
+    .attendance-container .attendance-left .button-row .button{
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+    .list-number{
+        h4{
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+        }
+        h3{
+            font-size: 12px;
+            width: 100px;
+        }
+        .dash{
+            width: calc(100% - 20px - 100px - 32px);
+            font-size: 18px;
+        }
+    }
+    .container-wheel{
+        .wheel-left{
+            .button-row{
+                text-align: center;
+            }
+            .title{
+                text-align: center;
+            }
+            .main-content{
+                .text{
+                    width: 100%;
+                    *{
+                        text-align: center;
+                    }
+                    .fee{
+                        margin-top: 20px;
+                    }
+                }
+                .wheel-block{
+                    width: 100%;
+                }
+            }
+        }
+        .wheel-right{
+            padding-top: 20px;
+        }
+    }
+    .des-staking{
+        .kdg-col-6{
+            width: 100%;
+        }
+    }
+}
+
+@media only screen and (max-width: 550px){
+    .staking-event-body{
+        .kdg-icon{
+            p{
+                display: none;
+            }
+            .staking-link-back{
+                .header-mobile{
+                    display: inline;
+                    margin-left: 15px;
+                    text-transform: uppercase;
+                    color: #fac800;
+                }
+                a{
+                    span{
+                        font-size: 0;
+                    }
+                }
+                img{
+                    display: none;
+                }
+                span{
+                    display: none
+                }
+            }
+        }
+    }
+    .number-staking-container{
+        width: 100%;
+        border-right: none;
+        .range{
+            position: relative;
+            margin-bottom: 20px;
+            .kdg-col-8{
+                width: 100%;
+            }
+            .kdg-col-2{
+                position: absolute;
+                top: 100%;
+                &:first-child{
+                    left: 0;
+                }
+                &:last-child{
+                    right: 0;
+                }
+            }
+        }
+    }
+    .amount-per-year{
+        width: 100%;
+        margin-top: 20px;
+    }
+    .stake-des{
+        .kdg-col-6{
+            width: 100%;
+        }
+    }
+    .title-place-lucky-spin{
+        width: auto;
+        height: auto;
+        padding-left: 0;
+        font-size: 10px;
+    }
+    .container-wheel{
+        .wheel-left{
+            padding: 10px 20px;
+        }
+    }
 }

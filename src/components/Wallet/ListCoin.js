@@ -4,6 +4,8 @@ import TRX from '../../assets/img/TRX.png'
 import BTC from '../../assets/img/btc_icon.png'
 import ETH from '../../assets/img/ETH.png'
 import USDT from '../../assets/img/USDT.png'
+import KNC from '../../assets/img/KNC.png'
+import MCH from '../../assets/img/MCH.png'
 import swap from '../../assets/img/swap.png'
 import deposit from '../../assets/img/deposit.png'
 import withdraw from '../../assets/img/withdraw.png'
@@ -57,6 +59,7 @@ export default function ListCoin(){
 
     const kdg_reward = useSelector(state=>state && state.user && state.user.kdg_reward)    
     const id = useSelector(state=> state && state.user && state.user._id)
+    const kdg_lock = useSelector(state=> state && state.user && state.user.kdg_lock)
 
     const handleWithdraw = useCallback((e)=>{
         e.preventDefault()
@@ -89,6 +92,7 @@ export default function ListCoin(){
     },[ercWallet,trxWallet,Coin,dispatch,id])
 
     const is2FA = useSelector(state=> state && state.user && state.user.is2FA)
+    const isKYC = useSelector(state=> state && state.user && state.user.kyc_success)
 
     const handleSwap = useCallback(async()=>{
         dispatch(actChangeLoading(true))
@@ -106,7 +110,12 @@ export default function ListCoin(){
     
     return(
         <>
-        <div className="popupswapmask" style={{display: 'none',width: '100%' , height: '100%', position: 'fixed', top: 0, left: 0 , backgroundColor: 'rgba(0, 0, 0 , .3)'}}></div>
+        <div 
+        onClick={e => {
+            e.target.style.display = 'none'
+            document.querySelector('.popupswap').style.display = 'none'
+        }}
+        className="popupswapmask" style={{display: 'none',width: '100%' , height: '100%', position: 'fixed', top: 0, left: 0 , backgroundColor: 'rgba(0, 0, 0 , .3)'}}></div>
         <div
         className='popupswap'
         style={{display:'none',paddingBottom: 26,width: 600, maxWidth: '90%', position: 'fixed', top: '50%' , left: '50%', transform: 'translate(-50% , -50%)', zIndex : 9999, backgroundColor : '#f1f3f4', borderRadius: 2}}
@@ -178,9 +187,10 @@ export default function ListCoin(){
                 onClick={handleSwap}
                 style={{cursor: 'pointer',width: 130, borderRadius: 50, textAlign: 'center', margin: '0 auto' ,marginTop: 20, padding: '10px 0', fontSize: 16, color : '#ffffff', backgroundImage: 'linear-gradient(to bottom , #e9c259 ,#e4cf7c , #aa8411 , #c59700)'}}
                 >{checkLanguage({vi: 'XÁC NHẬN', en: 'CONFIRM'},language)}</p>
-                <p style={{color :'#283349', textDecoration : 'underline', fontSize : 16}}>Lưu ý</p>
-                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>Tài khoản đăng ký trước ngày 1/9 sẽ được đổi tối đa 20KDG Reward / ngày, tối đa 1 lần/ngày. 1KDG Reward = 1KDG</p>
-                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>Tài khoản đăng ký sau ngày 1/9 sẽ được quy đổi thành KDG Token khi bạn có đủ 25KDG Reward, quy đổi mỗi ngày 1 lần. 1KDG Reward = 1KDG</p>
+                <p style={{color :'#283349', textDecoration : 'underline', fontSize : 16}}> {checkLanguage({vi : 'Lưu ý', en: 'Notice'},language)} </p>
+                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký trước ngày 1/9 sẽ được đổi tối đa 20KDG Reward / ngày, tối đa 1 lần/ngày. 1KDG Reward = 1KDG', en: 'Account registration before 1/9/2020 are able to swap the reward. Maximum 20KDG / day, only 1 time / day. 1 KDG reward = 1 KDG.'}, language)}</p>
+                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký sau ngày 1/9 sẽ được quy đổi thành KDG Token khi bạn có đủ 25KDG Reward, quy đổi mỗi ngày 1 lần. 1KDG Reward = 1KDG', en: 'Account registration after 1/9/2020 are able to swap the reward when being enough 25KDG / day, maximum 50KDG / day, only 1 time / day. 1 KDG reward = 1 KDG.'}, language)}</p>
+                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Vui lòng hoàn thành xác minh danh tính (KYC) trước khi swap', en: 'Please complete KYC before swap'}, language)}</p>
             </div>
         </div>
 
@@ -209,35 +219,53 @@ export default function ListCoin(){
         onCancel={()=>setVisibleWithdraw(false)}
         >
             <div className="model-withdraw">
-                {is2FA ? 
-                    <form onSubmit={handleWithdraw}>
-                        <div className="input-group">
-                            <span>{checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)}</span>
-                            <input placeholder={checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)} name="toAddress" />
-                        </div>
-                        <div className="input-group">
-                            <span>{checkLanguage({vi: 'Số lượng' , en: 'Value'},language)} {Coin}</span>
-                            <input placeholder={`${checkLanguage({vi: 'Số lượng' , en: 'Value'},language)} ${Coin}`} name="value"/>
-                        </div>
-                        <div className="input-group ">
-                            <span>{checkLanguage({vi: 'Mã 2FA' , en: '2FA CODE'},language)}</span>
-                            <input name="token" />
-                        </div>
-                        <button>{checkLanguage({vi: 'Rút tiền' , en: 'Withdraw'},language)}</button>
-                    </form> :
-                    <span
-                    onClick={()=>{
-                        history.push('/account?tab=1')
-                    }}
-                    style={{
-                        cursor:'pointer',
-                        width: '100%',
-                        textAlign: 'center',
-                        textDecoration: 'underline'
-                    }}
-                    >
-                        {checkLanguage({vi:'Vui lòng bật 2FA trước khi rút tiền', en: 'Please activate 2FA'}, language)}
-                    </span>
+                {!is2FA ? 
+                <span
+                onClick={()=>{
+                    history.push('/account?tab=1')
+                }}
+                style={{
+                    cursor:'pointer',
+                    width: '100%',
+                    textAlign: 'center',
+                    textDecoration: 'underline'
+                }}
+                >
+                    {checkLanguage({vi:'Vui lòng bật 2FA trước khi rút tiền', en: 'Please activate 2FA'}, language)}
+                </span>
+                :
+                !isKYC ? 
+                <span
+                onClick={()=>{
+                    history.push('/account?tab=3')
+                }}
+                style={{
+                    cursor:'pointer',
+                    width: '100%',
+                    textAlign: 'center',
+                    textDecoration: 'underline'
+                }}
+                >
+                    {checkLanguage({vi:'Vui lòng KYC trước khi rút tiền', en: 'Please KYC before withdraw'}, language)}
+                </span>
+                :
+                <form onSubmit={handleWithdraw}>
+                    <div className="input-group">
+                        <span>{checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)}</span>
+                        <input placeholder={checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)} name="toAddress" />
+                    </div>
+                    <div className="input-group">
+                        <span>{checkLanguage({vi: 'Số lượng' , en: 'Value'},language)} {Coin}</span>
+                        <input placeholder={`${checkLanguage({vi: 'Số lượng' , en: 'Value'},language)} ${Coin}`} name="value"/>
+                    </div>
+                    <div className="input-group ">
+                        <span>{checkLanguage({vi: 'Mã 2FA' , en: '2FA CODE'},language)}</span>
+                        <input name="token" />
+                    </div>
+                    <button>{checkLanguage({vi: 'Rút tiền' , en: 'Withdraw'},language)}</button>
+                </form> 
+                    
+                    
                 }
             </div>
 
@@ -251,7 +279,7 @@ export default function ListCoin(){
                 </div>
                 <div className='balance'>
                     <p><span>Available: </span><span> {balance && balance.kdg_balance} </span></p>
-                    <p><span>Locked: </span><span>0</span></p>
+                    <p><span>Locked: </span><span>{kdg_lock ? kdg_lock : 0}</span></p>
                 </div>
                 </div>
                 <div className="button-group">
@@ -326,6 +354,79 @@ export default function ListCoin(){
                 </div>
             </div>
         </div>
+
+        <div className="item">
+            <div className="coin">
+                <div className="top-info">
+                <div className="coin-image-name">
+                    <img src={KNC} alt="coin"/>
+                    <span className="name">KNC</span>
+                </div>
+                <div className='balance'>
+                    <p><span></span><span> {balance && balance.knc_balance} </span></p>
+                </div>
+                </div>
+                <div className="button-group">
+                <div className="kdg-row kdg-column-4 list-button text-c va-m">
+                    <div className="item">
+                    <div onClick={async()=>{
+                        setVisibleDeposit(true); 
+                        setCoin('KNC'); 
+                        setAddress(ercWallet)
+                        const img = await QRCode.toDataURL(ercWallet)
+                        setAddressQR(img)
+                    }} className='button'>
+                        <img alt="deposit" src={deposit}/>
+                        <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
+                    </div>
+                    </div>
+                    <div className="item">
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('KNC')}} className='button'>
+                        <img alt="withdraw" src={withdraw}/>
+                        <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="item">
+            <div className="coin">
+                <div className="top-info">
+                <div className="coin-image-name">
+                    <img src={MCH} alt="coin"/>
+                    <span className="name">MCH</span>
+                </div>
+                <div className='balance'>
+                    <p><span></span><span> {balance && balance.mch_balance} </span></p>
+                </div>
+                </div>
+                <div className="button-group">
+                <div className="kdg-row kdg-column-4 list-button text-c va-m">
+                    <div className="item">
+                    <div onClick={async()=>{
+                        setVisibleDeposit(true); 
+                        setCoin('MCH'); 
+                        setAddress(ercWallet)
+                        const img = await QRCode.toDataURL(ercWallet)
+                        setAddressQR(img)
+                    }} className='button'>
+                        <img alt="deposit" src={deposit}/>
+                        <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
+                    </div>
+                    </div>
+                    <div className="item">
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('MCH')}} className='button'>
+                        <img alt="withdraw" src={withdraw}/>
+                        <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        
 
         <div className="item">
             <div className="coin">

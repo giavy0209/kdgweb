@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faEnvelope, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router-dom'
@@ -41,78 +41,85 @@ import Menu from '../Menu'
 
 import '../../assets/css/gamehub.scss'
 
-const listGame = [
-    {
-        img: game1,
-        title: 'QUỶ HẦU VƯƠNG',
-        subTitle : 'Tây Du Ký',
-        desType : 'ARPG | Điện thoại',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 2,
-    },
-    {
-        img: game2,
-        title: 'MU KINGDOM MOBILE',
-        subTitle : 'Lục Địa Tàn Trở Lại',
-        desType : 'MMORPG | Điện thoại',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 2,
-    },
-    {
-        img: game3,
-        title: 'CON ĐƯỜNG TƠ LỤA',
-        subTitle : 'Vương triều báo thù',
-        desType : 'MMORPG | Máy tính',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 1,
-    },
-    {
-        img: game4,
-        title: 'MU SEASON 14',
-        subTitle : 'Castel Siege',
-        desType : 'MMORPG | Máy tính',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 1,
-    },
-    {
-        img: game5,
-        title: 'MU Kingdom XV',
-        subTitle : 'Hủy diệt Vương triều',
-        desType : 'MMORPG | Máy tính',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 1,
-    },
-    {
-        img: game6,
-        title: 'võ lâm truyền kỳ',
-        subTitle : 'Vạn Kiếm Khai Hoa',
-        desType : 'MMORPG | Điện thoại',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 2,
-    },
-    {
-        img: game7,
-        title: 'võ lâm truyền kỳ',
-        subTitle : 'Công Thành Chiến',
-        desType : 'MMORPG | Điện thoại',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 2,
-    },
-    {
-        img: game8,
-        title: 'VÕ BÁ THIÊN HẠ',
-        subTitle : 'Đấu Khí Đại Lục',
-        desType : 'MMO | Điện thoại',
-        desDate : 'Ngày phát hành: Coming soon',
-        type : 2,
-    },
-]
-
-
 export default function App(){
 
     const [Type , setType] = useState(0)
-    const [List , setList] = useState(listGame)
+    // const [List , setList] = useState(listGame)
+    const language = useSelector(state=>state && state.lang)
+
+    const listGame = useMemo(()=>{
+        var list = [
+            {
+                img: game1,
+                title: 'QUỶ HẦU VƯƠNG',
+                subTitle : 'Tây Du Ký',
+                desType : 'ARPG | Điện thoại',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 2,
+            },
+            {
+                img: game2,
+                title: 'MU KINGDOM MOBILE',
+                subTitle : 'Lục Địa Tàn Trở Lại',
+                desType : 'MMORPG | Điện thoại',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 2,
+            },
+            {
+                img: game3,
+                title: 'CON ĐƯỜNG TƠ LỤA',
+                subTitle : 'Vương triều báo thù',
+                desType : 'MMORPG | Máy tính',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 1,
+            },
+            {
+                img: game4,
+                title: 'MU SEASON 14',
+                subTitle : 'Castel Siege',
+                desType : 'MMORPG | Máy tính',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 1,
+            },
+            {
+                img: game5,
+                title: 'MU Kingdom XV',
+                subTitle : 'Hủy diệt Vương triều',
+                desType : 'MMORPG | Máy tính',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 1,
+            },
+            {
+                img: game6,
+                title: 'võ lâm truyền kỳ',
+                subTitle : 'Vạn Kiếm Khai Hoa',
+                desType : 'MMORPG | Điện thoại',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 2,
+            },
+            {
+                img: game7,
+                title: 'võ lâm truyền kỳ',
+                subTitle : 'Công Thành Chiến',
+                desType : 'MMORPG | Điện thoại',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 2,
+            },
+            {
+                img: game8,
+                title: 'VÕ BÁ THIÊN HẠ',
+                subTitle : 'Đấu Khí Đại Lục',
+                desType : 'MMO | Điện thoại',
+                desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
+                type : 2,
+            },
+        ]
+        var arr = []
+        list.forEach(o => {
+            if(o.type === Type || Type === 0) arr.push(o)
+        })
+        return arr
+    },[language,Type])
 
     const dispatch = useDispatch()
     const history = useHistory()
@@ -141,7 +148,6 @@ export default function App(){
         return state && state.settings && state.settings.logo && state.settings.logo.logo_header
     })
 
-    const language = useSelector(state=>state && state.lang)
 
     const textLogo = useSelector(state => {
         return state && state.settings && state.settings.text_next_logo
@@ -162,14 +168,6 @@ export default function App(){
             }
         })
     },[])
-
-    useEffect(()=>{
-        var arr = []
-        listGame.forEach(o => {
-            if(o.type === Type || Type === 0) arr.push(o)
-        })
-        setList([...arr])
-    },[Type])
 
 
     const handleScroll = useCallback(type =>{
@@ -242,16 +240,16 @@ export default function App(){
                 {/* <img className="border top" alt="" src={bordertop} /> */}
                 <div className="content">   
                     <p className="sub-title">
-                        Bạn Là Nhà Lập Trình Game Hay Game Thủ?
+                    {checkLanguage({vi: 'Bạn Là Nhà Lập Trình Game Hay Game Thủ?', en: 'Are you a game developer or gamer?'},language)}
                     </p>
                     <p className="title">
-                    Chúng tôi có tất cả
+                    {checkLanguage({vi: 'Chúng tôi có tất cả', en: 'WE HAVE '},language)}
                     </p>
                     <p className="title-bottom">
-                    những gì bạn cần
+                    {checkLanguage({vi: 'những gì bạn cần', en: 'ALL YOU NEED'},language)}
                     </p>
                     <p className='des-content'>
-                    Kingdom Game Hub cung cấp cho những nhà phát triển game hệ sinh thái toàn diện với Ví lưu trữ, Cổng thanh toán và Nền tảng hoán đổi, có thể áp dụng vào nền tảng KDG vào game một cách tiện lợi. Đồng thời, Kingdom Game Hub cũng mang lại cho người chơi trải nghiệm game hoàn toàn mới, lựa chọn game đa dạng và đặc biệt đem lại thu nhập từ việc chơi game.
+                    {checkLanguage({vi: 'Kingdom Game Hub cung cấp cho những nhà phát triển game hệ sinh thái toàn diện với Ví lưu trữ, Cổng thanh toán và Nền tảng hoán đổi, có thể áp dụng vào nền tảng KDG vào game một cách tiện lợi. Đồng thời, Kingdom Game Hub cũng mang lại cho người chơi trải nghiệm game hoàn toàn mới, lựa chọn game đa dạng và đặc biệt đem lại thu nhập từ việc chơi game.', en: 'Kingdom Game Hub provides comprehensive ecosystem for game developers with a Cryto Wallet, Payment Gateway and Swap Platform, which can be conveniently applied KDG token into the game. At the same time, Kingdom Game Hub also gives players a completely new game experience, diverse game choices and especially brings income from gaming.'},language)}
                     </p>
                 </div>
                 <img className="border bottom" alt="" src={borderbottom} />
@@ -263,69 +261,69 @@ export default function App(){
                     <div className='kdg-row'>
                         <div className='kdg-col-4 va-t'>
                             <div className='title'>
-                                Nhà phát triển game
+                            {checkLanguage({vi: 'Nhà phát triển game', en: 'GAME DEVELOPERS'},language)}
                             </div>
                             <ul>
                                 <li>
                                     <span><img src={li1} alt="" /></span>
-                                    <span>Hỗ trợ gọi vốn cộng đồng để phát triển game</span>
+                                    <span>{checkLanguage({vi: 'Hỗ trợ gọi vốn cộng đồng để phát triển game', en: 'Support for crowdfunding to develop games'},language)}</span>
                                 </li>
                                 <li>
                                     <span><img src={li2} alt="" /></span>
-                                    <span>Tiếp cận nền tảng thanh toán Blockchain hoàn toàn mới</span>
+                                    <span>{checkLanguage({vi: 'Tiếp cận nền tảng thanh toán Blockchain hoàn toàn mới', en: 'Access to a brand new Blockchain payment platform'},language)}</span>
                                 </li>
                                 <li>
                                     <span><img src={li3} alt="" /></span>
-                                    <span>Phát hành trò chơi với chi phí thấp, hiệu quả cao</span>
+                                    <span>{checkLanguage({vi: 'Phát hành trò chơi với chi phí thấp, hiệu quả cao', en: 'Releasing games with low cost and high efficiency'},language)}</span>
                                 </li>
                                 <li>
                                     <span><img src={li4} alt="" /></span>
-                                    <span>Dễ dàng quảng bá trò chơi trong và ngoài game</span>
+                                    <span>{checkLanguage({vi: 'Dễ dàng quảng bá trò chơi trong và ngoài game', en: 'Easily promote games'},language)}</span>
                                 </li>
                                 <li>
                                     <span><img src={li5} alt="" /></span>
-                                    <span>Giữ chân người dùng lâu dài</span>
+                                    <span>{checkLanguage({vi: 'Giữ chân người dùng lâu dài', en: 'Long-term retention of users'},language)}</span>
                                 </li>
                             </ul>
                         </div>
                         <div className='kdg-col-4'></div>
                         <div className='kdg-col-4 va-t'>
                             <div className='title'>
-                            NGƯỜI CHƠI GAME
+                            {checkLanguage({vi: '', en: ''},language)}NGƯỜI CHƠI GAME
                             </div>
                             <ul>
                                 <li>
                                     <span><img src={li6} alt="" /></span>
                                     <span>
-                                        Hệ sinh thái game phong phú và đa dạng
+                                        {checkLanguage({vi: 'Hệ sinh thái game phong phú và đa dạng', en: 'Collective game ecosystem'},language)}
                                     </span>
                                     
                                 </li>
                                 <li>
                                     <span><img src={li7} alt="" /></span>
                                     <span>
-                                        Chơi game tạo ra thu nhập ổn định
+                                        {checkLanguage({vi: 'Chơi game tạo ra thu nhập ổn định', en: 'Playing games generates stable income'},language)}
                                     </span>
                                     
                                 </li>
                                 <li>
                                     <span><img src={li8} alt="" /></span>
                                     <span>
-                                        Tích hợp ví điện tử đa năng, thanh toán dễ dàng
+                                        {checkLanguage({vi: 'Tích hợp ví điện tử đa năng, thanh toán dễ dàng', en: 'Integrated multi-function electronic wallet, easy payment'},language)}
                                     </span>
                                     
                                 </li>
                                 <li>
                                     <span><img src={li9} alt="" /></span>
                                     <span>
-                                        Chương trình hoa hồng giới thiệu người chơi hấp dẫn
+                                        {checkLanguage({vi: 'Chương trình hoa hồng giới thiệu người chơi hấp dẫn', en: 'Attractive commission program when inviting others for players'},language)}
                                     </span>
                                     
                                 </li>
                                 <li>
                                     <span><img src={li10} alt=""/></span>
                                     <span>
-                                        Hỗ trợ nhanh chóng và thân thiện
+                                        {checkLanguage({vi: 'Hỗ trợ nhanh chóng và thân thiện', en: 'Quick and friendly support'},language)}
                                     </span>
                                     
                                 </li>
@@ -340,7 +338,7 @@ export default function App(){
                 <img className="border top" alt="" src={bordertop} />
                 <div className='kdg-container'>
                     <p className='title'>
-                        DANH SÁCH GAME
+                    {checkLanguage({vi: 'DANH SÁCH GAME', en: 'GAME LIST'},language)}
                     </p>
                     <div className='tabs'>
                         <span 
@@ -349,21 +347,21 @@ export default function App(){
                             e.target.classList.add('active')
                             setType(0)
                         }}
-                        className='tab active'>TẤT CẢ</span>
+                        className='tab active'>{checkLanguage({vi: 'TẤT CẢ', en: 'ALL'},language)}</span>
                         <span 
                         onClick={(e)=>{
                             e.target.parentElement.querySelectorAll('.tab').forEach(el => el.classList.remove('active'))
                             e.target.classList.add('active')
                             setType(1)
                         }}
-                        className='tab'>MÁY TÍNH</span>
+                        className='tab'>{checkLanguage({vi: 'MÁY TÍNH', en: 'DESKTOP'},language)}</span>
                         <span 
                         onClick={(e)=>{
                             e.target.parentElement.querySelectorAll('.tab').forEach(el => el.classList.remove('active'))
                             e.target.classList.add('active')
                             setType(2)
                         }}
-                        className='tab'>ĐIỆN THOẠI</span>
+                        className='tab'>{checkLanguage({vi: 'ĐIỆN THOẠI', en: 'MOBILE'},language)}</span>
                     </div>
                     <div className='button'>
                         <FontAwesomeIcon 
@@ -373,9 +371,9 @@ export default function App(){
                         onClick={()=>handleScroll(1)}
                         className='right' size='2x' color='#ccc' icon={faChevronRight} />
                         <div className='track'>
-                            <div style={window.innerWidth <= 768 ? {width: List.length * 100 + '%'} : {}} className='kdg-row kdg-column-4 list-game'>
+                            <div style={window.innerWidth <= 768 ? {width: listGame.length * 100 + '%'} : {}} className='kdg-row kdg-column-4 list-game'>
                             {
-                                List.map(o => 
+                                listGame.map(o => 
                                 (Type === o.type || Type === 0) && <div className='item'>
                                     <div className='game'>
                                         <img alt="" src={o.img} />

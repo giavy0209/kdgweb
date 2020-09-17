@@ -36,7 +36,6 @@ function App() {
       dispatch(asyncGetListCategories(false)),
       dispatch(asyncGetUserData())
     ]).then(() => {
-      console.log(123);
       dispatch(actChangeLoading(false));
     })
   },[dispatch])
@@ -54,10 +53,12 @@ function App() {
       var loginDate = new Date(logintime)
       var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
       if(timeFromLastLogin >= 1800000){
-        console.log(timeFromLastLogin);
-        var email = localStorage.getItem('email')
-        var password = localStorage.getItem('password')
-        dispatch(asyncLogin({email, password}))
+        // console.log(timeFromLastLogin);
+        // var email = localStorage.getItem('email')
+        // var password = localStorage.getItem('password')
+        // dispatch(asyncLogin({email, password}))
+        storage.clearJWT()
+        storage.clearToken()
       }else{
       }
     }
@@ -67,9 +68,11 @@ function App() {
         var loginDate = new Date(logintime)
         var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
         if(timeFromLastLogin >= 1800000){
-          var email = localStorage.getItem('email')
-          var password = localStorage.getItem('password')
-          dispatch(asyncLogin({email, password}))
+          // var email = localStorage.getItem('email')
+          // var password = localStorage.getItem('password')
+          // dispatch(asyncLogin({email, password}))
+          storage.clearJWT()
+          storage.clearToken()
         }else{
         }
       }else{

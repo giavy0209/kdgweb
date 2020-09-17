@@ -123,12 +123,15 @@ export function asyncGetNewsById(id,next, language){
 
 export function asyncGetBalance(tron_kdg_wallet, eth_usdt_wallet) {
     return async dispatch => {
-        console.log(123);
         const res = (await callapi().get(`/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
         const res2 = (await callapi().get(`/api/tron_kdg/balance/${tron_kdg_wallet}`)).data
+        const res3 = (await callapi().get(`/api/knc/balance/${eth_usdt_wallet}`)).data
+        const res4 = (await callapi().get(`/api/mch/balance/${eth_usdt_wallet}`)).data
         const { eth_balance, usdt_balance } = res
         const { trx_balance, kdg_balance } = res2
-        dispatch(actChangeBalance({ eth_balance, usdt_balance, trx_balance, kdg_balance }))
+        const knc_balance = res3.balance
+        const mch_balance = res4.balance
+        dispatch(actChangeBalance({ eth_balance, usdt_balance, trx_balance, kdg_balance , knc_balance, mch_balance}))
 
         // setInterval(async () => {
         //     const res = (await callapi().get(`/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
@@ -173,9 +176,7 @@ export function asyncGetUserData(token) {
             dispatch(actChangeJWT(jwt))
             try {
                 const res = (await callapi().get(`/api/user/${token}`)).data
-                console.log(res);
                 if (res.status === 1) {
-                    console.log(res);
                     dispatch(actChangeUser(res.data))
                     dispatch(asyncGetBalance(res.data.trx_address, res.data.erc_address))
                     return true
@@ -242,7 +243,6 @@ export function asyncGetSettings(hasLoading = true) {
         try {
             hasLoading && dispatch(actChangeLoading(true))
             var res = (await callapi().get(`/setting`)).data
-            console.log(res);
             const setting = {}
             res.forEach(el => {
                 setting[el.key] = el.data
@@ -279,13 +279,14 @@ export function asyncGetHistoryUSDT(userWallet, skip, coin) {
     return async dispatch => {
         dispatch(actChangeLoading(true))
         const res = (await callapi().get(`/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=10`)).data
+        console.log(res);
         if (res.status === 1) {
             var result = res.data.result
             result = result.map(o => {
                 var data = {
                     time: new Date(o.timeStamp * 1000),
                     type: o.form === userWallet ? 0 : 1,
-                    value: o.value / 1e6,
+                    value: coin === 'MCH' ? o.value / 1e8 : coin === 'KNC' ?  o.value / 1e18 : o.value / 1e6 ,
                     hash: o.hash
                 }
                 return data

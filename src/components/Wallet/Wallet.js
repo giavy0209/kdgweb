@@ -24,6 +24,7 @@ function App() {
   })
 
   useEffect(()=>{
+    console.log(CurrentHistory);
     setHistory([...[]])
     if(CurrentHistory === 'KDG' || CurrentHistory === 'TRON'){
       if(ercWallet) {
@@ -34,7 +35,7 @@ function App() {
         })
       }
     }
-    if(CurrentHistory === 'ETH' || CurrentHistory === 'USDT'){
+    if(CurrentHistory === 'ETH' || CurrentHistory === 'USDT' || CurrentHistory === 'KNC' || CurrentHistory === 'MCH'){
       if(trxWallet) {
         dispatch(asyncGetHistoryUSDT(ercWallet, (Page - 1) * 10, CurrentHistory))
         .then(result=>{
@@ -65,24 +66,42 @@ function App() {
           <section className="section-history">
             <h2 className="title">{checkLanguage({vi : 'LỊCH SỬ GIAO DỊCH', en: 'HISTORY'}, language)}</h2>
             <div className="list-tab">
+
               <div onClick={()=>{
                 setCurrentHistory('KDG')
                 setPage(1)
               }} className={`tab ${CurrentHistory === 'KDG' && 'active'}`}>
                 <p>KDG</p>
               </div>
+
               <div onClick={()=>{
                 setCurrentHistory('TRON')
                 setPage(1)
               }} className={`tab ${CurrentHistory === 'TRON' && 'active'}`}>
                 <p>TRX</p>
               </div>
+
+              <div onClick={()=>{
+                setCurrentHistory('KNC')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'KNC' && 'active'}`}>
+                <p>KNC</p>
+              </div>
+
+              <div onClick={()=>{
+                setCurrentHistory('MCH')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'MCH' && 'active'}`}>
+                <p>MCH</p>
+              </div>
+
               <div onClick={()=>{
                 setCurrentHistory('ETH')
                 setPage(1)
               }} className={`tab ${CurrentHistory === 'ETH' && 'active'}`}>
                 <p>ETH</p>
               </div>
+
               <div onClick={()=>{
                 setCurrentHistory('USDT')
                 setPage(1)

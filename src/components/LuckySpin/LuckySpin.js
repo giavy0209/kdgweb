@@ -2,52 +2,13 @@ import React, {  useState, useCallback, useMemo } from 'react'
 import Wheel from '../Wheel'
 import './styles.css'
 import '../../assets/css/lucky-spin.scss'
-import btcIcon from '../../assets/img/btc_icon.png'
+import btcIcon from '../../assets/img/symbal.png'
 import { useSelector, useDispatch } from 'react-redux'
-import { asyncGetUserData, actChangeLoading } from '../../store/action'
+import { actChangeLoading, asyncGetUserData } from '../../store/action'
 import callapi from '../../axios'
 import { checkLanguage } from '../../helpers'
 import popupspin from '../../assets/img/popupspin.png'
 import { message } from 'antd'
-
-var addDate = function(date,days){
-    date.setDate(date.getDate() + days);
-    return date
-}
-const items = [
-    {
-        name: 'Ngày 1',
-        active: true,
-    },
-    {
-        name: 'Ngày 2'  ,
-        active: false,
-    },
-    {
-        name: 'Ngày 3',
-        active: true,
-    },
-    {
-        name: 'Ngày 4',
-        active: true,
-    },
-    {
-        name: 'Ngày 5',
-        active: false,
-    },
-    {
-        name: 'Ngày 6',
-        active: true,
-    },
-    {
-        name: 'Ngày 7',
-        active: true,
-    },
-]
-
-const totalItems = items.length;
-const numberOfActiveItems = items.filter(item => item.active).length;
-const progressBarWidth = totalItems > 1 ? (numberOfActiveItems - 1) / (totalItems - 1) * 100 : 0;
 export default function App({ ...prop }) {
     const dispatch = useDispatch()  
     const language = useSelector(state => state.lang)
@@ -55,6 +16,7 @@ export default function App({ ...prop }) {
     const userid = useSelector(state => state.user && state.user._id)
 
     const [IsRewardToday, setIsRewardToday] = useState(true)
+    const [ListMostKDGReward , setListMostKDGReward] = useState([])
 
     const getTransaction = useCallback(async()=>{
         const res = (await callapi().get(`/api/get_transaction?id=${userid}&skip=0&take=7&type=lucky-spin-daily`)).data 
@@ -80,22 +42,33 @@ export default function App({ ...prop }) {
         }
     },[userid])
 
+    const getMostKDGReward = useCallback(async ()=>{
+        const res = (await callapi().get(`/api/user?skip=${1}&take=${5}&sort=${1}`)).data
+        setListMostKDGReward([...res.data])
+    },[])
+
     const handleGetRewardDaily = useCallback(async ()=>{
         dispatch(actChangeLoading(true))
         const res = (await callapi().post('/api/create_transaction' , {from : 'admin' , to: userid, userId : userid, type : 'lucky-spin-daily'})).data
         if(res.status === 1){
             message.success(checkLanguage({vi: 'Chúc mừng bạn nhận được 2 KDG Reward', en: 'You receive 2 KDG Reward'},language))
             getTransaction()
+            dispatch(asyncGetUserData())
         }
         if(res.status === 0 ){
             message.error(checkLanguage({vi: 'Bạn đã nhận thưởng hôm nay rồi', en: 'Already got reward'},language))
         }
+        
+        if(res.status === 101 ){
+            message.error(checkLanguage({vi: 'Bạn phải KYC để nhận thưởng', en: 'You have to KYC to get reward'},language))
+        }
         setIsRewardToday(true)
         dispatch(actChangeLoading(false))
-    },[userid])
+    },[userid,dispatch])
 
     useMemo(()=>{
         getTransaction()
+        getMostKDGReward()
     },[userid,getTransaction])
 
     const places = [
@@ -127,6 +100,12 @@ export default function App({ ...prop }) {
 
     return (
         <>
+            <div 
+            onClick={e =>{
+                e.target.style.display = 'none'
+                document.querySelector('.popupspin').style.display = 'none'
+            }}
+            style={{position: 'fixed', top: 0 , left: 0 , width: '100%', height: '100%', display : 'none', backgroundColor: 'rgba(0,0,0,.3)'}} className='maskspin'></div>
             <div
             style={{display: 'none',paddingBottom: 26,width: 360, position: 'fixed', top: '50%' , left: '50%', transform: 'translate(-50% , -50%)', zIndex : 99, backgroundColor : '#fff', borderRadius: 5}}
             className='popupspin'>
@@ -164,6 +143,11 @@ export default function App({ ...prop }) {
                                     <p>{checkLanguage({vi: 'Quay ngay bây giờ ', en: 'Join now '},language)}</p>
                                     <p>{checkLanguage({vi: 'và chiến thắng!', en: 'and win!'},language)}</p>
                                 </div>
+                                <p className="total-coin">
+                                    <span>
+                                        {checkLanguage({vi: 'Số', en: 'Total'},language)} KDG Reward:</span> <span> {user && user.kdg_reward ? user.kdg_reward : 0} 
+                                    </span>
+                                </p>
                                 <div className="fee"> 
                                     <div className="fee-content">
                                         <div className="coin-img">
@@ -173,7 +157,6 @@ export default function App({ ...prop }) {
                                         <span>2 KDG Reward/{checkLanguage({vi: 'lượt', en: 'turn'},language)}</span> 
                                     </div>
                                 </div>
-                                <p className="total-coin"><span>{checkLanguage({vi: 'Số', en: 'Total'},language)} KDG Reward:</span> <span> {user && user.kdg_reward ? user.kdg_reward : 0} </span></p>
                             </div>
 
                             <div className="wheel-block">
@@ -188,26 +171,14 @@ export default function App({ ...prop }) {
                             <p>{checkLanguage({vi: 'THẮNG GIẢI', en: 'WIN THE PRIZE'},language)}</p>
                         </div>
                         <ul className="list-reward">
-                            <li>
-                                <span>Phương Linh</span>
-                                <span>1,025 KDG Reward</span>
-                            </li>
-                            <li>
-                                <span>An Dĩ Thái</span>
-                                <span>1,000 KDG Reward</span>
-                            </li>
-                            <li>
-                                <span>Hoàng Ân</span>
-                                <span>800 KDG Reward</span>
-                            </li>
-                            <li>
-                                <span>Châu Thi</span>
-                                <span>600 KDG Reward</span>
-                            </li>
-                            <li>
-                                <span>Phước Lài</span>
-                                <span>500 KDG Reward</span>
-                            </li>
+                            {
+                                ListMostKDGReward.map(user =>
+                                    <li>
+                                        <span> {user.last_name} {user.first_name} </span>
+                                        <span> {user.kdg_reward} KDG Reward</span>
+                                    </li>
+                                )
+                            }
                         </ul>
                     </div>
                 </div>
@@ -218,12 +189,16 @@ export default function App({ ...prop }) {
                             <p className="title">{checkLanguage({vi: 'ĐIỂM DANH NHẬN THƯỞNG', en: 'CHECK IN TODAY TO GET KDG REWARD'},language)}</p>
                         </div>
                         <div className="button-row">
-                            <button className="button">{kdg_reward} KDG Reward</button>
+                            <div className="receive-btn">
+                                <button 
+                                onClick={handleGetRewardDaily}
+                                style={
+                                    IsRewardToday ? {opacity: .5 , pointerEvents :'none'} : {opacity: 1 , pointerEvents :'all'}
+                                }
+                                className="button">{checkLanguage({vi: 'Nhấn để nhận ngay 2 KDG Reward', en: 'Click here to get 2 KDG Reward'},language)}</button>
+                            </div>
                         </div>
                         <div className="main-content">
-                            <div style={{justifyContent: 'center', width: '100%'}}>
-                                <p className="text">{checkLanguage({vi: 'Nhận Thưởng Hôm Nay', en: 'Get KDG Reward today'},language)}</p>
-                            </div>
                             <div  style={{width: '100%'}}>
                                 {/* <Timeline items={items}/> */}
                                 {/* <div className="timeline">
@@ -240,14 +215,7 @@ export default function App({ ...prop }) {
                                 </div> */}
                             </div>
                         </div>
-                        <div className="receive-btn">
-                            <button 
-                            onClick={handleGetRewardDaily}
-                            style={
-                                IsRewardToday ? {opacity: .5 , pointerEvents :'none'} : {opacity: 1 , pointerEvents :'all'}
-                            }
-                            className="button">{checkLanguage({vi: 'Nhấn để nhận ngay 2 KDG Reward', en: 'Click here to get 2 KDG Reward'},language)}</button>
-                        </div>
+                        
                     </div>
                     <div className="attendance-right">
                         

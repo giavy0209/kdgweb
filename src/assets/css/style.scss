@@ -247,6 +247,14 @@ body {
     text-align: center;
 }
 
+.text-l {
+    text-align: left;
+}
+
+.text-r {
+    text-align: right;
+}
+
 .img {
     display: block;
     position: relative;
@@ -405,7 +413,8 @@ header {
             .menubar{
                 cursor: pointer;
                 display: none;
-                width: 20px;
+                width: 60px;
+                height: 60px;
                 padding: 20px;
                 width: fit-content;
                 img{
@@ -1503,6 +1512,7 @@ footer{
                 margin-top: 0;
                 .button{
                     .background{
+                        font-size: 12px;
                         padding: 7px;
                     }
                 }
@@ -1519,9 +1529,13 @@ footer{
             }
             .slide-content {
                 margin-top: 25px;
+                .controls-left, .controls-right{
+                    font-size: 20px;
+                }
                 .slide-track {
                     .slide-block {
                         position: relative;
+                        padding: 0;
                         .block-text{
                             width: 100%;
                             h3{

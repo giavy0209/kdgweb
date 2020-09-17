@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { message } from 'antd';
 import { asyncGetUserData } from '../../store/action';
 function Wheel({keyValue, setSpinValue,getValue, items}) {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const [selectedItem, setSelectedItem] = useState(null);
 
   const [IsCanClick, setIsCanClick] = useState(true);
@@ -22,8 +22,9 @@ function Wheel({keyValue, setSpinValue,getValue, items}) {
       setTimeout(() => {
         setIsCanClick(true)
         setButtonName('RESET')
-        dispatch(asyncGetUserData())
         document.querySelector('.popupspin').style.display  = 'block'
+        document.querySelector('.maskspin').style.display  = 'block'
+        dispatch(asyncGetUserData())
       }, 4000);
     }else{
       message.error('Bạn không đủ KDG Reward')

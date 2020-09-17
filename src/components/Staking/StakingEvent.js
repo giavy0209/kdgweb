@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { Slider, message } from 'antd';
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux'
 import '../../assets/css/staking.scss'
 import callapi from '../../axios'
@@ -87,7 +86,7 @@ const handleStaking = useCallback( async ()=>{
     }
     dispatch(actChangeLoading(false))
     
-},[user,checked,ValueSlider,language])
+},[user,ValueSlider,language,dispatch])
 
 useEffect(()=>{
   document.getElementById('inputValue').value = ValueSlider
@@ -132,11 +131,11 @@ const history = useHistory();
                  </div>
                  <div className="kdg-col-4 staking-timeline-title l2 text-c">
                  <h3>{checkLanguage({vi : 'Thời gian mở khóa', en: 'Unlocking time'}, language)}</h3>
-                 <h4><h4> {addDate(new Date(), 60).getDate()}/{addDate(new Date(), 2).getMonth() + 1}/{addDate(new Date(), 2).getFullYear()} </h4></h4>
+                 <h4><h4> {addDate(new Date(), 63).getDate()}/{addDate(new Date(), 63).getMonth() + 1}/{addDate(new Date(), 63).getFullYear()} </h4></h4>
                    </div>
                    <div className="kdg-col-4 staking-timeline-title l3 text-r">
                    <h3>{checkLanguage({vi : 'Thời gian phân bố gốc và lãi', en: 'Time to allocate principal and interest'}, language)}</h3>
-                   <h4>{addDate(new Date(), 62).getDate()}/{addDate(new Date(), 62).getMonth() + 1}/{addDate(new Date(), 62).getFullYear()}</h4>
+                   <h4>{addDate(new Date(), 65).getDate()}/{addDate(new Date(), 65).getMonth() + 1}/{addDate(new Date(), 65).getFullYear()}</h4>
                    </div>
                   
               </div>
@@ -156,7 +155,7 @@ const history = useHistory();
                   <input id="inputValue" defaultValue={ValueSlider}
                   onChange={e=>{
                     var value = e.target.value !== '' ? Number(e.target.value) : ''
-                    if(value !== NaN){
+                    if(!isNaN(value)){
                       e.target.value = value
                     }else{
                       e.target.value = ValueSlider
@@ -199,8 +198,8 @@ const history = useHistory();
               <div className="kdg-col-4 amount-per-year va-m">
                 <div className=" number-staking-receive"> 
                   <div className="number-staking-title"> 
-                    <h3>{checkLanguage({vi : 'Số tiền lãi nhận được', en: 'The amount of interest received'}, language)}</h3>
-                    <h3  className="kdg-number">{parseFloat(ValueSlider*0.3).toFixed(2)} KDG</h3>
+                    <h3>{checkLanguage({vi : 'Tổng số tiền lãi và gốc được nhận', en: 'Total amount of interest and principal received'}, language)}</h3>
+                    <h3  className="kdg-number">{ValueSlider + (ValueSlider * 0.3 / 12 * 2)} KDG</h3>
                   </div>
                 </div>
               </div> 
@@ -209,14 +208,13 @@ const history = useHistory();
             <FontAwesomeIcon color="#ff0000" icon={faInfoCircle} />
             <span >{checkLanguage({vi : 'Vui lòng đọc kỹ quy tắc trước khi tham gia', en: 'Please read the following Staking rules carefully before join.'}, language)}</span>
             <ul>
-              <li>{checkLanguage({vi : '(1) Số lượng tham gia Staking tối thiểu là 100 KDG, thời hạn khóa tối thiểu là 60 ngày', en: '(1) Minimum investment amount is 100KDG, Minimum locked days is 60days.'}, language)}</li>
-              <li>{checkLanguage({vi : '(2) Lãi suất sẽ được tính vào ngày tiếp theo khi bạn tham gia Staking', en: '(2) The yield starts to be counted from the next day after you participate in Staking'}, language)}</li>
+              <li>{checkLanguage({vi : '(1) Số lượng tham gia Staking tối thiểu là 200 KDG, thời hạn khóa tối thiểu là 60 ngày', en: '(1) Minimum investment amount is 200KDG, Minimum locked days is 60days.'}, language)}</li>
+              <li>{checkLanguage({vi : '(2) Lãi suất sẽ được tính sau 2 ngày kể từ khi bạn tham gia Staking', en: '(2) The yield starts to be counted from the next 2 days after you participate in Staking'}, language)}</li>
               <li>{checkLanguage({vi : '(3) Bạn không thể rút, giao dịch hay sử dụng số lượng KDG trong khoảng thời gian tham gia Staking', en: '(3) Trade, withdrawal and pre-unlocking are unvailable during locking period'}, language)}</li>
               <li>{checkLanguage({vi : '(4) Khi thời gian tham gia Staking kết thúc, cả gốc và lãi sẽ được mở khóa vào tài khoản của bạn', en: '(4) When the Staking period ends, both principal and interest will be unlocked to your account'}, language)}</li>
             </ul>
             <div className="checkbox-container">
               <input
-                className="staking-input"
                 type="checkbox"
                 checked={checked}
                 className="checkbox"

@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from 'react'
 import {checkComponent, checkLanguage} from '../../helpers'
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {storage} from '../../helpers'
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncGetUserData, actChangeUser, actChangeToken } from '../../store/action';
@@ -11,16 +11,11 @@ export default function App({components,reqLogin,type,name}) {
     const language = useSelector(state => state.lang)
     const token = useSelector(state => state.token)
     const JWT = useSelector(state => state.JWT)
+    const location = useLocation();
 
-    // useMemo(()=>{
-    //     var tokenStorage = storage.getToken()
-    //     dispatch(actChangeToken(tokenStorage))
-    //     setInterval(() => {
-    //         var tokenStorage = storage.getToken()
-    //         console.log(tokenStorage);
-    //         dispatch(actChangeToken(tokenStorage))
-    //     }, 5000);
-    // },[])
+    React.useEffect(() => {
+      window.scroll(0,0)
+    }, [location]);
 
     useEffect(()=>{
         var title = checkLanguage(name,language).replace(/<[^>]*>/g, ' ').replace(/\s{2,}/g, ' ').trim();

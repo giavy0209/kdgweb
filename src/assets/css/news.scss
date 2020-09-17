@@ -104,7 +104,7 @@
             .item{
             width: 50%;
                 &:not(:nth-child(-n + 2)){
-                    margin-top: 20px;
+                    margin-top: 35px;
                 }
             }
         }
@@ -114,20 +114,23 @@
 @media only screen and (max-width : 500px){
     .top-news{
         margin-top: 50px;
+        display: flex;
+        align-items: center;
         .left{
-            width: 100%;
             display: inline-block;
-            text-align: center;
+            text-align: left;
+            width: 100%;
+            vertical-align: middle;
             .title{
                 font-size: 30px;
                 color: #0f0f25;
             }
         }
         .right{
-            width: 100%;
             display: inline-block;
             text-align: right;
-            text-align: center;
+            width: 100%;
+            vertical-align: middle;
             .search{
                 position: relative;
                 display: inline-block;
@@ -135,9 +138,9 @@
                     border: none;
                     border-radius: 5px;
                     background-color: #f1f3f4;
-                    padding: 16px 23px;
+                    padding: 8px 11px;
                     color: #8a8c8e;
-                    padding-right: 50px;
+                    padding-right: 10px;
                 }
                 .icon{
                     position: absolute;
@@ -154,7 +157,7 @@
             .item{
             width: 100%;
                 &:not(:nth-child(-n + 1)){
-                    margin-top: 20px;
+                    margin-top: 35px;
                 }
             }
         }
@@ -238,12 +241,21 @@
 }
 
 
-@media only screen and (max-width: 767px){
-    
+@media only screen and (max-width: 768px){
+.top-news {
+    .left {
+        .title{
+            font-size: 25px;
+        }
+    }
+}
 .news-content{
     margin-top: 45px;
     .kdg-col-9, .kdg-col-3{
         width: 100%;
+    }
+    .kdg-col-3 {
+        margin-top: 50px;
     }
     .main-content{
         .header{

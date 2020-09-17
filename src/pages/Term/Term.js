@@ -8,7 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { atcChangeLanguage } from '../../store/action';
 import menubar from '../../assets/img/menubar.png'
 import bg from '../../assets/img/bg-term.png'
-import { checkLanguage } from '../../helpers';
+import { checkLanguage, smoothscroll } from '../../helpers';
 import '../../assets/css/term.scss'
 export default function App(){
     const dispatch = useDispatch()
@@ -90,7 +90,7 @@ export default function App(){
     const [CurrentTerm, setCurrentTerm] = useState((index && Number(index) < terms.length) ? Number(index) : 0)
 
     useEffect(()=>{
-        if(window.innerWidth > 992){
+        if(window.innerWidth > 768){
             setTimeout(() => {
                 var windowHeight = window.innerHeight
                 var headerHeight = document.querySelector('header').offsetHeight
@@ -99,12 +99,17 @@ export default function App(){
                 sidebar.style.height = (windowHeight - headerHeight - 50) + 'px'
                 contentHeight.style.height = (windowHeight - headerHeight - 50) + 'px'
             }, 500);
+        }else{
+            var track = document.querySelector('.sidebar-term')
+            var trackLeft = track.offsetLeft
+            var itemLeft = track.querySelectorAll('.sidebar-term p')[CurrentTerm].offsetLeft
+            smoothscroll(track, track.scrollLeft, itemLeft - trackLeft, 0,0,200)
         }
 
     },[CurrentTerm])
     return(
         <>
-        <header style={{backgroundImage: `url(${bg})`}} className="header">
+        <header style={{backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition:'center'}} className="header">
             <div style={{backgroundColor: '#121827'}}>
                 <div className="kdg-container">
                     <div className="top-header">
@@ -131,9 +136,9 @@ export default function App(){
                     </div>
                 </div>
             </div>
-            <div style={{backgroundColor: 'transparent'}} className="bottom-header">
+            <div style={{backgroundColor: 'transparent',position: 'relative'}} className="bottom-header">
                 <div className="kdg-container">
-                    <div className=" logo-menu" style={{borderBottom: '1px solid #fff',paddingBottom: 25}}>
+                    <div className=" logo-menu" style={{borderBottom: '1px solid #fff',paddingBottom: 25, position: 'initial'}}>
                         <span className="menubar"><img src={menubar} alt="" /></span>
                         <a 
                         onClick={e=>{e.preventDefault();history.push('/')}}
