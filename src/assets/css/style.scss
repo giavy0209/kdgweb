@@ -275,7 +275,7 @@ body {
 .img-3-2::before {
     content: '';
     display: block;
-    padding-top: 66.6666%;
+    padding-top: 56.25%;
     background-color: transparent;
 }
 .img-1-1::before {
@@ -412,11 +412,15 @@ header {
             }
             .menubar{
                 cursor: pointer;
+                position: absolute;
+                top: 50%;
                 display: none;
+                left: 16px;
+                transform: translate(0 , -50%);
+                z-index: 99;
                 width: 60px;
                 height: 60px;
                 padding: 20px;
-                width: fit-content;
                 img{
                     width: 100%;
                 }
@@ -1173,7 +1177,7 @@ footer{
     }
     .tab-img{
         position: relative;
-        top: -50px;
+        top: 0px;
     }
     .group-tab{
         font-size: 0;
@@ -1405,13 +1409,7 @@ footer{
                 text-align: center;
             }
             .menubar{
-                cursor: pointer;
                 display: inline-block;
-                position: absolute;
-                top: 50%;
-                left: 16px;
-                transform: translate(0 , -50%);
-                z-index: 99;
                 transition: all .3s ease;
             }
         }
@@ -1432,11 +1430,12 @@ footer{
                         }
                         .block-img{
                             position: absolute;
-                            top: 0;
+                            top: unset;
+                            bottom: 0;
                             right: 0;
                             z-index: -1;
-                            width: 40%;
-                            opacity: .5;
+                            width: 52%;
+                            opacity: .3;
                         }
                     }
                 }
@@ -1503,7 +1502,7 @@ footer{
         margin-top: 240px;
         .bg{
             bottom: auto;
-            top: -240px;
+            top: -280px;
         }
         .list-button{
             display: flex;
@@ -1528,7 +1527,7 @@ footer{
                 padding: 0;
             }
             .slide-content {
-                margin-top: 25px;
+                margin-top: 30px;
                 .controls-left, .controls-right{
                     font-size: 20px;
                 }
@@ -1536,7 +1535,9 @@ footer{
                     .slide-block {
                         position: relative;
                         padding: 0;
+                        vertical-align: top;
                         .block-text{
+                            padding: 0 15px;
                             width: 100%;
                             h3{
                                 font-size: 18px;
@@ -1544,7 +1545,7 @@ footer{
                         }
                         .block-img{
                             position: absolute;
-                            top: 0;
+                            top: unset;
                             right: 0;
                             z-index: -1;
                         }
@@ -1686,7 +1687,7 @@ footer{
     right: 35px;
     left: auto;
     position: fixed;
-    z-index: 9999999;
+    z-index: 99999;
     >span{
         width: 100% !important;
         * {

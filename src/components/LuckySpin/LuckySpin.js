@@ -94,10 +94,6 @@ export default function App({ ...prop }) {
             setRewardValue(rewardvalue.title)
         }
     }, [user,dispatch])
-
-
-    const kdg_reward = useSelector(state=>state && state.user && state.user.kdg_reward)    
-
     return (
         <>
             <div 

@@ -8,7 +8,7 @@ import { InputNumber } from 'antd';
 import '../../assets/css/wallet.scss'
 import nodata from '../../assets/img/nodata.png'
 import { checkLanguage } from '../../helpers';
-import { asyncGetHistoryTRX, asyncGetHistoryUSDT } from '../../store/action';
+import { asyncGetHistoryTRX, asyncGetHistoryUSDT, asyncGetHistoryTOMO } from '../../store/action';
 
 function App() {
   const dispatch = useDispatch()
@@ -22,9 +22,11 @@ function App() {
   const trxWallet = useSelector(state=>{
       return state.user && state.user.trx_address
   })
+  const tomoWallet = useSelector(state=>{
+      return state.user && state.user.tomo_address
+  })
 
   useEffect(()=>{
-    console.log(CurrentHistory);
     setHistory([...[]])
     if(CurrentHistory === 'KDG' || CurrentHistory === 'TRON'){
       if(ercWallet) {
@@ -43,7 +45,15 @@ function App() {
         })
       }
     }
-  },[ercWallet,trxWallet,Page,CurrentHistory])
+    if(CurrentHistory === 'TOMO'){
+      if(trxWallet) {
+        dispatch(asyncGetHistoryTOMO(tomoWallet, (Page - 1) * 10, CurrentHistory))
+        .then(result=>{
+          setHistory([...result])
+        })
+      }
+    }
+  },[ercWallet,trxWallet,tomoWallet,Page,CurrentHistory])
 
   return (
     <>
@@ -107,6 +117,13 @@ function App() {
                 setPage(1)
               }} className={`tab ${CurrentHistory === 'USDT' && 'active'}`}>
                 <p>USDT</p>
+              </div>
+
+              <div onClick={()=>{
+                setCurrentHistory('TOMO')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'TOMO' && 'active'}`}>
+                <p>TOMO</p>
               </div>
             </div>
 

@@ -1,11 +1,11 @@
-import React ,{useState, useCallback, useEffect} from 'react'
+import React ,{useState, useCallback} from 'react'
 import symbal from '../../assets/img/symbal.png'
 import TRX from '../../assets/img/TRX.png'
-import BTC from '../../assets/img/btc_icon.png'
 import ETH from '../../assets/img/ETH.png'
 import USDT from '../../assets/img/USDT.png'
 import KNC from '../../assets/img/KNC.png'
 import MCH from '../../assets/img/MCH.png'
+import TOMO from '../../assets/img/TOMO.png'
 import swap from '../../assets/img/swap.png'
 import deposit from '../../assets/img/deposit.png'
 import withdraw from '../../assets/img/withdraw.png'
@@ -40,6 +40,9 @@ export default function ListCoin(){
     const trxWallet = useSelector(state=>{
         return state.user && state.user.trx_address
     })
+    const tomoWallet = useSelector(state=>{
+        return state.user && state.user.tomo_address
+    })
 
     const balance = useSelector(state=>{
         return state.allBalance
@@ -63,6 +66,7 @@ export default function ListCoin(){
 
     const handleWithdraw = useCallback((e)=>{
         e.preventDefault()
+        var target = e.target
         const data = new FormData(e.target)
         const rawSubmitData = {}
         for(var pair of data.entries()) {
@@ -78,13 +82,15 @@ export default function ListCoin(){
             .then(res=>{
                 if(res.status === 1){
                     message.success(checkLanguage({vi: 'Rút tiền thành công', en: 'Withdraw successfully'},language))
+                    target.reset()
                     setVisibleWithdraw(false)
                 }else{
                     message.error(checkLanguage({vi: 'Giao dịch không thành công', en: 'Transaction fail'},language))
                 }
                 dispatch(actChangeLoading(false))
             })
-            .catch(e=>{
+            .catch(er=>{
+                console.log(er);
                 message.error(checkLanguage({vi: 'Giao dịch không thành công', en: 'Transaction fail'},language))
                 dispatch(actChangeLoading(false))
             })
@@ -95,17 +101,19 @@ export default function ListCoin(){
     const isKYC = useSelector(state=> state && state.user && state.user.kyc_success)
 
     const handleSwap = useCallback(async()=>{
-        dispatch(actChangeLoading(true))
-        const res = (await callapi().post('/api/convert_kdg_reward',{userId: id , value : SwapValue})).data
-        dispatch(actChangeLoading(false))
-        console.log(res);
-        if(res.status === 1){
-            message.success(checkLanguage({vi: 'Chuyển đổi KDG thành công', en: 'Swap KDG successfully'},language))
-        }else{
-            message.error(checkLanguage({vi: 'Chuyển đổi thất bại', en: 'Swap KDG fail'},language))
+        if(SwapValue > 0){
+            dispatch(actChangeLoading(true))
+            const res = (await callapi().post('/api/convert_kdg_reward',{userId: id , value : SwapValue})).data
+            dispatch(actChangeLoading(false))
+            console.log(res);
+            if(res.status === 1){
+                message.success(checkLanguage({vi: 'Chuyển đổi KDG thành công', en: 'Swap KDG successfully'},language))
+            }else{
+                message.error(checkLanguage({vi: 'Chuyển đổi thất bại', en: 'Swap KDG fail'},language))
+            }
+            document.querySelector('.popupswap').style.display = 'none'
+            document.querySelector('.popupswapmask').style.display = 'none'
         }
-        document.querySelector('.popupswap').style.display = 'none'
-        document.querySelector('.popupswapmask').style.display = 'none'
     },[SwapValue, id])
     
     return(
@@ -185,7 +193,7 @@ export default function ListCoin(){
 
                 <p
                 onClick={handleSwap}
-                style={{cursor: 'pointer',width: 130, borderRadius: 50, textAlign: 'center', margin: '0 auto' ,marginTop: 20, padding: '10px 0', fontSize: 16, color : '#ffffff', backgroundImage: 'linear-gradient(to bottom , #e9c259 ,#e4cf7c , #aa8411 , #c59700)'}}
+                style={{opacity : SwapValue ,cursor: 'pointer',width: 130, borderRadius: 50, textAlign: 'center', margin: '0 auto' ,marginTop: 20, padding: '10px 0', fontSize: 16, color : '#ffffff', backgroundImage: 'linear-gradient(to bottom , #e9c259 ,#e4cf7c , #aa8411 , #c59700)'}}
                 >{checkLanguage({vi: 'XÁC NHẬN', en: 'CONFIRM'},language)}</p>
                 <p style={{color :'#283349', textDecoration : 'underline', fontSize : 16}}> {checkLanguage({vi : 'Lưu ý', en: 'Notice'},language)} </p>
                 <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký trước ngày 1/9 sẽ được đổi tối đa 20KDG Reward / ngày, tối đa 1 lần/ngày. 1KDG Reward = 1KDG', en: 'Account registration before 1/9/2020 are able to swap the reward. Maximum 20KDG / day, only 1 time / day. 1 KDG reward = 1 KDG.'}, language)}</p>
@@ -537,6 +545,43 @@ export default function ListCoin(){
                 </div>
             </div>
         </div> */}
+
+        <div className="item">
+            <div className="coin">
+                <div className="top-info">
+                <div className="coin-image-name">
+                    <img src={TOMO} alt="coin"/>
+                    <span className="name">TOMO</span>
+                </div>
+                <div className='balance'>
+                    <p><span> </span><span> {balance && balance.tomo_balance} </span></p>
+                </div>
+                </div>
+                <div className="button-group">
+                <div className="kdg-row kdg-column-4 list-button text-c va-m">
+                    <div className="item">
+                    <div onClick={async()=>{
+                        setVisibleDeposit(true); 
+                        setCoin('TOMO'); 
+                        setAddress(tomoWallet)
+                        const img = await QRCode.toDataURL(tomoWallet)
+                        setAddressQR(img)
+                    }} className='button'>
+                        <img alt="deposit" src={deposit}/>
+                        <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
+                    </div>
+                    </div>
+                    <div className="item">
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('TOMO')}} className='button'>
+                        <img alt="withdraw" src={withdraw}/>
+                        <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
+                    </div>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+        </div>
 
         <div className="item">
             <div className="coin">

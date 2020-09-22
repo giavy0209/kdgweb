@@ -86,7 +86,7 @@ export default function App({...prop}) {
                   <tr>
                     <td><img width="30px" src={KDG} alt="" />  KDG</td>                  
                     <td> {new Date(stake.start_date).getDate()}/{new Date(stake.start_date).getMonth()+1}/{new Date(stake.start_date).getFullYear()} </td>
-                    <td> <td> {new Date(stake.end_date).getDate()}/{new Date(stake.end_date).getMonth()+1}/{new Date(stake.end_date).getFullYear()} </td> </td>
+                    <td>{new Date(stake.end_date).getDate()}/{new Date(stake.end_date).getMonth()+1}/{new Date(stake.end_date).getFullYear()} </td>
                     <td> {stake.kdg_coin_send} </td>
                     <td> 30% </td>
                   </tr>

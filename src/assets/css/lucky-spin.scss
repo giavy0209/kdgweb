@@ -155,8 +155,15 @@
         }
     }
 }
-
+@media only screen and (max-width: 1366px){
+    .container-wheel .wheel-left .main-content .text .total-coin > span{
+        font-size: 14px;
+    }
+}
 @media only screen and (max-width: 992px){
+    .container-wheel .wheel-left .main-content .text .total-coin > span{
+        font-size: 14px;
+    }
     .container-wheel{
         .wheel-left{
             width: 100%;

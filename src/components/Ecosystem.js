@@ -28,7 +28,7 @@ export default function App({data,...prop}) {
         if(window.innerWidth > 767){
             setButtonTrackWidth('100%')
         }else{
-            setButtonTrackWidth(((100 * data.length)/3) + '%')
+            setButtonTrackWidth(((100 * data.length)/2.5) + '%')
         }
     },[data])
     

@@ -15,6 +15,7 @@ export default function App(){
     const dispatch = useDispatch()
     const [ValidForm , setValidForm] = useState({newpass: false, renewpass: false,oldpass: false})
     const [Token, setToken] = useState('')
+    const [Password, setPassword] = useState('')
     const [Visible, setVisible] = useState(false)
     const [VisibleDisable, setVisibleDisable] = useState(false)
     const [Serect2FA, setSerect2FA] = useState('')
@@ -79,7 +80,7 @@ export default function App(){
 
     const handleDisable2FA = useCallback(async ()=>{
         dispatch(actChangeLoading(true))
-        var res = (await callapi().post('/api/disable_2fa', {userId:userID ,token: Token })).data
+        var res = (await callapi().post('/api/disable_2fa', {userId:userID ,token: Token , password : Password})).data
         if(res.status === 1){
             dispatch(asyncGetUserData())
             message.success(checkLanguage({vi: 'Hủy 2FA thành công', en: 'Disable 2FA successfully'}, language))
@@ -90,7 +91,7 @@ export default function App(){
             dispatch(actChangeLoading(false))
 
         }
-    },[Token,userID])
+    },[Token,userID, Password])
     return(
         <>
         <Modal
@@ -135,21 +136,32 @@ export default function App(){
         onCancel={()=>setVisibleDisable(false)}
         >
             <div className='model-deposit'>
-                <div className="verify">
+                <div style={{margin : 0}} className="verify">
                     <input 
                     value={Token}
                     onChange={e=>setToken(e.target.value)}
-                    style={{padding: 10, width: 360}}
+                    style={{padding: 10, width: '100%'}}
                     onKeyPress={e=>{
                         if(e.key == 'Enter'){
                             handleDisable2FA()
                         }
                     }}
-                    placeholder="Nhập mã 2FA trong app của bạn"/>
+                    placeholder={checkLanguage({vi: "Nhập mã 2FA trong app của bạn", en: '2FA Code'},language)}/>
+                    <input 
+                    value={Password}
+                    onChange={e=>setPassword(e.target.value)}
+                    style={{padding: 10, width: '100%', marginTop: 10}}
+                    onKeyPress={e=>{
+                        if(e.key == 'Enter'){
+                            handleDisable2FA()
+                        }
+                    }}
+                    placeholder={checkLanguage({vi: 'Nhập mật khẩu', en: 'Password'},language)}/>
                     <button 
+                    style={{marginTop : 10}}
                     onClick={handleDisable2FA}
                     className="button-gradiant">
-                        {checkLanguage({vi: 'Xác nhận 2FA', en: 'Confirm 2FA'},language)}
+                        {checkLanguage({vi: 'Xác nhận hủy 2FA', en: 'Confirm disable 2FA'},language)}
                     </button>
                 </div>
             </div>

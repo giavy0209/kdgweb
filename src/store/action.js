@@ -3,6 +3,8 @@ import Home from '../pages/Home'
 import Storage from '../helpers/storage'
 import { storage } from '../helpers';
 import Axios from 'axios';
+import socket from '../socket'
+
 export const CHANGE_LOADING = 'CHANGE_LOADING';
 export const CHANGE_NEWS = 'CHANGE_NEWS';
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
@@ -121,17 +123,19 @@ export function asyncGetNewsById(id,next, language){
     }
 }
 
-export function asyncGetBalance(tron_kdg_wallet, eth_usdt_wallet) {
+export function asyncGetBalance(tron_kdg_wallet, eth_usdt_wallet,tomo_address) {
     return async dispatch => {
         const res = (await callapi().get(`/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
         const res2 = (await callapi().get(`/api/tron_kdg/balance/${tron_kdg_wallet}`)).data
         const res3 = (await callapi().get(`/api/knc/balance/${eth_usdt_wallet}`)).data
         const res4 = (await callapi().get(`/api/mch/balance/${eth_usdt_wallet}`)).data
+        const res5 = (await callapi().get(`/api/tomo/balance/${tomo_address}`)).data
         const { eth_balance, usdt_balance } = res
         const { trx_balance, kdg_balance } = res2
         const knc_balance = res3.balance
         const mch_balance = res4.balance
-        dispatch(actChangeBalance({ eth_balance, usdt_balance, trx_balance, kdg_balance , knc_balance, mch_balance}))
+        const tomo_balance = res5.balance
+        dispatch(actChangeBalance({ eth_balance, usdt_balance, trx_balance, kdg_balance , knc_balance, mch_balance,tomo_balance}))
 
         // setInterval(async () => {
         //     const res = (await callapi().get(`/api/eth_usdt/balance/${eth_usdt_wallet}`)).data
@@ -149,6 +153,7 @@ export function asyncLogin(submitData) {
         try {
             dispatch(actChangeLoading(true))
             res = ((await callapi().post('/api/authorize', submitData)))
+            socket.emit('login', submitData)
             dispatch(actChangeUser(res.data.data))
             dispatch(asyncGetBalance(res.data.data.trx_address, res.data.data.erc_address))
             Storage.setToken(res.data.data._id)
@@ -169,8 +174,8 @@ export function asyncLogin(submitData) {
 
 export function asyncGetUserData(token) {
     return async dispatch => {
-        var token = token ? token : storage.getToken()
-        var jwt = jwt ? jwt : storage.getJWT()
+        var token = storage.getToken()
+        var jwt = storage.getJWT()
         if (token && jwt) {
             dispatch(actChangeToken(token))
             dispatch(actChangeJWT(jwt))
@@ -178,7 +183,7 @@ export function asyncGetUserData(token) {
                 const res = (await callapi().get(`/api/user/${token}`)).data
                 if (res.status === 1) {
                     dispatch(actChangeUser(res.data))
-                    dispatch(asyncGetBalance(res.data.trx_address, res.data.erc_address))
+                    dispatch(asyncGetBalance(res.data.trx_address, res.data.erc_address,res.data.tomo_address))
                     return true
                 } else {
                     Storage.clearToken()
@@ -261,7 +266,6 @@ export function asyncWithdraw(submitdata) {
     return async dispatch => {
         try {
             const res = (await callapi().post(`/api/deposit`, submitdata)).data
-            console.log(res);
             if (res.status === 1) {
                 dispatch(asyncGetUserData())
                 return res
@@ -313,6 +317,31 @@ export function asyncGetHistoryTRX(userWallet, skip, coin) {
                         type: o.transferFromAddress === userWallet ? 0 : 1,
                         value: coin.toLowerCase() === 'kdg' ? o.amount / 1e18 :  o.amount / 1e6, 
                         hash: o.transactionHash
+                    }
+                    return data
+                })
+            dispatch(actChangeLoading(false))
+            return result
+        }else{
+            dispatch(actChangeLoading(false))
+            return []
+        }
+    }
+}
+
+export function asyncGetHistoryTOMO(userWallet, skip, coin) {
+    return async dispatch => {
+        userWallet = userWallet.toLowerCase()
+        dispatch(actChangeLoading(true))
+        const res = (await callapi().get(`/api/blockchain_transaction?coin_type=${coin.toLowerCase()}&address=${userWallet}&skip=${skip}&take=100&begin_date=1970-01-01`)).data
+        if (res.status === 1) {
+            var result = res.data.items
+                result = result.map(o => {
+                    var data = {
+                        time: new Date(o.timestamp),
+                        type: o.from === userWallet ? 0 : 1,
+                        value:  o.value / 1e18,
+                        hash: o.hash
                     }
                     return data
                 })

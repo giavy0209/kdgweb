@@ -9,7 +9,7 @@ import menubar from '../../assets/img/menubar.png'
 
 import bgbanner from '../../assets/img/gamehub/bgbanner.png'
 import bgdes from '../../assets/img/gamehub/bgdes.png'
-import bginfo from '../../assets/img/gamehub/bginfo.png'
+import bginfo from '../../assets/img/gamehub/bginfo.jpg'
 import bggames from '../../assets/img/gamehub/bggames.png'
 
 import borderbottom from '../../assets/img/gamehub/borderbottom.png'
@@ -48,28 +48,29 @@ export default function App(){
     const language = useSelector(state=>state && state.lang)
 
     const listGame = useMemo(()=>{
+        checkLanguage({vi: '', en: ''},language)
         var list = [
             {
                 img: game1,
-                title: 'QUỶ HẦU VƯƠNG',
-                subTitle : 'Tây Du Ký',
-                desType : 'ARPG | Điện thoại',
+                title: checkLanguage({vi: 'QUỶ HẦU VƯƠNG', en: 'MONKEY KING'},language),
+                subTitle : checkLanguage({vi: 'Tây Du Ký', en: 'journey to the west'},language),
+                desType : 'ARPG | '+checkLanguage({vi: 'Điện Thoại', en: 'Mobile'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 2,
             },
             {
                 img: game2,
                 title: 'MU KINGDOM MOBILE',
-                subTitle : 'Lục Địa Tàn Trở Lại',
-                desType : 'MMORPG | Điện thoại',
+                subTitle : checkLanguage({vi: 'Lục Địa Tàn Trở Lại', en: 'The Return of Legend'},language),
+                desType : 'MMORPG | '+checkLanguage({vi: 'Điện Thoại', en: 'Mobile'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 2,
             },
             {
                 img: game3,
-                title: 'CON ĐƯỜNG TƠ LỤA',
-                subTitle : 'Vương triều báo thù',
-                desType : 'MMORPG | Máy tính',
+                title: checkLanguage({vi: 'CON ĐƯỜNG TƠ LỤA', en: 'silk road'},language),
+                subTitle : checkLanguage({vi: 'Vương triều báo thù', en: 'The Revenge of kingdom'},language),
+                desType : 'MMORPG | '+checkLanguage({vi: 'Máy tính', en: 'PC'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 1,
             },
@@ -77,39 +78,39 @@ export default function App(){
                 img: game4,
                 title: 'MU SEASON 14',
                 subTitle : 'Castel Siege',
-                desType : 'MMORPG | Máy tính',
+                desType : 'MMORPG | '+checkLanguage({vi: 'Máy tính', en: 'PC'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 1,
             },
             {
                 img: game5,
                 title: 'MU Kingdom XV',
-                subTitle : 'Hủy diệt Vương triều',
-                desType : 'MMORPG | Máy tính',
+                subTitle : checkLanguage({vi: 'Hủy diệt Vương triều', en: 'Destroy Kingdom'},language),
+                desType : 'MMORPG | '+checkLanguage({vi: 'Máy tính', en: 'PC'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 1,
             },
             {
                 img: game6,
-                title: 'võ lâm truyền kỳ',
-                subTitle : 'Vạn Kiếm Khai Hoa',
-                desType : 'MMORPG | Điện thoại',
+                title: checkLanguage({vi: 'võ lâm truyền kỳ', en: 'SWORDSMAN Online'},language),
+                subTitle : checkLanguage({vi: 'Vạn Kiếm Khai Hoa', en: 'Multi sword'},language),
+                desType : 'MMORPG | '+checkLanguage({vi: 'Điện Thoại', en: 'Mobile'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 2,
             },
             {
                 img: game7,
-                title: 'võ lâm truyền kỳ',
-                subTitle : 'Công Thành Chiến',
-                desType : 'MMORPG | Điện thoại',
+                title: checkLanguage({vi: 'võ lâm truyền kỳ', en: 'SWORDSMAN Online'},language),
+                subTitle : checkLanguage({vi: 'Công Thành Chiến', en: 'castle siege'},language),
+                desType : 'MMORPG | '+checkLanguage({vi: 'Điện Thoại', en: 'Mobile'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 2,
             },
             {
                 img: game8,
-                title: 'VÕ BÁ THIÊN HẠ',
-                subTitle : 'Đấu Khí Đại Lục',
-                desType : 'MMO | Điện thoại',
+                title: checkLanguage({vi: 'VÕ BÁ THIÊN HẠ', en: 'VO BA THIEN HA'},language),
+                subTitle : checkLanguage({vi: 'Đấu Khí Đại Lục', en: 'dau Khi dai Luc'},language),
+                desType : 'MMO | '+checkLanguage({vi: 'Điện Thoại', en: 'Mobile'},language),
                 desDate : checkLanguage({vi: 'Ngày phát hành: Coming soon', en: 'Release date: Coming soon'},language),
                 type : 2,
             },
@@ -289,7 +290,7 @@ export default function App(){
                         <div className='kdg-col-4'></div>
                         <div className='kdg-col-4 va-t'>
                             <div className='title'>
-                            {checkLanguage({vi: '', en: ''},language)}NGƯỜI CHƠI GAME
+                            {checkLanguage({vi: 'NGƯỜI CHƠI GAME', en: 'PLAYER'},language)}
                             </div>
                             <ul>
                                 <li>

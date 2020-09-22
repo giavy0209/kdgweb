@@ -198,6 +198,20 @@
     }
 }
 @media only screen and (max-width: 768px) {
+    .gamehub{
+        header{
+            background-position: center;
+            .banner{
+                padding: 0;
+                &::before{
+                    height: 100vh;
+                }
+            }
+        }
+        .border.boob{
+            height: 50px;
+        }
+    }
     .gamehub .banner .content{
         .top{
             font-size:40px ;
@@ -222,6 +236,7 @@
         }
         .des-content{
             font-size: 14px;
+            padding: 0 35px;
         }
     }
 

@@ -159,7 +159,9 @@ main{
         position: relative;
         overflow-x: scroll;
         overflow-y: hidden;
-        white-space: pre;
+        white-space: nowrap;
+        word-wrap: normal;
+        resize: none;
         // &::-webkit-scrollbar-button{
         //     display: none;
         // }
@@ -652,8 +654,10 @@ main{
 @media only screen and (max-width : 768px){
     .section-prices {
         .list-price{
-            white-space: pre;
+            white-space: nowrap;
             overflow-x: scroll;
+            word-wrap: normal;
+            resize: none;
             &.kdg-column-4 .item{
                 margin-top: 0 !important;
                 width: 100%;

@@ -1,35 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 22.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 41 126.6" style="enable-background:new 0 0 41 126.6;" xml:space="preserve">
+	 viewBox="0 0 45 45" style="enable-background:new 0 0 45 45;" xml:space="preserve">
 <style type="text/css">
-	.st0{opacity:0.6;enable-background:new    ;}
-	.st1{fill:#DDD9D8;}
-	.st2{fill:url(#SVGID_1_);}
-	.st3{opacity:0.6;fill:#DDD9D8;enable-background:new    ;}
+	.st0{fill:#FAC800;}
+	.st1{fill:#FFFFFF;}
 </style>
-<g id="Path_4016_1_" class="st0">
-	<polygon class="st1" points="11.2,21.7 21.5,9.2 31.4,21.7 23.4,21.7 23.4,29 18.7,29 18.7,21.7 	"/>
-</g>
-<g id="Rectangle_735">
-	
-		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-731.3539" y1="538.4434" x2="-731.3539" y2="539.444" gradientTransform="matrix(-35.029 0 0 -67.256 -25598.0957 36309.8477)">
-		<stop  offset="0" style="stop-color:#D5AF33"/>
-		<stop  offset="0.19" style="stop-color:#E9C35A"/>
-		<stop  offset="0.2591" style="stop-color:#EACA69"/>
-		<stop  offset="0.37" style="stop-color:#EDDA8A"/>
-		<stop  offset="0.61" style="stop-color:#A37D2D"/>
-		<stop  offset="0.83" style="stop-color:#CA9E2C"/>
-		<stop  offset="1" style="stop-color:#7E461D"/>
-	</linearGradient>
-	<path class="st2" d="M29,96.3H12c-5,0-9-4-9-9V38c0-5,4-9,9-9h17c5,0,9,4,9,9v49.3C38,92.3,34,96.3,29,96.3z"/>
-</g>
-<rect id="Rectangle_737" x="18" y="71.1" class="st3" width="5.6" height="14"/>
-<rect id="Rectangle_737_1_" x="18.7" y="29" class="st3" width="4.7" height="14"/>
-<g id="Rectangle_738" class="st0">
-	<rect x="18" y="101.9" class="st1" width="5.6" height="5.6"/>
-</g>
-<g id="Rectangle_739" class="st0">
-	<rect x="18" y="111.7" class="st1" width="5.6" height="5.6"/>
+<path class="st0" d="M43,45H2c-1.1,0-2-0.9-2-2L0,2c0-1.1,0.9-2,2-2l41,0c1.1,0,2,0.9,2,2v41C45,44.1,44.1,45,43,45z"/>
+<g>
+	<g>
+		<path class="st1" d="M21.5,15.7L10.6,26.6c-0.3,0.3-0.4,0.6-0.4,1c0,0.4,0.1,0.7,0.4,1l0.8,0.8c0.5,0.5,1.4,0.5,1.9,0l9.2-9.2
+			l9.2,9.2c0.3,0.3,0.6,0.4,1,0.4c0.4,0,0.7-0.1,1-0.4l0.8-0.8c0.3-0.3,0.4-0.6,0.4-1c0-0.4-0.1-0.7-0.4-1L23.4,15.7
+			c-0.3-0.3-0.6-0.4-1-0.4C22.1,15.3,21.8,15.4,21.5,15.7z"/>
+	</g>
 </g>
 </svg>

@@ -95,6 +95,7 @@ export default function App(){
         const uploadFont = new FormData()
         uploadFont.append('file', submitData.font)
         uploadFont.append('userId' , userId)
+        console.log(uploadFont);
         arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadFont))
 
         const uploadSelf = new FormData()
@@ -275,7 +276,7 @@ export default function App(){
                 </label>
             </div>}
             <div className="upload">
-                <div className="text">{SelectedID === 0 ? checkLanguage({vi: '3. Ảnh có mặt của bạn chụp chung với mặt trước CMND/Bằng lái xe và ngày tháng năm hiện tại', en: `3. Your face image with ID/Driver's license at the present time`}, language) : checkLanguage({vi: '2. Ảnh có mặt bạn chụp chung với hộ chiếu và ngày tháng năm hiện tại', en: '2. Your face image with passport at the present time'}, language)}</div>
+                <div className="text">{SelectedID === 0 ? checkLanguage({vi: '3. Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn.', en: `3. Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a written sentence "KINGDOM GAME 4.0", current date and your signature in that.`}, language) : checkLanguage({vi: '2.Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn.', en: `Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a written sentence "KINGDOM GAME 4.0", current date and your signature in that.`}, language)}</div>
                 <input 
                 onChange={e=>{
                     readURL(e);

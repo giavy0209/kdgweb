@@ -53,10 +53,10 @@
                 font-size: 14px;
                 margin-top: 12px;
                 line-height: 16px;
-                max-height: 48px;
                 overflow: hidden;
-                height: 50px;
-                overflow: hidden;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                display: -webkit-box;
             }
             .viewmore{
                 padding: 7px;

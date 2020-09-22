@@ -30,7 +30,7 @@ export default function App(){
 
             var startLoadScrollHeight = scrollHeight - footerHeight - 200
             console.log(Page,news.length);
-            if(scrollY >= startLoadScrollHeight && Page <= TotalPage && news.length === Page * 3) {
+            if(scrollY >= startLoadScrollHeight && Page <= TotalPage && news.length === Page * 6) {
                 setPage(Page + 1)
             }
 
@@ -53,10 +53,10 @@ export default function App(){
     // },[Page,TotalPage])
 
     const handleGetNews = useCallback(async ()=>{
-        dispatch(asyncGetNews((Page - 1) * 3, 3,Search,language))
+        dispatch(asyncGetNews((Page - 1) * 6, 6,Search,language))
         .then(res=>{
-            setTotalPage(Math.ceil(res.totalPost / 3))
-            console.log(res.totalPost,Math.ceil(res.totalPost / 3));
+            setTotalPage(Math.ceil(res.totalPost / 6))
+            console.log(res.totalPost,Math.ceil(res.totalPost / 6));
             setnews([...news,...res.data])
         })
         .catch(res=>{

@@ -64,7 +64,16 @@ export default function App(){
     useEffect(()=>{
         dispatch(asyncGetNewsById(id))
         .then(res=>{
-            setNews(res.data)
+            var d = new Date (res.data.create_date)
+            var h = (d.getHours() + '').length === 2 ? d.getHours() : '0' + d.getHours()
+            var minute = (d.getMinutes() + '').length === 2 ? d.getMinutes() : '0' + d.getMinutes()
+            var day = (d.getDate() + '').length === 2 ? d.getDate() : '0' + d.getDate()
+            var month = ((d.getMonth() + 1) + '').length === 2 ? (d.getMonth() + 1) : '0' + (d.getMonth() + 1)
+            var year = (d.getFullYear() + '').length === 2 ? d.getFullYear() : '0' + d.getFullYear()
+            setNews({
+                ...res.data,
+                h,minute,day,month,year
+            })
         })
     },[id])
     var checkNews = useCallback((o, lang)=>{
@@ -115,7 +124,7 @@ export default function App(){
                             <div className="main-content">
                                 <div className="header">
                                     <h1 className="title">{News && checkLanguage({vi: News.title_vi , en: News.title_en}, language)}</h1>
-                                    <p className="date">{News && `${new Date(News.create_date).getHours()}:${new Date(News.create_date).getMinutes()} - ${new Date(News.create_date).getDate()}/${new Date(News.create_date).getMonth() + 1}/${new Date(News.create_date).getFullYear()}`}</p>
+                                    <p className="date">{News && `${News.h}:${News.minute} - ${News.day}/${News.month}/${News.year}`}</p>
                                 </div>
                                 <div className="body">
                                     <div className="metades">{News && checkLanguage({vi: News.meta_vi , en: News.meta_en}, language)}</div>
@@ -132,12 +141,19 @@ export default function App(){
                                     <ul className="list-othernews">
                                         {
                                             news && news.map((o , index)=>{
+                                                var d = new Date(o.create_date)
+                                                var h = (d.getHours() + '').length === 2 ? d.getHours() : '0' + d.getHours()
+                                                var minute = (d.getMinutes() + '').length === 2 ? d.getMinutes() : '0' + d.getMinutes()
+                                                var sec = (d.getSeconds() + '').length === 2 ? d.getSeconds() : '0' + d.getSeconds()
+                                                var day = (d.getDate() + '').length === 2 ? d.getDate() : '0' + d.getDate()
+                                                var month = ((d.getMonth() + 1) + '').length === 2 ? (d.getMonth() + 1) : '0' + (d.getMonth() + 1)
+                                                var year = (d.getFullYear() + '').length === 2 ? d.getFullYear() : '0' + d.getFullYear()
                                                 if(checkNews(o, language) &&  o._id !== id){
                                                     return <li
                                                     onClick={()=>history.push('/news/'+o._id)}
                                                     >            
                                                         <h3 className="othernew-title">{checkLanguage({vi: o.title_vi, en: o.title_en},language)}</h3>
-                                                        <p className="othernew-date">{new Date(o.create_date).getHours()}:{new Date(o.create_date).getMinutes()} - {new Date(o.create_date).getDate()}/{new Date(o.create_date).getMonth() + 1}/{new Date(o.create_date).getFullYear()}</p>
+                                                        <p className="othernew-date">{h}:{minute} - {day}/{month}/{year}</p>
                                                     </li>
                                                 }
                                             }

@@ -12,6 +12,8 @@ import NewsDetail from './pages/NewsDetail'
 
 import backtop from './assets/img/back-top.svg'
 import { smoothscroll, storage } from './helpers';
+import socket from './socket';
+
 function App() {
   const dispatch = useDispatch()
   const [ShowScrollTop, setShowScrollTop] = useState(false)
@@ -53,13 +55,13 @@ function App() {
       var loginDate = new Date(logintime)
       var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
       if(timeFromLastLogin >= 1800000){
-        // console.log(timeFromLastLogin);
-        // var email = localStorage.getItem('email')
-        // var password = localStorage.getItem('password')
-        // dispatch(asyncLogin({email, password}))
+        socket.emit('login-timeout',storage.getToken())
         storage.clearJWT()
         storage.clearToken()
+        window.open('/login', '_self')
       }else{
+        console.log(storage.getToken());
+        socket.emit('reconnect', storage.getToken())
       }
     }
     var id = setInterval(() => {
@@ -68,21 +70,19 @@ function App() {
         var loginDate = new Date(logintime)
         var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
         if(timeFromLastLogin >= 1800000){
-          // var email = localStorage.getItem('email')
-          // var password = localStorage.getItem('password')
-          // dispatch(asyncLogin({email, password}))
+          socket.emit('login-timeout',storage.getToken())
           storage.clearJWT()
           storage.clearToken()
-        }else{
+          window.open('/login', '_self')
         }
       }else{
         clearInterval(id)
       }
-    }, 5000);
+    }, 60000);
 
     setInterval(() => {
       dispatch(asyncGetUserData())
-    }, 5000);
+    }, 30000);
   },[])
 
 

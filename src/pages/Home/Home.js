@@ -1,9 +1,8 @@
 import React, { useMemo, useEffect } from 'react'
 import {checkComponent, checkLanguage} from '../../helpers'
 import { useHistory, useLocation } from 'react-router-dom';
-import {storage} from '../../helpers'
 import { useDispatch, useSelector } from 'react-redux';
-import { asyncGetUserData, actChangeUser, actChangeToken } from '../../store/action';
+import { asyncGetUserData, } from '../../store/action';
 import bg from '../../assets/img/home.png'
 export default function App({components,reqLogin,type,name}) {
     const history = useHistory()

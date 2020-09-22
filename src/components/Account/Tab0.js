@@ -1,9 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import axios from 'axios'
 import { asyncGetUserData } from '../../store/action'
 import { message } from 'antd'
-import { checkLanguage, validateForm } from '../../helpers'
+import { checkLanguage } from '../../helpers'
 import callapi from '../../axios'
 function isValidDate(dateString) {
     var regEx = /^\d{1,2}\/\d{1,2}\/\d{4}$/;

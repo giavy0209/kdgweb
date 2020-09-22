@@ -218,7 +218,7 @@ export default function App({...rest}) {
                         }
                         onClick={()=>{getCode(document.getElementById('email').value)}} 
                         className="button">
-                            {checkLanguage({vi: "Nhấp để nhận", en: 'Get code'},language)}
+                            {checkLanguage({vi: "Nhận mã", en: 'Get code'},language)}
                             <span className="count-down">{CountDownSendMail !== null && CountDownSendMail}</span>
                         </span>
                     </div>
