@@ -403,6 +403,46 @@ main{
     }
 }
 
+.group-radio{
+    margin-bottom: 30px !important;
+    text-align: center;
+    *{
+        vertical-align: middle;
+    }
+    .detail{
+        margin-right: 45px;
+    }
+    .radio{
+        +.radio {
+            margin-left: 24px;
+        }
+        .fake-radio{
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #ddd9d8;
+            margin-right: 8px;
+        }
+        &.check{
+            .fake-radio{
+                position: relative;
+                background-color: #fac800;
+                &::before{
+                    content: '';
+                    position: absolute;
+                    width: 9px;
+                    height: 14px;
+                    border-right: 2px solid #fff;
+                    border-bottom: 2px solid #fff;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate( -50% , -50%) rotate( 45deg);
+                }
+            }
+        }
+    }
+}
+
 .model-deposit{
     font-size: 14px;
     color: #8a8c8e;

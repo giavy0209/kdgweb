@@ -208,6 +208,40 @@ export default function ListCoin(){
         onCancel={()=>setVisibleDeposit(false)}
         >
             <div className='model-deposit'>
+                {
+                    (Coin === 'USDT' || Coin === 'USDT-TRC20') && 
+                    <div className='group-radio'>
+                        <span>
+                            <span className='detail'>{checkLanguage({vi : 'Chọn loại', en: 'Type'}, language)}</span>
+                            <span
+                             onClick={async e =>{
+                                e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
+                                e.currentTarget.classList.add('check')
+                                setCoin('USDT')
+                                setAddress(ercWallet)
+                                const img = await QRCode.toDataURL(ercWallet)
+                                setAddressQR(img)
+                            }}
+                            className='radio check'>
+                                <span className='fake-radio'></span>
+                                <span>ERC-20</span>
+                            </span>
+                            <span
+                            onClick={async e =>{
+                                e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
+                                e.currentTarget.classList.add('check')
+                                setCoin('USDT-TRC20')
+                                setAddress(trxWallet)
+                                const img = await QRCode.toDataURL(trxWallet)
+                                setAddressQR(img)
+                            }}
+                            className='radio'>
+                                <span className='fake-radio'></span>
+                                <span>TRC-20</span>
+                            </span>
+                        </span>
+                    </div>
+                }
                 <span>{checkLanguage({vi: 'Scan tại đây để nạp' , en: 'Scan here to deposit'},language)}</span>
                 <div className="qr-code">
                     <span></span>
@@ -258,6 +292,34 @@ export default function ListCoin(){
                 </span>
                 :
                 <form onSubmit={handleWithdraw}>
+                    {
+                        (Coin === 'USDT' || Coin === 'USDT-TRC20') && 
+                        <div className='group-radio'>
+                            <span>
+                                <span className='detail'>{checkLanguage({vi : 'Chọn loại', en: 'Type'}, language)}</span>
+                                <span
+                                onClick={async e =>{
+                                    e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
+                                    e.currentTarget.classList.add('check')
+                                    setCoin('USDT')
+                                }}
+                                className='radio check'>
+                                    <span className='fake-radio'></span>
+                                    <span>ERC-20</span>
+                                </span>
+                                <span
+                                onClick={async e =>{
+                                    e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
+                                    e.currentTarget.classList.add('check')
+                                    setCoin('USDT-TRC20')
+                                }}
+                                className='radio'>
+                                    <span className='fake-radio'></span>
+                                    <span>TRC-20</span>
+                                </span>
+                            </span>
+                        </div>
+                    }
                     <div className="input-group">
                         <span>{checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)}</span>
                         <input placeholder={checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)} name="toAddress" />
