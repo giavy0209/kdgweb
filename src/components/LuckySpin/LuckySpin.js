@@ -88,15 +88,15 @@ export default function App({ ...prop }) {
     const user = useSelector(state => state.user)
     const Spin = useCallback(async () => {
         if(user){
-            var res = (await callapi().post('/api/get_lucky_spin', { userId: user._id, token: '5f27dfdc81d58518f022b054' })).data
+            var res = (await callapi().post('/api/get_lucky_spin', { userId: user._id})).data
             setSpinValue(res.spin_value);
             var rewardvalue = places.find( o => o.key === res.spin_value)
-            setRewardValue(rewardvalue.title)
+            setRewardValue(rewardvalue.title) 
         }
     }, [user,dispatch])
     return (
         <>
-            <div 
+            <div  
             onClick={e =>{
                 e.target.style.display = 'none'
                 document.querySelector('.popupspin').style.display = 'none'
