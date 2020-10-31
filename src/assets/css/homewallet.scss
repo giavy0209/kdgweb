@@ -40,6 +40,9 @@
         }
         .store{
             margin-top: 45px;
+            img{
+                cursor: pointer;
+            }
             img + img{
                 margin-left: 23px;
             }

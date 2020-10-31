@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ListChart from './ListChart'
 import ListCoin from './ListCoin'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,7 +8,9 @@ import { InputNumber } from 'antd';
 import '../../assets/css/wallet.scss'
 import nodata from '../../assets/img/nodata.png'
 import { checkLanguage } from '../../helpers';
-import { asyncGetHistoryTRX, asyncGetHistoryUSDT, asyncGetHistoryTOMO } from '../../store/action';
+import { asyncGetHistoryTRX, asyncGetHistoryUSDT, asyncGetHistoryTOMO, asyncGetHistoryBTC, asyncGetTransactions, asyncGetBalance } from '../../store/action';
+
+
 
 function App() {
   const dispatch = useDispatch()
@@ -16,44 +18,16 @@ function App() {
   const [Page, setPage] = useState(1)
   const [History, setHistory] = useState([])
   const language = useSelector(state=>state.lang)
-  const ercWallet = useSelector(state=>{
-      return state.user && state.user.erc_address
-  })
-  const trxWallet = useSelector(state=>{
-      return state.user && state.user.trx_address
-  })
-  const tomoWallet = useSelector(state=>{
-      return state.user && state.user.tomo_address
-  })
+  const userID = useSelector(state => state.user && state.user._id)
+
 
   useEffect(()=>{
-    setHistory([...[]])
-    if(CurrentHistory === 'KDG' || CurrentHistory === 'TRON'){
-      if(ercWallet) {
-        dispatch(asyncGetHistoryTRX(trxWallet, (Page - 1) * 10, CurrentHistory))
-        .then(result=>{
-          result = result.slice((Page - 1) * 10,(Page - 1) * 10 + 10)
-          setHistory([...result])
-        })
-      }
-    }
-    if(CurrentHistory === 'ETH' || CurrentHistory === 'USDT' || CurrentHistory === 'KNC' || CurrentHistory === 'MCH'){
-      if(trxWallet) {
-        dispatch(asyncGetHistoryUSDT(ercWallet, (Page - 1) * 10, CurrentHistory))
-        .then(result=>{
-          setHistory([...result])
-        })
-      }
-    }
-    if(CurrentHistory === 'TOMO'){
-      if(trxWallet) {
-        dispatch(asyncGetHistoryTOMO(tomoWallet, (Page - 1) * 10, CurrentHistory))
-        .then(result=>{
-          setHistory([...result])
-        })
-      }
-    }
-  },[ercWallet,trxWallet,tomoWallet,Page,CurrentHistory])
+    dispatch(asyncGetTransactions(userID, (Page - 1) * 10 , 10 , CurrentHistory))
+    .then(res => {
+      console.log(res);
+      setHistory([...res])
+    })
+  },[Page,CurrentHistory,userID])
 
   return (
     <>
@@ -85,9 +59,9 @@ function App() {
               </div>
 
               <div onClick={()=>{
-                setCurrentHistory('TRON')
+                setCurrentHistory('TRX')
                 setPage(1)
-              }} className={`tab ${CurrentHistory === 'TRON' && 'active'}`}>
+              }} className={`tab ${CurrentHistory === 'TRX' && 'active'}`}>
                 <p>TRX</p>
               </div>
 
@@ -111,12 +85,18 @@ function App() {
               }} className={`tab ${CurrentHistory === 'ETH' && 'active'}`}>
                 <p>ETH</p>
               </div>
+              <div onClick={()=>{
+                setCurrentHistory('USDT-ERC20')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'USDT-ERC20' && 'active'}`}>
+                <p>USDT-ERC20</p>
+              </div>
 
               <div onClick={()=>{
-                setCurrentHistory('USDT')
+                setCurrentHistory('USDT-TRC20')
                 setPage(1)
-              }} className={`tab ${CurrentHistory === 'USDT' && 'active'}`}>
-                <p>USDT</p>
+              }} className={`tab ${CurrentHistory === 'USDT-TRC20' && 'active'}`}>
+                <p>USDT-TRC20</p>
               </div>
 
               <div onClick={()=>{
@@ -125,6 +105,13 @@ function App() {
               }} className={`tab ${CurrentHistory === 'TOMO' && 'active'}`}>
                 <p>TOMO</p>
               </div>
+
+              {/* <div onClick={()=>{
+                setCurrentHistory('BTC')
+                setPage(1)
+              }} className={`tab ${CurrentHistory === 'BTC' && 'active'}`}>
+                <p>BTC</p>
+              </div> */}
             </div>
 
             <div className="history">
@@ -139,20 +126,23 @@ function App() {
                   </tr>
 
                   {
-                    (History && History.length > 0 )?  History.map(({time, type, value , hash},index) =>
-                      <tr>
+                    (History && History.length > 0 )?  History.map(({create_date, type, value , txId},index) =>{
+                      var create_date = new Date(create_date)
+                      return (
+                        <tr>
                         <td className="date-time">
-                          <span className="date"> {time.getDate()} /{time.getMonth() + 1}/{time.getFullYear()}</span>
-                          <span className="time">{time.getHours()}:{time.getMinutes()}:{time.getSeconds()}</span>
+                          <span className="date"> {create_date.getDate()} /{create_date.getMonth() + 1}/{create_date.getFullYear()}</span>
+                          <span className="time">{create_date.getHours()}:{create_date.getMinutes()}:{create_date.getSeconds()}</span>
                         </td>
                         <td className={`quantity ${type === 0 ? 'red' : 'green'}`} >
                           {value}
                         </td>
                         <td>{CurrentHistory}</td>
                         <td>{type === 0 ? checkLanguage({vi : 'Rút tiền', en: 'Withdraw'}, language) : checkLanguage({vi : 'Nạp tiền', en: 'Deposit'}, language)}</td>
-                        <td> {hash} </td>
+                        <td> {txId} </td>
                       </tr>
-                    ): 
+                      )
+                    }): 
                     <tr>
                     <td colSpan="5">
                       <img src={nodata} alt="" /> <br></br>

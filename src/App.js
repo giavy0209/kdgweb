@@ -11,8 +11,8 @@ import Loading from './pages/Loading'
 import NewsDetail from './pages/NewsDetail'
 
 import backtop from './assets/img/back-top.svg'
-import { smoothscroll, storage } from './helpers';
-import socket from './socket';
+import bgdownload from './assets/img/bgdownload.png'
+import { checkLanguage, smoothscroll, storage } from './helpers';
 
 function App() {
   const dispatch = useDispatch()
@@ -55,13 +55,10 @@ function App() {
       var loginDate = new Date(logintime)
       var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
       if(timeFromLastLogin >= 1800000){
-        socket.emit('login-timeout',storage.getToken())
         storage.clearJWT()
         storage.clearToken()
         window.open('/login', '_self')
       }else{
-        console.log(storage.getToken());
-        socket.emit('reconnect', storage.getToken())
       }
     }
     var id = setInterval(() => {
@@ -70,7 +67,6 @@ function App() {
         var loginDate = new Date(logintime)
         var timeFromLastLogin = (new Date().getTime()) - loginDate.getTime()
         if(timeFromLastLogin >= 1800000){
-          socket.emit('login-timeout',storage.getToken())
           storage.clearJWT()
           storage.clearToken()
           window.open('/login', '_self')
@@ -80,13 +76,10 @@ function App() {
       }
     }, 60000);
 
-    setInterval(() => {
-      dispatch(asyncGetUserData())
-    }, 30000);
   },[])
 
-
-  
+  const language = useSelector(state=>state && state.lang)
+  console.log(language);
   const ListRoute = useCallback(()=>{
     return ROUTERS_LINK && ROUTERS_LINK.map(route => 
       route.path && !route.isURL && !route.pathEN && <Route key={route.path} exact={true} path={route.path}>
@@ -101,6 +94,14 @@ function App() {
     style={ShowScrollTop ? {opacity: 1, pointerEvents: 'all'} : {opacity: 0 , pointerEvents: 'none'}}
     className="back-top" src={backtop} alt="" />
     {isLoading && <Loading />}
+    <div onClick={e=>document.querySelector('.maskdownload').style.display = 'none'} className="maskdownload">
+      <div className="popupdownload">
+        <img src={bgdownload} alt=""/>
+        <div className="title">{checkLanguage({vi: 'TẢI APP VÀ đăng NHẬP ĐỂ nhận ngay', en: "DOWNLOAD APP AND GET"},language)}</div>
+        <div className="reward">KDG REWARD</div>
+        <div onClick={()=>window.open('https://kingdomgame.org/news/5f72cf0729610263db6c155c','_blank')} className="button-viewmore"> {checkLanguage({vi: 'XEM THÊM', en: "VIEW MORE"},language)} </div>
+      </div>
+    </div>
     <BrowserRouter>
       <Switch>
         {ListRoute()}

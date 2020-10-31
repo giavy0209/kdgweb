@@ -1,6 +1,7 @@
 import React ,{useState, useCallback} from 'react'
 import symbal from '../../assets/img/symbal.png'
 import TRX from '../../assets/img/TRX.png'
+import BTC from '../../assets/img/btc_icon.png'
 import ETH from '../../assets/img/ETH.png'
 import USDT from '../../assets/img/USDT.png'
 import KNC from '../../assets/img/KNC.png'
@@ -30,6 +31,7 @@ export default function ListCoin(){
     const [VisibleDeposit, setVisibleDeposit] = useState(false)
     const [VisibleWithdraw, setVisibleWithdraw] = useState(false)
     const [Coin, setCoin] = useState('KDG')
+    const [Balance, setBalance] = useState(0)
     const [Address, setAddress] = useState('')
     const [AddressQR, setAddressQR] = useState('')
 
@@ -42,6 +44,9 @@ export default function ListCoin(){
     })
     const tomoWallet = useSelector(state=>{
         return state.user && state.user.tomo_address
+    })
+    const btcWallet = useSelector(state=>{
+        return state.user && state.user.btc_address
     })
 
     const balance = useSelector(state=>{
@@ -168,7 +173,7 @@ export default function ListCoin(){
                         }else{
                             e.target.value = e.target.value.slice(0 , e.target.value.length - 1)
                         }
-                        setSwapValue(Number(e.target.value))
+                        setSwapValue(Number(e.target.value / 2))
                     }}
                     style={{width: '100%', border: 'none', backgroundColor: '#fff', color: '#283349', fontSize: 35,textAlign: 'center', fontWeight: 400, height: 95}}
                     />
@@ -196,8 +201,8 @@ export default function ListCoin(){
                 style={{opacity : SwapValue ,cursor: 'pointer',width: 130, borderRadius: 50, textAlign: 'center', margin: '0 auto' ,marginTop: 20, padding: '10px 0', fontSize: 16, color : '#ffffff', backgroundImage: 'linear-gradient(to bottom , #e9c259 ,#e4cf7c , #aa8411 , #c59700)'}}
                 >{checkLanguage({vi: 'XÁC NHẬN', en: 'CONFIRM'},language)}</p>
                 <p style={{color :'#283349', textDecoration : 'underline', fontSize : 16}}> {checkLanguage({vi : 'Lưu ý', en: 'Notice'},language)} </p>
-                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký trước ngày 1/9 sẽ được đổi tối đa 20KDG Reward / ngày, tối đa 1 lần/ngày. 1KDG Reward = 1KDG', en: 'Account registration before 1/9/2020 are able to swap the reward. Maximum 20KDG / day, only 1 time / day. 1 KDG reward = 1 KDG.'}, language)}</p>
-                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký sau ngày 1/9 sẽ được quy đổi thành KDG Token khi bạn có đủ 25KDG Reward, quy đổi mỗi ngày 1 lần. 1KDG Reward = 1KDG', en: 'Account registration after 1/9/2020 are able to swap the reward when being enough 25KDG / day, maximum 50KDG / day, only 1 time / day. 1 KDG reward = 1 KDG.'}, language)}</p>
+                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký trước ngày 1/9 sẽ được đổi tối đa 20KDG Reward / ngày, tối đa 1 lần/ngày. 2KDG Reward = 1KDG', en: 'Account registration before 1/9/2020 are able to swap the reward. Maximum 20KDG / day, only 1 time / day. 2 KDG reward = 1 KDG.'}, language)}</p>
+                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký sau ngày 1/9 sẽ được quy đổi thành KDG Token khi bạn có đủ 25KDG Reward, tối đa 50 KDG Reward,quy đổi mỗi ngày 1 lần. 2 KDG Reward = 1KDG', en: 'Account registration after 1/9/2020 are able to swap the reward when being enough 25KDG / day, maximum 50KDG / day, only 1 time / day. 2 KDG reward = 1 KDG.'}, language)}</p>
                 <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Vui lòng hoàn thành xác minh danh tính (KYC) trước khi swap', en: 'Please complete KYC before swap'}, language)}</p>
             </div>
         </div>
@@ -208,40 +213,6 @@ export default function ListCoin(){
         onCancel={()=>setVisibleDeposit(false)}
         >
             <div className='model-deposit'>
-                {
-                    (Coin === 'USDT' || Coin === 'USDT-TRC20') && 
-                    <div className='group-radio'>
-                        <span>
-                            <span className='detail'>{checkLanguage({vi : 'Chọn loại', en: 'Type'}, language)}</span>
-                            <span
-                             onClick={async e =>{
-                                e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
-                                e.currentTarget.classList.add('check')
-                                setCoin('USDT')
-                                setAddress(ercWallet)
-                                const img = await QRCode.toDataURL(ercWallet)
-                                setAddressQR(img)
-                            }}
-                            className='radio check'>
-                                <span className='fake-radio'></span>
-                                <span>ERC-20</span>
-                            </span>
-                            <span
-                            onClick={async e =>{
-                                e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
-                                e.currentTarget.classList.add('check')
-                                setCoin('USDT-TRC20')
-                                setAddress(trxWallet)
-                                const img = await QRCode.toDataURL(trxWallet)
-                                setAddressQR(img)
-                            }}
-                            className='radio'>
-                                <span className='fake-radio'></span>
-                                <span>TRC-20</span>
-                            </span>
-                        </span>
-                    </div>
-                }
                 <span>{checkLanguage({vi: 'Scan tại đây để nạp' , en: 'Scan here to deposit'},language)}</span>
                 <div className="qr-code">
                     <span></span>
@@ -258,7 +229,7 @@ export default function ListCoin(){
         <Modal
         isVisible={VisibleWithdraw}
         title={`${checkLanguage({vi: 'Rút' , en: 'Withdraw'},language)} ${Coin}`}
-        onCancel={()=>setVisibleWithdraw(false)}
+        onCancel={()=>{setVisibleWithdraw(false);document.getElementById('withdraw-form').reset()}}
         >
             <div className="model-withdraw">
                 {!is2FA ? 
@@ -291,42 +262,21 @@ export default function ListCoin(){
                     {checkLanguage({vi:'Vui lòng KYC trước khi rút tiền', en: 'Please KYC before withdraw'}, language)}
                 </span>
                 :
-                <form onSubmit={handleWithdraw}>
-                    {
-                        (Coin === 'USDT' || Coin === 'USDT-TRC20') && 
-                        <div className='group-radio'>
-                            <span>
-                                <span className='detail'>{checkLanguage({vi : 'Chọn loại', en: 'Type'}, language)}</span>
-                                <span
-                                onClick={async e =>{
-                                    e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
-                                    e.currentTarget.classList.add('check')
-                                    setCoin('USDT')
-                                }}
-                                className='radio check'>
-                                    <span className='fake-radio'></span>
-                                    <span>ERC-20</span>
-                                </span>
-                                <span
-                                onClick={async e =>{
-                                    e.currentTarget.parentElement.querySelectorAll('.radio').forEach(el=>el.classList.remove('check'))
-                                    e.currentTarget.classList.add('check')
-                                    setCoin('USDT-TRC20')
-                                }}
-                                className='radio'>
-                                    <span className='fake-radio'></span>
-                                    <span>TRC-20</span>
-                                </span>
-                            </span>
-                        </div>
-                    }
+                <form id='withdraw-form' onSubmit={handleWithdraw}>
                     <div className="input-group">
                         <span>{checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)}</span>
                         <input placeholder={checkLanguage({vi: 'Địa chỉ ví nhận' , en: 'Receive address'},language)} name="toAddress" />
                     </div>
                     <div className="input-group">
                         <span>{checkLanguage({vi: 'Số lượng' , en: 'Value'},language)} {Coin}</span>
-                        <input placeholder={`${checkLanguage({vi: 'Số lượng' , en: 'Value'},language)} ${Coin}`} name="value"/>
+                        <div style={{position : 'relative'}}>
+                            <input style={{width : '100%'}} placeholder={`${checkLanguage({vi: 'Số lượng' , en: 'Value'},language)} ${Coin}`} name="value"/>
+                            <span 
+                            onClick={e => {
+                                e.currentTarget.previousElementSibling.value = Balance
+                            }}
+                            style={{position : 'absolute', top : '50%' , right: 5, transform : 'translate(0 , -50%)', cursor : 'pointer'}}> {checkLanguage({vi : 'Tối đa', en: 'Max'}, language)} </span>
+                        </div>
                     </div>
                     <div className="input-group ">
                         <span>{checkLanguage({vi: 'Mã 2FA' , en: '2FA CODE'},language)}</span>
@@ -361,13 +311,14 @@ export default function ListCoin(){
                         setAddress(trxWallet);
                         const img = await QRCode.toDataURL(trxWallet)
                         setAddressQR(img)
+                        
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
                         <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('KDG')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('KDG');setBalance(balance.kdg_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -409,13 +360,14 @@ export default function ListCoin(){
                         setAddress(trxWallet)
                         const img = await QRCode.toDataURL(trxWallet)
                         setAddressQR(img)
+                        
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
                         <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('TRON')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('TRON');setBalance(balance.trx_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -445,13 +397,14 @@ export default function ListCoin(){
                         setAddress(ercWallet)
                         const img = await QRCode.toDataURL(ercWallet)
                         setAddressQR(img)
+                        
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
                         <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('KNC')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('KNC');setBalance(balance.knc_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -481,13 +434,14 @@ export default function ListCoin(){
                         setAddress(ercWallet)
                         const img = await QRCode.toDataURL(ercWallet)
                         setAddressQR(img)
+                        
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
                         <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('MCH')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('MCH');setBalance(balance.mch_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -518,13 +472,14 @@ export default function ListCoin(){
                         setAddress(ercWallet)
                         const img = await QRCode.toDataURL(ercWallet)
                         setAddressQR(img)
+                        
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
                         <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('ETH')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('ETH');setBalance(balance.eth_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -540,10 +495,10 @@ export default function ListCoin(){
                 <div className="top-info">
                 <div className="coin-image-name">
                     <img src={USDT} alt="coin"/>
-                    <span className="name">USDT</span>
+                    <span className="name">USDT-ERC20</span>
                 </div>
                 <div className='balance'>
-                    <p><span> </span><span> {balance && balance.eth_balance} </span></p>
+                    <p><span> </span><span> {balance && balance.usdt_erc20_balance} </span></p>
                 </div>
                 </div>
                 <div className="button-group">
@@ -555,13 +510,52 @@ export default function ListCoin(){
                         setAddress(ercWallet)
                         const img = await QRCode.toDataURL(ercWallet)
                         setAddressQR(img)
+                        
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
                         <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('USDT')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('USDT');setBalance(balance.usdt_erc20_balance)}} className='button'>
+                        <img alt="withdraw" src={withdraw}/>
+                        <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
+                    </div>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="item">
+            <div className="coin">
+                <div className="top-info">
+                <div className="coin-image-name">
+                    <img src={USDT} alt="coin"/>
+                    <span className="name">USDT-TRC20</span>
+                </div>
+                <div className='balance'>
+                    <p><span> </span><span> {balance && balance.usdt_trc20_balance} </span></p>
+                </div>
+                </div>
+                <div className="button-group">
+                <div className="kdg-row kdg-column-4 list-button text-c va-m">
+                    <div className="item">
+                    <div onClick={async()=>{
+                        setVisibleDeposit(true); 
+                        setCoin('USDT'); 
+                        setAddress(trxWallet)
+                        const img = await QRCode.toDataURL(trxWallet)
+                        setAddressQR(img)
+                        
+                    }} className='button'>
+                        <img alt="deposit" src={deposit}/>
+                        <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
+                    </div>
+                    </div>
+                    <div className="item">
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('USDT');setBalance(balance.usdt_trc20_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -580,7 +574,7 @@ export default function ListCoin(){
                     <span className="name">BTC</span>
                 </div>
                 <div className='balance'>
-                    <p><span></span><span> {balance && balance.trx_balance} </span></p>
+                    <p><span></span><span> {(balance && balance.btc_balance) ? balance.btc_balance : 0 } </span></p>
                 </div>
                 </div>
                 <div className="button-group">
@@ -589,8 +583,8 @@ export default function ListCoin(){
                     <div onClick={async()=>{
                         setVisibleDeposit(true); 
                         setCoin('BTC'); 
-                        setAddress(trxWallet)
-                        const img = await QRCode.toDataURL(trxWallet)
+                        setAddress(btcWallet)
+                        const img = await QRCode.toDataURL(btcWallet)
                         setAddressQR(img)
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
@@ -598,7 +592,7 @@ export default function ListCoin(){
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('TRX')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('BTC')}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -628,13 +622,14 @@ export default function ListCoin(){
                         setAddress(tomoWallet)
                         const img = await QRCode.toDataURL(tomoWallet)
                         setAddressQR(img)
+                        
                     }} className='button'>
                         <img alt="deposit" src={deposit}/>
                         <p> {checkLanguage({vi: 'Nạp', en: 'Deposit'}, language)} </p>
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('TOMO')}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('TOMO');setBalance(balance.tomo_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>

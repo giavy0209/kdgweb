@@ -55,6 +55,7 @@ export default function App(){
 
     useEffect(()=>{
         setFixSideBar()
+        document.querySelector('.maskdownload').style.display = 'none'
     },[])
 
     useMemo(()=>{

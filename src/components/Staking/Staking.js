@@ -22,7 +22,7 @@ export default function App({...prop}) {
 
                     <p className="kdg-text-description-content">{checkLanguage({vi: 'Với hệ sinh thái Staking của Kingdom Game, người dùng không chỉ nắm giữ token đơn thuần mà còn được tận hưởng thu nhập thụ động. King Wallet cung cấp dịch vụ Staking cho các loại Game token và nhiều đồng tiền kỹ thuật số khác để hạn chế sự mất giá của token từ lạm phát và tăng lợi tức cho người dùng.', en: 'With the Kingdom Game Staking ecosystem, users not only hold tokens but also receive passive income. King Wallet provides a Staking service for Game Tokens and many other digital currencies to reduce the devaluation of tokens from inflation and increase returns for users.'}, language)}</p>
                     <ul className="kdg-text-description-list">
-                        <li className="kdg-text-description-list-item"> <FontAwesomeIcon color="#f9c700" icon={faCheck} /> {checkLanguage({vi: 'Lợi tức cao lên tới 50%/năm', en: 'High income up to 50% per year'}, language)}</li>
+                        <li className="kdg-text-description-list-item"> <FontAwesomeIcon color="#f9c700" icon={faCheck} /> {checkLanguage({vi: 'Lợi tức cao lên tới 30%/năm', en: 'High income up to 30% per year'}, language)}</li>
                         <li className="kdg-text-description-list-item"> <FontAwesomeIcon color="#f9c700" icon={faCheck} /> {checkLanguage({vi: ' Hỗ trợ Game token, ERC-20 và TRC-20 token', en: 'Support for Game Token, ERC-20 and TRC-20 Token'}, language)}</li>
                         <li className="kdg-text-description-list-item"> <FontAwesomeIcon color="#f9c700" icon={faCheck} /> {checkLanguage({vi: 'Stake KDG nhận thêm token Game khác miễn phí', en: 'Stake KDG in order to receive more free Game Tokens'}, language)}</li>
                     </ul>
@@ -51,7 +51,7 @@ export default function App({...prop}) {
                         <img alt="" src={stakingDevelop} />
                     </div>
                     
-                    <p className="text-card">{checkLanguage({vi: 'Lãi suất tham chiếu hàng năm lên tới ', en: 'Estimated annual interest rate up to '}, language)} <span className="text-percent">50%</span></p>
+                    <p className="text-card">{checkLanguage({vi: 'Lãi suất tham chiếu hàng năm lên tới ', en: 'Estimated annual interest rate up to '}, language)} <span className="text-percent">30%</span></p>
                 </div>
             </div>
             </div>  

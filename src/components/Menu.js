@@ -27,13 +27,13 @@ export default function App({type}) {
       window.open(checkLanguage({vi:path, en: pathEN}, language),'_blank')
     }
     if(isURL){
+      console.log(selectedItem);
       window.open(selectedItem, '_blank')
     }
     if(!isURL && !pathEN){
       if(selectedItem !== ''){
         if(selectedItem !=='null'){
           if(event) event.stopPropagation();
-          
           setCurrentUrl(selectedItem);
           history.push(selectedItem);
 

@@ -11,11 +11,93 @@ import { checkLanguage } from '../helpers'
 import { atcChangeLanguage } from '../store/action'
 import menubar from '../assets/img/menubar.png'
 import { useHistory } from 'react-router-dom'
+import { useRef } from 'react'
+
+const calcTime = (sec)=>{
+    if(sec <= 0) {
+        return{
+            d: 0,
+            h: 0,
+            m: 0,
+            s: 0
+        }
+    }
+    if(sec / 60 < 1){
+        sec = Math.floor(sec)
+        if((sec + '').length === 1){
+            sec = '0' + sec
+        }
+        return {
+            d : '00',
+            h: '00',
+            m: '00',
+            s : sec
+        }
+    }else{
+        var minus = Math.floor(sec / 60)
+        var sec = Math.floor(sec % 60)
+        if(minus / 60 < 1){
+            if((minus + '').length === 1){
+                minus = '0' + minus
+            }
+            if((sec + '').length === 1){
+                sec = '0' + sec
+            }
+            return {
+                d : '00',
+                h: '00',
+                m: minus,
+                s : sec
+            }
+
+        }else{
+            var h = Math.floor(minus / 60)
+            minus = Math.floor(minus % 60)
+            if((h + '').length === 1){
+                h = '0' + h
+            }
+            if((minus + '').length === 1){
+                minus = '0' + minus
+            }
+            if((sec + '').length === 1){
+                sec = '0' + sec
+            }
+
+            return {
+                d : '00',
+                h: h,
+                m: minus,
+                s : sec
+            }
+        }
+
+    }
+}
+
+var targetDate = new Date('Sep 29 2020 14:00:00 GMT+0700')
 export default function App({data,type}){
     const VisibleBanner = data && data[0] ? data[0].visible_banner : false
     const dispatch = useDispatch()
     const history = useHistory()
     const [html, sethtml] = useState('')
+
+    const refH = useRef()
+    const refM = useRef()
+    const refS = useRef()
+
+    useEffect(()=>{
+        var interval = setInterval(() => {
+            var currDate = new Date()
+            var secToTarget = Math.round((targetDate - currDate) / 1000)
+            var time = calcTime(secToTarget)
+            if(secToTarget >0){
+                refH.current.innerText = time.h
+                refM.current.innerText = time.m
+                refS.current.innerText = time.s
+            }
+        }, 100);
+        return () => clearInterval(interval)
+    },[])
 
     const email = useSelector(state=>{
         return state.settings && state.settings.email && state.settings.email.email
@@ -146,16 +228,37 @@ export default function App({data,type}){
                             <div dangerouslySetInnerHTML={{__html:html}}></div>
                         </div>
                         <div className="kdg-col-6 va-m">
-                            <div className="rotate-block">
-                                <img className="rotate-left" src={rotate1} alt=""/>
-                                <img className="middle" src={token} alt=""/>
-                                <div className="icon">
-                                    {
-                                        listIcoinRotate && 
-                                        listIcoinRotate.map((o,index)=><a key={index} href={o.link} rel="noopener noreferrer" target="_blank" className='icon-container'><img className="" src={o.img} alt=""/> </a>)
-                                    }
+                            {
+                                targetDate - new Date() <= 0 ? 
+                                <div className="rotate-block">
+                                    <img className="rotate-left" src={rotate1} alt=""/>
+                                    <img className="middle" src={token} alt=""/>
+                                    <div className="icon">
+                                        {
+                                            listIcoinRotate && 
+                                            listIcoinRotate.map((o,index)=><a key={index} href={o.link} rel="noopener noreferrer" target="_blank" className='icon-container'><img className="" src={o.img} alt=""/> </a>)
+                                        }
+                                    </div>
                                 </div>
-                            </div>
+                                :
+                                <div className="countdown">
+                                    <p className="title"> {checkLanguage({vi: 'KING WALLET DỰ KIẾN RA MẮT', en :' KING WALLET WILL BE RELEASED SOON'}, language)}</p>
+                                    <div className="time">
+                                        <span className="hours">
+                                            <p ref={ref => refH.current = ref} className="top">23</p>
+                                            <p className="bottom">{checkLanguage({vi: 'Giờ', en :'Hours'}, language)} </p>
+                                        </span>
+                                        <span className="minutes">
+                                            <p ref={ref=>refM.current =ref} className="top">23</p>
+                                            <p className="bottom">{checkLanguage({vi: 'Phút', en :'Minutes'}, language)}</p>
+                                        </span>
+                                        <span className="second">
+                                            <p ref={ref=>refS.current = ref} className="top">23</p>
+                                            <p className="bottom">{checkLanguage({vi: 'Giây', en :'Seconds'}, language)}</p>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

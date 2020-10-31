@@ -61,7 +61,7 @@ export default function App(){
                             <tbody>
                                 {ListReward.length > 0 ? ListReward.map(o=>{
                                     var d = new Date(o.create_date)
-                                    return <tr>
+                                    return o.from && <tr>
                                         <td><span>{d.getHours()}:{d.getMinutes()}</span> <br></br> <span>{d.getDate()}/{d.getMonth() + 1}/{d.getFullYear()}</span> </td>
                                         <td> {o.from.email} </td>
                                         <td>KYC thành công</td>

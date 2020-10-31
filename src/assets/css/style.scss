@@ -1,4 +1,90 @@
 /*=========== 00. RESET CSS ================ */	
+.maskdownload{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, .3);
+}
+.popupdownload{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+    width: 50%;
+    max-width: 600px;
+    z-index: 999;
+    border-radius: 5px;
+    overflow: hidden;
+    @media only screen and (max-width : 1366px){
+        width: 100%;
+    }
+    
+    &::before{
+        content:  '';
+        padding-top: 75%;
+        display: block;
+    }
+    img{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        object-fit: cover;
+
+    }
+    .title{
+        color: #fff;
+        font-size: 25px;
+        text-align: center;
+        position: absolute;
+        text-transform: uppercase;
+        top: 63%;
+        width: 100%;
+    }
+    .reward{
+        font-size: 35px;
+        font-weight: 600;
+        text-align: center;
+        position: absolute;
+        top: 73%;
+        width: 100%;
+    }
+    .button-viewmore{
+        text-align: center;
+        position: absolute;
+        top: 84%;
+        background-color: #fff;
+        color: #fac800;
+        padding: 13px 55px;
+        font-size: 18px;
+        border-radius: 5px;
+        left: 50%;
+        transform: translate(-50% , 0);
+        cursor: pointer;
+    }
+    @media only screen and (max-width : 768px){
+        max-width: 90%;
+        .title{
+            top: 60%;
+            font-size: 16px;
+        }
+        .reward{
+            top: 70%;
+            font-size: 20px;
+        }
+        .button-viewmore{
+            top: 80%;
+            padding: 5px 15px;
+            font-size: 16px;
+        }
+    }
+}
 input.checkbox{
     display: none;
     ~.checkbox-label{
@@ -611,6 +697,84 @@ header {
     .banner{
         padding: 60px 0;
         overflow: hidden;
+        .kdg-col-12{
+            text-align: center;
+            position: relative;
+            &:first-child::before{
+                content:  "";
+                width:  25%;
+                position: absolute;
+                height: 1px;
+                top: calc(100% + 17px);
+                background-color: #fac800;
+                left: 50%;
+                transform: translate(-50% , 0);
+            }
+            .countdown{
+                margin-top: 54px;
+                .title{
+                    font-size: 25px;
+                    font-weight: 600;
+                    color: #fff;
+                }
+                .time{
+                    margin: 0 -45px;
+                    margin-top: 33px;
+                    span {
+                        +span{
+                            .top{
+                                position: relative;
+                                &::before{
+                                    content:  '';
+                                    position: absolute;
+                                    top: calc(50% - 16px);
+                                    left: 0;
+                                    transform: translate(-50% , 0);
+                                    width: 12px;
+                                    height: 12px;
+                                    border-radius: 50%;
+                                    background-color: #fac800;
+                                }
+                                &::after{
+                                    content:  '';
+                                    position: absolute;
+                                    top: calc(50% + 16px);
+                                    left: 0;
+                                    transform: translate(-50% , 0);
+                                    width: 12px;
+                                    height: 12px;
+                                    border-radius: 50%;
+                                    background-color: #fac800;
+                                }
+                            }
+                        }
+                    }
+                    .top{
+                        padding: 0 45px;
+                        font-size: 62px;
+                        font-weight: 600;
+                        color: #fac800;
+                    }
+                    .bottom {
+                        margin-top: 20px;
+                        color: #fff;
+                        font-weight: 300;
+                        font-size: 22px;
+                    }
+                }
+                span{
+                    display: inline-block;
+                }
+                .detail-btn{
+                    margin-top: 60px;
+                    width: 230px;
+                    padding: 15px 0;
+                    border-radius: 30px;
+                    background-color: rgba(255, 255, 255, .2);
+                    cursor: pointer;
+                }
+            }
+        }
         span{
             display: inline;
         }
@@ -1619,6 +1783,44 @@ footer{
     header .banner {
         padding-top: 70px;
         padding-bottom: 0;
+        .kdg-col-12{
+            .countdown{
+                .title{
+                    font-size: 18px;
+                }
+                .time{
+                    margin: 0 -30px;
+                    margin-top: 20px;
+                    span{
+                        .top{
+                            padding: 0 30px;
+                            font-size: 40px;
+                        }
+                        +span{
+                            .top{
+                                &::before{
+                                    top: calc(50% - 8px);
+                                    width: 8px;
+                                    height: 8px;
+                                }
+                                &::after{
+                                    top: calc(50% + 8px);
+                                    width: 8px;
+                                    height: 8px;
+                                }
+                            }
+                        }
+                    }
+                    .bottom{
+                        font-size: 16px;
+                        margin-top: 10px;
+                    }
+                }
+                .detail-btn{
+                    margin-top: 20px;
+                }
+            }
+        }
         .rotate-block{
             width: 275px;
             height: 275px;
