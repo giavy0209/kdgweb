@@ -8,6 +8,7 @@ import KNC from '../../assets/img/KNC.png'
 import MCH from '../../assets/img/MCH.png'
 import TOMO from '../../assets/img/TOMO.png'
 import swap from '../../assets/img/swap.png'
+import switchswap from '../../assets/img/switchswap.svg'
 import deposit from '../../assets/img/deposit.png'
 import withdraw from '../../assets/img/withdraw.png'
 import trade from '../../assets/img/trade.png'
@@ -34,6 +35,7 @@ export default function ListCoin(){
     const [Balance, setBalance] = useState(0)
     const [Address, setAddress] = useState('')
     const [AddressQR, setAddressQR] = useState('')
+    const [SwapType, setSwapType] = useState(1)
 
 
     const ercWallet = useSelector(state=>{
@@ -108,18 +110,32 @@ export default function ListCoin(){
     const handleSwap = useCallback(async()=>{
         if(SwapValue > 0){
             dispatch(actChangeLoading(true))
-            const res = (await callapi().post('/api/convert_kdg_reward',{userId: id , value : SwapValue})).data
-            dispatch(actChangeLoading(false))
-            console.log(res);
-            if(res.status === 1){
-                message.success(checkLanguage({vi: 'Chuyển đổi KDG thành công', en: 'Swap KDG successfully'},language))
-            }else{
-                message.error(checkLanguage({vi: 'Chuyển đổi thất bại', en: 'Swap KDG fail'},language))
+            if(SwapType === 1){
+                const res = (await callapi().post('/api/convert_kdg_reward',{userId: id , value : SwapValue})).data
+                if(res.status === 1){
+                    message.success(checkLanguage({vi: 'Chuyển đổi KDG thành công', en: 'Swap KDG successfully'},language))
+                }else{
+                    message.error(checkLanguage({vi: 'Chuyển đổi thất bại', en: 'Swap KDG fail'},language))
+                }
             }
+            if(SwapType === 2){
+                const res = (await callapi().post('/api/convert_kdg',{userId: id , value : SwapValue / 2})).data
+                if(res.status === 1){
+                    message.success(checkLanguage({vi: 'Chuyển đổi KDG Reward thành công', en: 'Swap KDG Reward successfully'},language))
+                }else if(res.status === 100){
+                    message.error(checkLanguage({vi: 'Chuyển đổi nhỏ nhất 2 KDG, lớn nhất 200 KDG', en: 'Min swap : 2 KDG, max swap : 200 KDG'},language))
+                }else if(res.status === 101){
+                    message.error(checkLanguage({vi: 'Giới hạn chuyển đổi 5 lần 1 ngày', en: 'Limit swap 5 time per day'},language))
+                }else{
+                    message.error(checkLanguage({vi: 'Chuyển đổi thất bại', en: 'Swap KDG fail'},language))
+                }
+            }
+            dispatch(actChangeLoading(false))
+
             document.querySelector('.popupswap').style.display = 'none'
             document.querySelector('.popupswapmask').style.display = 'none'
         }
-    },[SwapValue, id])
+    },[SwapValue, id,SwapType])
     
     return(
         <>
@@ -158,28 +174,49 @@ export default function ListCoin(){
                     style={{textAlign: 'center', color: '#fff', fontSize: 16, padding: '10px 0', backgroundColor: '#283349'}}
                     >
                         <img src={symbal} style={{width: 28, marginRight: 20}}/>
-                        KDG Reward
+                        {SwapType === 1 ? 'KDG Reward' : 'KDG'}
                     </p>
                     <input 
                     defaultValue={SwapValue}
                     onChange={e=>{
                         var value = Number(e.target.value)
-                        if(value){
-                            if(value <= kdg_reward){
-                                e.target.value = value
+                        if(SwapType === 1){
+                            if(value){
+                                if(value <= kdg_reward){
+                                    e.target.value = value
+                                }else{
+                                    e.target.value = kdg_reward
+                                }
                             }else{
-                                e.target.value = kdg_reward
+                                e.target.value = e.target.value.slice(0 , e.target.value.length - 1)
                             }
+                            setSwapValue(Number(e.target.value / 2))
                         }else{
-                            e.target.value = e.target.value.slice(0 , e.target.value.length - 1)
+                            if(value){
+                                if(!balance.kdg_balance || value <= balance.kdg_balance){
+                                    e.target.value = value
+                                }else{
+                                    e.target.value = balance.kdg_balance
+                                }
+                            }else{
+                                e.target.value = e.target.value.slice(0 , e.target.value.length - 1)
+                            }
+                            setSwapValue(Number(e.target.value * 2))
                         }
-                        setSwapValue(Number(e.target.value / 2))
                     }}
                     style={{width: '100%', border: 'none', backgroundColor: '#fff', color: '#283349', fontSize: 35,textAlign: 'center', fontWeight: 400, height: 95}}
                     />
                 </div>
-                <div style={{width: 50, display: 'inline-block'}}>
-
+                <div style={{width: 50, display: 'inline-block', verticalAlign : 'middle', textAlign : 'center'}}>
+                    <img
+                    onClick={() => {
+                        if(SwapType === 1){
+                            setSwapType(2)
+                        }else{
+                            setSwapType(1)
+                        }
+                    }}
+                    style={{cursor : 'pointer', width :  '50%'}} src={switchswap} alt="" />
                 </div>
                 <div
                 style={{width: 'calc(50% - 25px)', display: 'inline-block'}}
@@ -188,7 +225,7 @@ export default function ListCoin(){
                     style={{textAlign: 'center', color: '#fff', fontSize: 16, padding: '10px 0', backgroundColor: '#283349'}}
                     >
                         <img src={symbal} style={{width: 28, marginRight: 20}}/>
-                        KDG
+                        {SwapType === 1 ? 'KDG' : 'KDG Reward'}
                     </p>
                     <input 
                     value={SwapValue}
