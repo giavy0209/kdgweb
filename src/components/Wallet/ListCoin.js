@@ -19,7 +19,7 @@ import { faCopy} from '@fortawesome/free-solid-svg-icons'
 import QRCode from 'qrcode'
 import Modal from '../Modal'
 import { useSelector, useDispatch } from 'react-redux'
-import { asyncWithdraw, actChangeLoading } from '../../store/action'
+import { asyncWithdraw, actChangeLoading, asyncGetUserData } from '../../store/action'
 import { message } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { checkLanguage } from '../../helpers'
@@ -113,6 +113,7 @@ export default function ListCoin(){
             if(SwapType === 1){
                 const res = (await callapi().post('/api/convert_kdg_reward',{userId: id , value : SwapValue})).data
                 if(res.status === 1){
+                    dispatch(asyncGetUserData())
                     message.success(checkLanguage({vi: 'Chuyển đổi KDG thành công', en: 'Swap KDG successfully'},language))
                 }else{
                     message.error(checkLanguage({vi: 'Chuyển đổi thất bại', en: 'Swap KDG fail'},language))
@@ -121,6 +122,7 @@ export default function ListCoin(){
             if(SwapType === 2){
                 const res = (await callapi().post('/api/convert_kdg',{userId: id , value : SwapValue / 2})).data
                 if(res.status === 1){
+                    dispatch(asyncGetUserData())
                     message.success(checkLanguage({vi: 'Chuyển đổi KDG Reward thành công', en: 'Swap KDG Reward successfully'},language))
                 }else if(res.status === 100){
                     message.error(checkLanguage({vi: 'Chuyển đổi nhỏ nhất 2 KDG, lớn nhất 200 KDG', en: 'Min swap : 2 KDG, max swap : 200 KDG'},language))
@@ -177,7 +179,7 @@ export default function ListCoin(){
                         {SwapType === 1 ? 'KDG Reward' : 'KDG'}
                     </p>
                     <input 
-                    defaultValue={SwapValue}
+                    value={SwapType === 1 ? SwapValue * 2 : SwapValue / 2}
                     onChange={e=>{
                         var value = Number(e.target.value)
                         if(SwapType === 1){
@@ -210,6 +212,7 @@ export default function ListCoin(){
                 <div style={{width: 50, display: 'inline-block', verticalAlign : 'middle', textAlign : 'center'}}>
                     <img
                     onClick={() => {
+                        setSwapValue(0)
                         if(SwapType === 1){
                             setSwapType(2)
                         }else{
@@ -238,9 +241,20 @@ export default function ListCoin(){
                 style={{opacity : SwapValue ,cursor: 'pointer',width: 130, borderRadius: 50, textAlign: 'center', margin: '0 auto' ,marginTop: 20, padding: '10px 0', fontSize: 16, color : '#ffffff', backgroundImage: 'linear-gradient(to bottom , #e9c259 ,#e4cf7c , #aa8411 , #c59700)'}}
                 >{checkLanguage({vi: 'XÁC NHẬN', en: 'CONFIRM'},language)}</p>
                 <p style={{color :'#283349', textDecoration : 'underline', fontSize : 16}}> {checkLanguage({vi : 'Lưu ý', en: 'Notice'},language)} </p>
-                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký trước ngày 1/9 sẽ được đổi tối đa 20KDG Reward / ngày, tối đa 1 lần/ngày. 2KDG Reward = 1KDG', en: 'Account registration before 1/9/2020 are able to swap the reward. Maximum 20KDG / day, only 1 time / day. 2 KDG reward = 1 KDG.'}, language)}</p>
-                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký sau ngày 1/9 sẽ được quy đổi thành KDG Token khi bạn có đủ 25KDG Reward, tối đa 50 KDG Reward,quy đổi mỗi ngày 1 lần. 2 KDG Reward = 1KDG', en: 'Account registration after 1/9/2020 are able to swap the reward when being enough 25KDG / day, maximum 50KDG / day, only 1 time / day. 2 KDG reward = 1 KDG.'}, language)}</p>
-                <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Vui lòng hoàn thành xác minh danh tính (KYC) trước khi swap', en: 'Please complete KYC before swap'}, language)}</p>
+                {
+                    SwapType === 1 ? 
+                    <>
+                    <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký trước ngày 1/9 sẽ được đổi tối đa 20KDG Reward / ngày, tối đa 1 lần/ngày. 2KDG Reward = 1KDG', en: 'Account registration before 1/9/2020 are able to swap the reward. Maximum 20KDG / day, only 1 time / day. 2 KDG reward = 1 KDG.'}, language)}</p>
+                    <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tài khoản đăng ký sau ngày 1/9 sẽ được quy đổi thành KDG Token khi bạn có đủ 25KDG Reward, tối đa 50 KDG Reward,quy đổi mỗi ngày 1 lần. 2 KDG Reward = 1KDG', en: 'Account registration after 1/9/2020 are able to swap the reward when being enough 25KDG / day, maximum 50KDG / day, only 1 time / day. 2 KDG reward = 1 KDG.'}, language)}</p>
+                    <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Vui lòng hoàn thành xác minh danh tính (KYC) trước khi swap', en: 'Please complete KYC before swap'}, language)}</p>
+                    </>
+                    :
+                    <>
+                    <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Tỷ lệ: 1 KDG = 2 KDG reward', en: 'Ratio: 1 KDG = 2 KDG rewards'}, language)}</p>
+                    <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Mỗi lần được swap tối đa 200 KDG. Tối thiểu 2 KDG.', en: 'Maximum 200 KDG and Minimum 2 KDG for each swap.'}, language)}</p>
+                    <p style={{color : '#8a8c8e', fontSize : 14, marginTop : 10}}>{checkLanguage({vi: 'Mỗi ngày swap tối đa 5 lần/tài khoản.', en: 'Swap up to 5 times per day per account.'}, language)}</p>
+                    </>
+                }
             </div>
         </div>
 
