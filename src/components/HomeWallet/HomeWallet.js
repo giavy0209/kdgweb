@@ -96,8 +96,8 @@ export default function App(){
                         <li>{checkLanguage({vi: 'Thuận tiện', en: 'Facilitation'},language)}</li>
                     </ul>
                     <div className="store">
-                        <img onClick={()=>window.open('https://kingdomgame.org/download-app')} alt="" src={appstore} />
-                        <img onClick={()=>window.open('https://kingdomgame.org/download-app')} alt="" src={chplay} />
+                        <img onClick={()=>window.open('https://kingdomgame.org/download-ios')} alt="" src={appstore} />
+                        <img onClick={()=>window.open('https://play.google.com/store/apps/details?id=kingwallet.kingdomgame.org')} alt="" src={chplay} />
                     </div>
                 </div>
                 <div className="kdg-col-6 right va-t text-c">

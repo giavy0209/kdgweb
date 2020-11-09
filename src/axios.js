@@ -15,5 +15,4 @@ const callapi = ()=>{
   });
 }
 
-
 export default callapi
