@@ -13,7 +13,7 @@ export default function App(){
     const userEmail = useSelector(state => state && state.user && state.user.email)
     const language = useSelector(state => state.lang)
     const dispatch = useDispatch()
-    const [ValidForm , setValidForm] = useState({newpass: false, renewpass: false,oldpass: false})
+    const [ValidForm , setValidForm] = useState({newpass: false, renewpass: false,oldpass: true})
     const [Token, setToken] = useState('')
     const [Password, setPassword] = useState('')
     const [Visible, setVisible] = useState(false)
@@ -185,17 +185,6 @@ export default function App(){
                     }}
                     size="1x" color="#fff" className="eye" icon={Eye.oldpass ? faEye : faEyeSlash}/>
                     <input 
-                    onChange={e=>{
-                        if(!e.target.value.match(validateForm.password)){
-                            e.target.nextElementSibling.classList.add('show')
-                            e.target.nextElementSibling.innerText = checkLanguage({vi: 'Password phải ít nhất 8 ký tự cả chữ và số',en: 'At least 8 digits, include word and number'},language)
-                            setValidForm({...ValidForm, oldpass: false})
-                        }else{
-                            e.target.nextElementSibling.classList.remove('show')
-                            e.target.nextElementSibling.innerText = ''
-                            setValidForm({...ValidForm, oldpass: true})
-                        }
-                    }}
                     type={Eye.oldpass ? '' : 'password'}
                     name="oldpass" placeholder={checkLanguage({vi: 'Nhập mật khẩu cũ', en: 'Enter your old password'}, language)}/>
                     <span className="validate-error"></span>

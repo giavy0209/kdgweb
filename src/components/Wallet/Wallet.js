@@ -14,7 +14,7 @@ import { asyncGetHistoryTRX, asyncGetHistoryUSDT, asyncGetHistoryTOMO, asyncGetH
 
 function App() {
   const dispatch = useDispatch()
-  const [CurrentHistory, setCurrentHistory] =useState('KDG')
+  const [Type, setType] =useState('2')
   const [Page, setPage] = useState(1)
   const [History, setHistory] = useState([])
   const language = useSelector(state=>state.lang)
@@ -22,12 +22,12 @@ function App() {
 
 
   useEffect(()=>{
-    dispatch(asyncGetTransactions(userID, (Page - 1) * 10 , 10 , CurrentHistory))
+    dispatch(asyncGetTransactions(userID, (Page - 1) * 10 , 10 , Type))
     .then(res => {
       console.log(res);
       setHistory([...res])
     })
-  },[Page,CurrentHistory,userID])
+  },[Page,Type,userID])
 
   return (
     <>
@@ -50,68 +50,25 @@ function App() {
           <section className="section-history">
             <h2 className="title">{checkLanguage({vi : 'LỊCH SỬ GIAO DỊCH', en: 'HISTORY'}, language)}</h2>
             <div className="list-tab">
-
               <div onClick={()=>{
-                setCurrentHistory('KDG')
+                setType('2')
                 setPage(1)
-              }} className={`tab ${CurrentHistory === 'KDG' && 'active'}`}>
-                <p>KDG</p>
-              </div>
-
-              <div onClick={()=>{
-                setCurrentHistory('TRX')
-                setPage(1)
-              }} className={`tab ${CurrentHistory === 'TRX' && 'active'}`}>
-                <p>TRX</p>
-              </div>
-
-              <div onClick={()=>{
-                setCurrentHistory('KNC')
-                setPage(1)
-              }} className={`tab ${CurrentHistory === 'KNC' && 'active'}`}>
-                <p>KNC</p>
-              </div>
-
-              <div onClick={()=>{
-                setCurrentHistory('MCH')
-                setPage(1)
-              }} className={`tab ${CurrentHistory === 'MCH' && 'active'}`}>
-                <p>MCH</p>
-              </div>
-
-              <div onClick={()=>{
-                setCurrentHistory('ETH')
-                setPage(1)
-              }} className={`tab ${CurrentHistory === 'ETH' && 'active'}`}>
-                <p>ETH</p>
+              }} className={`tab ${Type === '2' && 'active'}`}>
+                <p> {checkLanguage({vi : 'Tất cả' , en : 'All'}, language)} </p>
               </div>
               <div onClick={()=>{
-                setCurrentHistory('USDT-ERC20')
+                setType('1')
                 setPage(1)
-              }} className={`tab ${CurrentHistory === 'USDT-ERC20' && 'active'}`}>
-                <p>USDT-ERC20</p>
+              }} className={`tab ${Type === '1' && 'active'}`}>
+                <p> {checkLanguage({vi : 'Nạp' , en : 'Deposit'}, language)} </p>
               </div>
-
               <div onClick={()=>{
-                setCurrentHistory('USDT-TRC20')
+                setType('0')
                 setPage(1)
-              }} className={`tab ${CurrentHistory === 'USDT-TRC20' && 'active'}`}>
-                <p>USDT-TRC20</p>
+              }} className={`tab ${Type === '0' && 'active'}`}>
+                <p> {checkLanguage({vi : 'Rút' , en : 'Withdraw'}, language)} </p>
               </div>
-
-              <div onClick={()=>{
-                setCurrentHistory('TOMO')
-                setPage(1)
-              }} className={`tab ${CurrentHistory === 'TOMO' && 'active'}`}>
-                <p>TOMO</p>
-              </div>
-
-              {/* <div onClick={()=>{
-                setCurrentHistory('BTC')
-                setPage(1)
-              }} className={`tab ${CurrentHistory === 'BTC' && 'active'}`}>
-                <p>BTC</p>
-              </div> */}
+              
             </div>
 
             <div className="history">
@@ -126,7 +83,7 @@ function App() {
                   </tr>
 
                   {
-                    (History && History.length > 0 )?  History.map(({create_date, type, value , txId},index) =>{
+                    (History && History.length > 0 )?  History.map(({create_date, type, value , txId, coin},index) =>{
                       var create_date = new Date(create_date)
                       return (
                         <tr>
@@ -137,7 +94,7 @@ function App() {
                         <td className={`quantity ${type === 0 ? 'red' : 'green'}`} >
                           {value}
                         </td>
-                        <td>{CurrentHistory}</td>
+                        <td>{coin.code}</td>
                         <td>{type === 0 ? checkLanguage({vi : 'Rút tiền', en: 'Withdraw'}, language) : checkLanguage({vi : 'Nạp tiền', en: 'Deposit'}, language)}</td>
                         <td> {txId} </td>
                       </tr>

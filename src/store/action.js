@@ -386,10 +386,10 @@ export function asyncGetHistoryBTC(userWallet, skip, coin) {
     }
 }
 
-export function asyncGetTransactions(userID, skip,limit, coin) {
+export function asyncGetTransactions(userID, skip,limit, type) {
     return async dispatch => {
         dispatch(actChangeLoading(true))
-        const res = (await callapi().get(`/api/transactions?coin=${coin}&userid=${userID}&skip=${skip}&limit=${limit}`)).data
+        const res = (await callapi().get(`/api/transactions?type=${type}&userid=${userID}&skip=${skip}&limit=${limit}`)).data
         if (res.status === 1) {
             var history = res.data
             dispatch(actChangeLoading(false))
