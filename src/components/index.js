@@ -13,7 +13,7 @@ import Account from './Account'
 import LuckySpin from './LuckySpin'
 import Staking from './Staking'
 import StakingHistory from './Staking/StakingHistory'
-import StakingEvent from './Staking/StakingEvent'
+import StakingJoin from './Staking/StakingJoin'
 import Wallet from './Wallet'
 import News from './News'
 import HomeWallet from './HomeWallet'
@@ -35,7 +35,7 @@ export {
     LuckySpin,
     Staking,
     StakingHistory,
-    StakingEvent,
+    StakingJoin,
     News,
     Wallet,
     HomeWallet,

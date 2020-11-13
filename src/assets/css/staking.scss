@@ -1,772 +1,172 @@
-.range{
-    > * {
-        display: inline-block;
-    }
-    .min{
-        width: 170px;
-    }
-    .chooserange{
-        width: calc(100% - 30px - 140px - 100px);
-        .ant-slider{
-            margin: 0;
-        }
-    }
-    .max{
-        padding-left: 10px;
-        width: 100px;
-    }
-}
-
-
-.des-staking{
-    margin-top: 50px;
-}
-.kdg-text-gardient {
-    font-size: 40px;
-    background: -webkit-linear-gradient(#edda88, #a77b00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
-
-}
-.kdg-text-description {
-    font-size: 20px;
-  
-}
-
-.kdg-text-description-content {
-    margin-top: 20px;
-    color: rgba(255,255,255, 0.8);
-}
-
-.kdg-text-description-list {
-    margin-top: 20px;
-    color: rgba(255,255,255, 0.8);
-}
-
-.kdg-text-description-list-item {
-    padding-bottom: 20px;
-}
-
-.kdg-img-description{
-    margin-top: 20px;
-}
-
-.kdg-h2-title {
-    text-align: center;
-    font-size: 30px;
-    color: #fff;
-    margin-top: 100px;
-}
-
-.kdg-card {
-   background-color: #121827;
-   padding: 30px;
-   margin-top: 35px;
-}
-
-
-.text-card {
-    text-align: center;
-    font-size: 18px;
-}
-
-.text-percent {
-    font-style: italic;
-    color: #fac800;
-    font-weight: bold;
-}
-
-.kdg-card-img {
-    display: flex;
-    justify-content: center;
-}
-
-.staking-table {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  .staking-table td, .staking-table th {
-    padding: 8px;
-  }
-  
-  
-  .staking-table tr:hover {background-color: #ddd;}
-  
-  .staking-table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: rgba(67,74,84, 0.8);
-    color: white;
-  }
-
-  .staking-table td {
-    font-size: 15px;
-  }
-
-  .title-table {
-    font-size: 25px;
-    color: #fff;
-  }
-
-  .kdg-coin-name {
-    padding-left:  20px;
-  }
-
-  .kdg-button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 13px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;    
-    border-radius: 20px;
-  }
-
-  .date-time-picker-container {
-    float: right;
-    font-size: 17px;    
-    padding-bottom: 10px;
-  }
-
-  .kdg-staking-header {
-      background-color: #121827;
-      width: 100%;
-  }
-
-  
-  .kdg-staking-header span{
-    padding-left: 5px;
-    font-weight: bold;
-  }
-
-  .kdg-staking-header h3 {
-    font-size: 17px;
-    color: #fac800;
-    position: absolute;
-    top: 107px;
-    left: 570px;
-  }
-
-  .kdg-link-history a{
-    text-align: right;
-    width: 100%;
-    color: #daaf0b;
-    font-size: 17px;
-    text-decoration: underline;
-    padding-bottom: 10px;
-    margin-top: 70px;
-  }
-
-
-  .kdg-link-back a{
-    float: left;
-    color: #daaf0b;
-    font-size: 23px;
-    padding-bottom: 10px;
-  }
-
-.staking-event-body{
-    background-color: #121827;
-    .staking-link-back{
-        padding: 10px 0;
-        .back{
-            font-size: 22px;
-            .arrow{
-                font-size: 22px;
-            }
-            span{
-                margin-left: 10px;
-            }
-        }
-        img{
-            width: 60px;
-            height: 60px;
-            
-        }
-        .info{
-            margin-left: 15px;
-            > * {
-                display: inline-block;
-                vertical-align: middle;
+.stake{
+    .block1{
+        margin-top: 75px;
+        .block-title{
+            .title{
+                font-size: 35px;
+                font-weight: bold;
+                background: linear-gradient(to bottom ,#edda8b,#d9c26a, #a47b00);
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                text-align: center;
             }
             p{
-                &:first-child{
-                    span{
-                        font-size: 25px;
-                        color: #ffffff;
-                        display: block;
-                        width: fit-content;
-                        +span{
-                            color: #8a8c8e;
-                            font-size: 15px;
-                        }
-                    }
-                }
-                + p{
-                    margin-left: 90px;
-                    span{
-                        vertical-align: middle;
-                        + span{
-                            margin-left: 10px;
-                            color: #8a8c8e;
-                            font-size: 18px;
-                        }
+                text-align: center;
+                font-size: 18px;
+                margin-top: 10px;
+            }
+        }
+        .des{
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 22px;
+            padding: 0 35px;
+            
+        }
+        .list-block1{
+            margin: 0 -22px;
+            margin-top: 30px;
+            .item{
+                padding: 0 22px;
+                .item-block1{
+                    text-align: center;
+                    border-radius: 5px;
+                    padding: 25px 10px;
+                    border: 1px solid #444959;
+                    p{
+                        margin-top: 15px;
                     }
                 }
             }
         }
-        >*{
-            display: inline-block;
-            vertical-align: middle;
+    }
+
+    .block2{
+        padding: 35px 0;
+        margin-top: 70px;
+        background-color: rgba($color: #fff, $alpha: .3);
+        .list-block2{
+            margin: 0 -100px;
+            .item{
+                padding: 0 100px;
+                .block2-item{
+                    text-align: center;
+                    position: relative;
+                    background-color: #171a23;
+                    border-radius: 50%;
+                    .inside-block{
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50% , -50%);
+                        width: 80%;
+                        height: 80%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        flex-direction: column;
+                        border-radius: 50%;
+                        border: 1px solid #fac800;
+                        .number{
+                            font-size: 30px;
+                            font-weight: 500;
+                            color: #fac800;
+                        }
+                        .name{
+                            margin-top: 5px;
+                            font-size: 18px;
+                            font-weight: 300;
+                        }
+                    }
+                    &::before{
+                        content: "";
+                        padding-top: 100%;
+                    }
+                }
+            }
         }
-        .header-mobile{
-            display: none;
-        }
-    }
-}
-
-  .staking-span-text{
-      font-size: 20px;
-      color: #e7b903;
-      font-weight: bold;
-  }
-
-  .kdg-icon span {
-      font-size: 16px;
-  }
-
-  .staking-header-container{
-      padding-top: 10px;
-  }
-
-
-    .staking-timeline-title {
-        vertical-align: top;
-        h3 {
-            font-weight: bold;
-            font-size: 12px;
-        }
-    }
-
-    .coin-number {
-        margin-top: 40px;
-        margin-bottom: 30px;
-    }
-
-    // .top-header{
-    //     padding: 23px 0;
-    //     .social{
-    //         .kdg-icon{
-    //             display: flex;
-    //             flex-direction: row;
-    //             align-items: center;
-    //             .staking-span-text{
-    //                 margin-left: 73px;
-    //             }
-    //         }
-    //     }
-    // }
-
-    /*=========== Slider for staking ================ */
-        
-    .ant-slider-track {
-        background-image:  linear-gradient(to bottom, #eac45d, #eac45d,#dfaa0b,#ffc400);
-        height: 8px;
-      }
-      .ant-slider:hover .ant-slider-rail {
-          height: 4px !important;
-          background-image: linear-gradient(to bottom, #ffffff, #e0dfda, #afafaf, #b3b3ae) !important;
-      }
-    .ant-slider-handle {
-        border: solid 2px #c29c05;
-        width: 18px;
-        height: 18px;
-    }
-    .ant-slider-handle.ant-tooltip-open {
-        border-color: #ffd900;
-    }
-    .ant-slider-handle:focus {
-        border-color: #c29c05;
-      }
-    .ant-slider:hover .ant-slider-rail {
-        height: 8px;
-        background-image: linear-gradient(to bottom, #888888, #575654,#444343,#272727);
-      }
-      .ant-slider-rail {
-        height: 8px;
-        background-image: linear-gradient(to bottom, #ffffff, #e0dfda,#afafaf,#b3b3ae);
-      }
-    /*=========== End Slider for staking ================ */	
-
-    .coin-number h3{
-        color: #fac800;
-    }
-
-    .coin-number span {
-        font-weight: bold;
-    }
-
-    .staking-link-back a{
-      color: #daaf0b;   
-      font-size: 18px;
-
-    }
-    .header-mobile{
-        display: none;
-    }
-    .number-staking-container { 
-        border-right: 3px solid #eac45c;
-    }
-    .number-staking-container h3 {
-        color: #58595b;
-        padding-left: 12px;
-    }
-
-    .percent {
-        color: #58595b;
-        font-size: 14px;
-        padding-left: 12px;
-        >span{
-            font-size: 20px;
-            font-weight: bold;
-            color: black;
-        }
-    }
-
-    .number-staking-receive{
-        background-color: #fac800;
-        border-radius: 10px ;
-        box-shadow: 10px 10px 5px rgba(40, 51,73 , 0.2);
-        display: flex;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-        padding: 40px 0;
-    }
-    .number-staking-title {
-        text-align: center;
-        height: 100%;
-    }
-        .kdg-number{
-            color:#fff;
-        }
-
-    .list-number{
-        width: 100%;
-        ~.list-number{
-            margin-top: 20px;
-        }
-        > * {
-            display: inline-block;
-        }
-        .dash{
-            border: none;
-            background-color: transparent;
-            text-align: center;
-            color: #121827;
-            font-size: 22px;
-            font-weight: 500;
-            border-bottom: 3px dashed #8a8c8e;
-            width: calc(100% - 30px - 140px - 100px);
-        }
-        h3{
-            width: 140px;
-            font-weight: 400;
-        }
-        .coin{
-            font-size: 16px;
-            width: 100px;
-            padding-left: 10px;
-            color: #58595b;
-        }
-    }
-    .list-number h4 {
-        text-align: center;
-        width: 30px;
-        height: 30px;
-        justify-content: center;
-        align-items: center;
-        background-color: #212431;
-        padding-top: 5px;
-        border-radius: 5px;
-        color: #ddd;
-        font-weight: bold;
-    }
-    .term-container {
-        margin: 30px 0;
-    }
-    .term-container span{
-        padding-left: 10px;
-        display: inline;
-        color: #8a8c8e;
-        &.checkbox-box{
-            display: inline-block;
-        }
-        &.title-checkbox{
-            padding-left: 0;
-        }
-    }
-    .term-container ul {
-        margin: 20px 0;
-        color: #8a8c8e;
-    }
-    .term-container ul li {
-        margin-bottom: 10px;
-    }
-    .staking-input{
-        color: #14192a;
-    }
-    .checkbox-container {
-        display: flex;
-        justify-content: center;
-    }
-    .checkbox-container span{
-        font-weight: bold;
-    }
-    .checkbox-container button {
-        background: linear-gradient(to bottom, #eac45d, #eac45d,#a77f08,#c39500);
-        border: none;
-        color: white;
-        padding: 13px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        cursor: pointer;    
-        border-radius: 20px;
-        width: 500px;
     }
 
     .history{
-        width: 100%;
-        overflow-x: scroll;
-        &::-webkit-scrollbar{
-            display: none;
+        margin-top: 70px;
+        .link{
+            text-align: right;
+            span{
+                color: #fac800;
+                font-size: 20px;
+                text-decoration: underline;
+            }
         }
-        .stacking-history{
-            margin-top: 13px;
+        table{
             width: 100%;
-            background-color: rgba(40, 51, 70, .4);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            min-width: 992px;
+            margin-top: 13px;
             thead{
+                width: 100%;
+                background-color: #434a54;
                 tr{
-                    &:first-child{
-                        border-bottom: 1px solid #7c8188;
-                        th{
-                            justify-content: center;
-                            align-items: center;
-                            padding: 36px 26px;
-                            padding-bottom: 24px;
-                            text-transform: uppercase;
-                            input{
-                                border: 1px solid #ddd9d8;
-                                padding: 13px;
-                                border-radius: 5px;
-                                background-color: transparent;
+                    width: 100%;
+                    th{
+                        text-align: center;
+                        padding: 26px 0 20px 0;
+                    }
+                    th:first-child{
+                        padding-left: 24px;
+                    }
+                    th:last-child{
+                        padding-right: 24px;
+                    }
+                    .head-title{
+                        column-span: 4;
+                        text-align: left;
+                        font-size: 30px;
+                        font-weight: bold;
+                        padding: 35px 0;
+                        position: relative;
+                        &::before{
+                            content:  "";
+                            position: absolute;
+                            bottom: 0;
+                            height: 1px;
+                            width: calc(100% - 48px);
+                            background-color: rgba($color: #fff, $alpha: .3);
+                            left: 50%;
+                            transform: translate(-50% , 0);
+                        }
+                    }
+                }
+            }
+            tbody {
+                background-color: rgba($color: #283349, $alpha: .4);
+                tr{
+                    td{
+                        padding: 13px 0;
+                        text-align: center;
+                        button{
+                            font-size: 14px;
+                            border: none;
+                            padding: 12px 18px;
+                            border-radius: 50px;
+                            &.enable{
+                                cursor: pointer;
+                                background-color: #26a65b;
+                                color: #fff;
+                            }
+                            &.disable{
                                 color: #8a8c8e;
+                                background-color: #525863;
                             }
                         }
                     }
-                    &:last-child{
-                        th{
-                            padding: 26px;
-                            text-align: center;
-                            font-weight: 15px;
-                            font-weight: 400;
-                        }
-                    }
-                }
-                background-color: #434a54;
-            }
-            tbody{
-                tr{
-                    td{
-                        text-align: center;
-                        padding: 12px 10px;
-                        font-size: 15px;
-                        button{
-                            border-radius: 25px;
-                            padding: 13px 25px;
-                            border: none;
-                            cursor: pointer;
-                            background-color: #26a65b;
-                        }
-                    }
                 }
             }
-        }
-    }
-    
-    @media only screen and (max-width: 550px){
-        
-        .number-staking-container{
-            width: 100%;
-            border-right: none;
-            .range{
-                position: relative;
-                margin-bottom: 20px;
-                font-size: 0;
-                >*{
-                    display: inline-block;
-                }
-                
-                .kdg-col-8{
-                    width: 100%;
-                }
-                .kdg-col-2{
-                    position: absolute;
-                    top: 100%;
-                    &:first-child{
-                        left: 0;
-                    }
-                    &:last-child{
-                        right: 0;
-                    }
-                }
-            }
-        }
-        .amount-per-year{
-            width: 100%;
-            margin-top: 20px;
-        }
-        .stake-des{
-            .kdg-col-6{
-                width: 100%;
-            }
-        }
-        .title-place-lucky-spin{
-            width: auto;
-            height: auto;
-            padding-left: 0;
-            font-size: 10px;
-        }
-        .container-wheel{
-            .wheel-left{
-                padding: 10px 20px;
-            }
-        }
-    }
-
-@media only screen and (max-width: 550px){
-    .staking-event-body{
-        p{
-            display: none !important;
-        }
-        .staking-link-back{
-        }
-    }
-    .number-staking-container{
-        &.kdg-col-8{
-            width: 100%;
-            border-right: none;
-        }
-        .range{
-            position: relative;
-            margin-bottom: 20px;
-            .kdg-col-8{
-                width: 100%;
-            }
-            .kdg-col-2{
-                position: absolute;
-                top: 100%;
-                &:first-child{
-                    left: 0;
-                }
-                &:last-child{
-                    right: 0;
-                }
-            }
-        }
-    }
-    .amount-per-year.kdg-col-4{
-        width: 100%;
-        margin-top: 20px;
-    }
-    .stake-des{
-        .kdg-col-6{
-            width: 100%;
-        }
-    }
-    .title-place-lucky-spin{
-        width: auto;
-        height: auto;
-        padding-left: 0;
-        font-size: 10px;
-    }
-    .container-wheel{
-        .wheel-left{
-            padding: 10px 20px;
         }
     }
 }
 
-@media only screen and (max-width: 768px){
-    .range{
-        > * {
-            display: inline-block;
-            font-size: 14px;
-        }
-        .min{
-            width: 120px;
-        }
-        .chooserange{
-            width: calc(100% - 20px - 100px - 100px);
-            .ant-slider{
-                margin: 0;
-            }
-        }
-        .max{
-            padding-left: 10px;
-            width: 100px;
-        }
-    }
-    .list-number{
-        h4{
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-        }
-        h3{
-            font-size: 12px;
-            width: 100px;
-        }
-        .dash{
-            width: calc(100% - 20px - 100px - 100px);
-            font-size: 18px;
-        }
-    }
-    .container-wheel{
-        .wheel-left{
-            .button-row{
-                text-align: center;
-            }
-            .title{
-                text-align: center;
-            }
-            .main-content{
-                .text{
-                    width: 100%;
-                    *{
-                        text-align: center;
-                    }
-                    .fee{
-                        margin-top: 20px;
-                    }
-                }
-                .wheel-block{
-                    width: 100%;
-                }
-            }
-        }
-        .wheel-right{
-            padding-top: 20px;
-        }
-    }
-    .des-staking{
-        .kdg-col-6{
-            width: 100%;
-        }
-    }
-}
+.stake-join{
 
-@media only screen and (max-width: 550px){
-    .range .kdg-col-2{
-        width: 50%;
-        ~ .kdg-col-2{
-            p{
-                text-align: right;
-            }
-        }
-    }
-    .staking-event-body{
-        .kdg-icon{
-            p{
-                display: none;
-            }
-            .staking-link-back{
-                .header-mobile{
-                    display: inline;
-                    margin-left: 15px;
-                    text-transform: uppercase;
-                    color: #fac800;
-                }
-                a{
-                    span{
-                        font-size: 0;
-                    }
-                }
-                img{
-                    display: none;
-                }
-                span{
-                    display: none
-                }
-            }
-        }
-    }
-    .number-staking-container{
-        width: 100%;
-        border-right: none;
-        .range{
-            position: relative;
-            margin-bottom: 20px;
-            
-            .kdg-col-8{
-                width: 100%;
-            }
-            .kdg-col-2{
-                position: absolute;
-                top: 100%;
-                &:first-child{
-                    left: 0;
-                }
-                &:last-child{
-                    right: 0;
-                }
-            }
-        }
-    }
-    .amount-per-year{
-        width: 100%;
-        margin-top: 20px;
-    }
-    .stake-des{
-        .kdg-col-6{
-            width: 100%;
-        }
-    }
-    .title-place-lucky-spin{
-        width: auto;
-        height: auto;
-        padding-left: 0;
-        font-size: 10px;
-    }
-    .container-wheel{
-        .wheel-left{
-            padding: 10px 20px;
-        }
-    }
-}   
-
-@media only screen and (max-width : 992px){
-    
-    .staking-event-body .staking-link-back{
-        img{
-            display: none;
-        }
-        .info{
-            display: none;
-        }
-
-    }
 }
