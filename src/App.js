@@ -9,6 +9,8 @@ import Reg from './pages/Reg'
 import ForgotPassword from './pages/ForgotPassword'
 import Loading from './pages/Loading'
 import NewsDetail from './pages/NewsDetail'
+import Landing from './pages/Landing'
+import FormGameHub from './pages/Landing/FormGameHub'
 
 import backtop from './assets/img/back-top.svg'
 import bgdownload from './assets/img/bgdownload.png'
@@ -17,7 +19,10 @@ import { checkLanguage, smoothscroll, storage } from './helpers';
 function App() {
   const dispatch = useDispatch()
   const [ShowScrollTop, setShowScrollTop] = useState(false)
-  const ROUTERS_LINK = useSelector(state => state.router)
+  const ROUTERS_LINK = useSelector(state => {
+    // debugger
+    return state.router
+  })
   const isLoading = useSelector(state=>state.loading)
   const settings = useSelector(state => {
     return state.settings && {login: state.settings.login_button.url , reg: state.settings.reg_button.url}
@@ -79,9 +84,8 @@ function App() {
   },[])
 
   const language = useSelector(state=>state && state.lang)
-  console.log(language);
   const ListRoute = useCallback(()=>{
-    return ROUTERS_LINK && ROUTERS_LINK.map(route => 
+    return ROUTERS_LINK && ROUTERS_LINK.map(route =>
       route.path && !route.isURL && !route.pathEN && <Route key={route.path} exact={true} path={route.path}>
         <Home name={route.name} type={route.type} reqLogin={route.reqLogin} components={route.page.components}/>
       </Route>
@@ -122,7 +126,12 @@ function App() {
         <Route exact={true} path='/news/:id?'>
           <NewsDetail/>
         </Route>
-        
+        <Route exact={true} path='/gamehub-landing'>
+          <Landing/>
+        </Route>
+        <Route exact={true} path='/gamehub-form'>
+          <FormGameHub/>
+        </Route>
         </>
         }
       </Switch>

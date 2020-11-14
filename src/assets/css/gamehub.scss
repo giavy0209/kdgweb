@@ -118,6 +118,15 @@
                 }
             }
         }
+        .button {
+            background-image: linear-gradient(to bottom right, #dfb415, #a47b00, #edda8b, #ddb744);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #111b2d;
+            display: inline-block;
+            font-weight: 500;
+            margin-top: 30px;
+        }
     }
     .games{
         position: relative;

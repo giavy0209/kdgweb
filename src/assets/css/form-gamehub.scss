@@ -1,0 +1,18 @@
+.form-gamehub {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .2);
+    // filter: blur(33px);
+
+    .form {
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        right: 25%;
+        bottom: 25%;
+        background-color: #000;
+    }
+}

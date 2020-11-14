@@ -286,6 +286,7 @@ export default function App(){
                                     <span>{checkLanguage({vi: 'Giữ chân người dùng lâu dài', en: 'Long-term retention of users'},language)}</span>
                                 </li>
                             </ul>
+                            <a className="button" target="_blank" rel="noopener noreferrer" href="/gamehub-landing"> {checkLanguage({ vi: 'Đăng Ký', en: 'Register' }, language)} </a>
                         </div>
                         <div className='kdg-col-4'></div>
                         <div className='kdg-col-4 va-t'>
