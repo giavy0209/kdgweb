@@ -10,7 +10,6 @@ import ForgotPassword from './pages/ForgotPassword'
 import Loading from './pages/Loading'
 import NewsDetail from './pages/NewsDetail'
 import Landing from './pages/Landing'
-import FormGameHub from './pages/Landing/FormGameHub'
 
 import backtop from './assets/img/back-top.svg'
 import bgdownload from './assets/img/bgdownload.png'
@@ -128,9 +127,6 @@ function App() {
         </Route>
         <Route exact={true} path='/gamehub-landing'>
           <Landing/>
-        </Route>
-        <Route exact={true} path='/gamehub-form'>
-          <FormGameHub/>
         </Route>
         </>
         }
