@@ -72,6 +72,7 @@ const FormGameHub = ({ visible, onCancel }) => {
             onCancel={onCancel}
             footer={null}
             width={1088}
+            className="modal-form-gamehub"
         >
             <p className="title">ĐĂNG KÝ</p>
             <p className="desc">Bây giờ bạn đã sẵn sàng để điền vào biểu mẫu gửi!</p>
