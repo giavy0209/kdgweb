@@ -36,17 +36,14 @@ const calcDate = function(type) {
     var month = create_date.getMonth() + 1
     var year = create_date.getFullYear()
     var VN_8AM_TIME = new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`)
-    var start_date ;
-    var end_date
+    var start_date = new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`);
     if(create_date < VN_8AM_TIME){
-        start_date = new Date(new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`) + 86400000)
-        end_date = new Date(new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`) + 86400000)
-        end_date.setDate(end_date.getDate() - 1)
+        start_date.setDate(start_date.getDate() + 1)
     }else{
-        start_date = new Date(new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`) + 86400000 * 2)
-        end_date = new Date(new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`) + 86400000)
-        end_date.setDate(end_date.getDate() - 1)
+        start_date.setDate(start_date.getDate() + 2)
     }
+    var end_date = new Date(start_date)
+    end_date.setDate(end_date.getDate() - 1)
     end_date.setMonth(end_date.getMonth() + find_type.type)
 
 
@@ -93,7 +90,7 @@ export default function App() {
         var value = Number(e.target.value)
         if(value){
             setValue(value)
-            if(value >= 2){
+            if(value >= 200){
                 setValidate({...Validate , min : true})
             }else{
                 setValidate({...Validate , min : false})
@@ -136,13 +133,13 @@ export default function App() {
                                 <span className="name">KDG</span>
                             </div>
                             <div className="stake-info">
-                                Tỷ lệ lợi nhuận hằng năm tham chiếu lên tới <span className="percent">48%</span>
+                            {checkLanguage({vi: 'Tỷ lệ lợi nhuận hằng năm tham chiếu lên tới', en: 'Expected annual rate of return up to'}, language)} <span className="percent">48%</span>
                             </div>
                         </div>
                     </div>
                     <div className="block2">
-                        <div className="title">Các Gói Stake</div>
-                        <p className="sub-title">Chọn một trong số các gói stake dưới đây:</p>
+                        <div className="title">{checkLanguage({vi: 'Các Gói Stake', en: 'There are packages of Stake'}, language)}</div>
+                        <p className="sub-title">{checkLanguage({vi: 'Chọn một trong số các gói stake dưới đây:', en: 'Choose one of the Staking packages below'}, language)}</p>
 
                         <div className="kdg-row kdg-column-4 list-block2">
                             {
@@ -169,7 +166,7 @@ export default function App() {
                                 <div className="dot"></div>
                                 <div className="des">
                                     <div className="text">
-                                        Thời gian bắt đầu trả lãi
+                                        {checkLanguage({vi: 'Thời gian bắt đầu trả lãi', en: 'Starting time'}, language)}
                                     </div>
                                     <div className="date"> {renderDate(calcDate(Selected).start_date)} </div>
                                 </div>
@@ -178,7 +175,7 @@ export default function App() {
                                 <div className="dot"></div>
                                 <div className="des">
                                     <div className="text">
-                                        Thời gian kết thúc trả lãi
+                                        {checkLanguage({vi: 'Thời gian kết thúc trả lãi', en: 'Closing time'}, language)}
                                     </div>
                                     <div className="date"> {renderDate(calcDate(Selected).end_date)} </div>
                                 </div>
@@ -188,7 +185,7 @@ export default function App() {
                                 <div className="dot"></div>
                                 <div className="des">
                                     <div className="text">
-                                        Thời gian mở khóa
+                                        {checkLanguage({vi: 'Thời gian mở khóa', en: 'Unlock time'}, language)}
                                     </div>
                                     <div className="date"> {renderDate(calcDate(Selected).unlock_date)} </div>
                                 </div>
@@ -198,7 +195,7 @@ export default function App() {
                                 <div className="dot"></div>
                                 <div className="des">
                                     <div className="text">
-                                        Thời gian xác nhận kết thúc
+                                        {checkLanguage({vi: 'Thời gian xác nhận kết thúc', en: 'Confirm time'}, language)}
                                     </div>
                                     <div className="date"> {renderDate(calcDate(Selected).confirm_date)} </div>
                                 </div>
@@ -208,25 +205,25 @@ export default function App() {
                     </div>
 
                     <div className="block4">
-                        <div className="title">Số Lượng Đầu Tư</div>
-                        <p className="sub-title">Nhập số lượng bạn muốn đầu tư</p>
+                        <div className="title">{checkLanguage({vi: 'Số Lượng Đầu Tư', en: 'Investment Amount'}, language)}</div>
+                        <p className="sub-title">{checkLanguage({vi: 'Nhập số lượng bạn muốn đầu tư', en: 'Enter the amount you want to invest'}, language)}</p>
                         <div className="kdg-row group-input-calc">
                             <div className="kdg-col-8">
                                 <div className="group-input-info">
                                     <div className="available">
-                                        Số dư khả dụng: {balance && balance.kdg_balance} KDG
+                                        {checkLanguage({vi: 'Số dư khả dụng:', en: 'Available balance'}, language)} {balance && Math.floor(balance.kdg_balance * 1000) / 1000} KDG
                                     </div>
                                     <div className="group-input">
                                         <span className="input">
-                                            <span>Nhập số lượng đầu tư:</span>
+                                            <span>{checkLanguage({vi: 'Nhập số lượng đầu tư:', en: 'Enter amount to stake'}, language)}</span>
                                             <input
                                             onChange={handleChangeInput}
                                             type="text" value={Value}/>
                                         </span>
                                         <span className="coin-name">KDG</span>
                                     </div>
-                                    <div className="error">
-                                        <span className="error-icon"><FontAwesomeIcon icon={faTimesCircle} /></span> Số lượng đầu tư tối thiểu là 200 KDG
+                                    <div className={`error ${Validate.min ? '' : 'show'}`}>
+                                        <span className="error-icon"><FontAwesomeIcon icon={faTimesCircle} /></span> {checkLanguage({vi: 'Số lượng đầu tư tối thiểu là 200 KDG', en: 'Minimun stake is 200 KDG'}, language)}
                                     </div>
                                 </div>
                             </div>
@@ -234,11 +231,11 @@ export default function App() {
                             <div className="kdg-col-4">
                                 <div className="calc-group">
                                     <div className="top">
-                                        <div className="name">Lợi nhuận ngày</div>
+                                        <div className="name">{checkLanguage({vi: 'Lợi nhuận ngày', en: 'Daily interest'}, language)}</div>
                                         <div className="data"> {(calcDate(Selected).profit_per_day * Value).toFixed(2)} </div>
                                     </div>
                                     <div className="bottom">
-                                        <div className="name">Tổng gốc {'&'} lãi</div>
+                                        <div className="name">{checkLanguage({vi: 'Tổng gốc & lãi', en: 'Total principal & interest'}, language)}</div>
                                         <div className="data"> {Value + calcDate(Selected).total_profit * Value} KDG</div>
                                     </div>
                                 </div>
@@ -247,30 +244,30 @@ export default function App() {
                     </div>
 
                     <div className="block5">
-                        <div className="title">Xác Nhận Thông Tin <div className="icon"><FontAwesomeIcon icon={faExclamationCircle}/></div> </div>
-                        <p className="sub-title">Vui lòng đọc kỹ quy tắc trước khi tham gia</p>
+                        <div className="title">{checkLanguage({vi: 'Xác Nhận Thông Tin', en: 'Confirm information'}, language)} <div className="icon"><FontAwesomeIcon icon={faExclamationCircle}/></div> </div>
+                        <p className="sub-title">{checkLanguage({vi: 'Vui lòng đọc kỹ quy tắc trước khi tham gia', en: 'Please read the rules carefully before joining'}, language)}</p>
                         <div className="block-content">
                             <div className="group-content">
                                 <div className="title-content">
-                                    <span className="index">(1)</span> Stake KDG để nhận lãi: Số lượng stake tối thiểu: 200 KDG
+                                    <span className="index">(1)</span> {checkLanguage({vi: 'Stake KDG để nhận lãi: Số lượng stake tối thiểu: 200 KDG', en: 'Stake KDG to receive interest: Minimum amount of Stake is 200KDG'}, language)}
                                 </div>
                                 <div className="content">
-                                    <p>- Có các gói stake như sau:</p>
+                                    <p>{checkLanguage({vi: '- Có các gói stake như sau:', en: 'There are packages of Stake as follows:'}, language)}</p>
                                     <div className="row-content">
-                                        <span className="bold">01 tháng:</span> Lãi suất là 1% / tháng
-                                        <span className="bold">06 tháng:</span> Lãi suất là 3% / tháng
+                                        <span className="bold">01 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 1% / tháng', en: 'Interest rate is 1% / month'}, language)}
+                                        <span className="bold">06 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 3% / tháng', en: 'Interest rate is 3% / month'}, language)}
                                     </div>
                                     <div className="row-content">
-                                        <span className="bold">03 tháng:</span> Lãi suất là 2% / tháng
-                                        <span className="bold">12 tháng:</span> Lãi suất là 4% / tháng
+                                        <span className="bold">03 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 2% / tháng', en: 'Interest rate is 2% / month'}, language)}
+                                        <span className="bold">12 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 4% / tháng', en: 'Interest rate is 4% / month'}, language)}
                                     </div>
                                 </div>
                             </div>
                             <div className="group-content">
-                                <div className="title-content"><span className="index">(2)</span> Lãi suất được trả lúc 8:00 hàng ngày (Tối thiểu 24 tiếng cho lần nhận lãi đầu tiên).</div>
+                                <div className="title-content"><span className="index">(2)</span> {checkLanguage({vi: 'Lãi suất được trả lúc 8:00 hàng ngày (Tối thiểu 24 tiếng cho lần nhận lãi đầu tiên).', en: 'Interest is paid at 8:00 every day (Min 24 hours for the first interest payment)'}, language)}</div>
                             </div>
                             <div className="group-content">
-                                <div className="title-content"><span className="index">(3)</span> Kết thúc thời hạn stake, người dùng có thể rút khoản gốc đã stake trong vòng 05 ngày bằng cách nhấn xác nhận kết thúc stake. Khoản stake không được rút sẽ được tự động gia hạn.</div>
+                                <div className="title-content"><span className="index">(3)</span> {checkLanguage({vi: 'Kết thúc thời hạn stake, người dùng có thể rút khoản gốc đã stake trong vòng 05 ngày bằng cách nhấn xác nhận kết thúc stake. Khoản stake không được rút sẽ được tự động gia hạn.', en: 'At the end of the Stake period, users can withdraw the Stake original within 05 days by pressing the button to confirm. Stakes that are not withdrawn will be automatically renewed'}, language)}</div>
                             </div>
                         </div>
                         <div className="input-group checkbox">
@@ -281,14 +278,14 @@ export default function App() {
                             <label className="checkbox-label" for="confirm">
                                 <span className="checkbox-box"></span> 
                                 <span>
-                                    Tôi đã đọc và hiểu rõ <span className="link">cảnh báo rủi ro</span> trước khi tham gia
+                                    {checkLanguage({vi: 'Tôi đã đọc và hiểu rõ', en: 'I have read and understood the risk warning before participating'}, language)} <span className="link">{checkLanguage({vi: 'cảnh báo rủi ro', en: 'the risk warning'}, language)}</span> {checkLanguage({vi: 'trước khi tham gia', en: 'before participating'}, language)}
                                 </span>
                             </label>
 
                             <button 
                             onClick={handleStaking}
                             className={(Validate.check && Validate.min) ? '' : 'disable'}>
-                                Tham gia ngay
+                                {checkLanguage({vi: 'Tham gia ngay', en: 'Join now'}, language)}
                             </button>
                         </div>
                         

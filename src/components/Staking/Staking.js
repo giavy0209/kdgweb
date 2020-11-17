@@ -104,9 +104,9 @@ export default function App({...prop}) {
       <div className="stake">
         <div className="banner">
           <div className="content">
-            <div className="text1">GIỚI THIỆU BẠN BÈ</div>
-            <div className="text2">NHẬN NGAY ƯU ĐÃI</div>
-            <div onClick={()=>history.push('/staking/share')} className="text3">Chia Sẻ Ngay</div>
+            <div className="text1">{checkLanguage({vi: 'GIỚI THIỆU BẠN BÈ', en: 'INVITE YOUR FRIEND'}, language)}</div>
+            <div className="text2">{checkLanguage({vi: 'NHẬN NGAY ƯU ĐÃI', en: 'GET REWARD'}, language)}</div>
+            <div onClick={()=>history.push('/staking/share')} className="text3">{checkLanguage({vi: 'Chia Sẻ Ngay', en: 'Share now'}, language)}</div>
           </div>
         </div>
       </div>
@@ -114,28 +114,28 @@ export default function App({...prop}) {
         <div className="block1">
           <div className="block-title">
             <h2 className="title">Kingdom Staking</h2>
-            <p>mô hình kinh tế chia sẻ trong thế giới số</p>
+            <p>{checkLanguage({vi: 'mô hình kinh tế chia sẻ trong thế giới số', en: 'SHARING ECONOMICS IN THE DIGITAL WORLD'}, language)}</p>
           </div>
           <div className="des">
-            Với hệ sinh thái Staking của Kingdom Game, người dùng không chỉ nắm giữ Token đơn thuần mà còn được tận hưởng thu nhập thụ động. King Wallet cung cấp dịch vụ Staking cho các loại Game Token và nhiều đồng tiền kỹ thuật số khác để hạn chế sự mất giá của Token từ lạm phát và tăng lợi tức cho người dùng.
+            {checkLanguage({vi: 'Với hệ sinh thái Staking của Kingdom Game, người dùng không chỉ nắm giữ Token đơn thuần mà còn được tận hưởng thu nhập thụ động. King Wallet cung cấp dịch vụ Staking cho các loại Game Token và nhiều đồng tiền kỹ thuật số khác để hạn chế sự mất giá của Token từ lạm phát và tăng lợi tức cho người dùng.', en: 'With the Kingdom Game ecosystem, users not only hold tokens but also enjoy additional passive income. King Wallet provides Staking program for Game Tokens and many other digital currencies to limit the devaluation of Token from inflation and increase profit for users.'}, language)}
           </div>
           <div className="kdg-row kdg-column-3 list-block1">
             <div className="item">
               <div onLoad={handleBlock1Loaded} className="item-block1">
                 <img src={block1Icon} alt=""/>
-                <p>Lợi tức cao lên tới <br/> 48%/năm</p>
+                <p>{checkLanguage({vi: 'Lợi tức cao lên tới', en: 'High income up to '}, language)} <br/> 48%/{checkLanguage({vi: 'năm', en: 'year'}, language)}</p>
               </div>
             </div>
               <div className="item">
                 <div className="item-block1">
                   <img src={block1Icon} alt=""/>
-                  <p>Hỗ trợ Game Token, ERC-20 <br/> và TRC-20 Token</p>
+                  <p>{checkLanguage({vi: 'Hỗ trợ ', en: 'Support'}, language)}Game Token, ERC-20 <br/> {checkLanguage({vi: 'và', en: 'and'}, language)} TRC-20 Token</p>
                 </div>
               </div>
               <div className="item">
                 <div className="item-block1">
                   <img src={block1Icon} alt=""/>
-                  <p>Stake KDG nhận thêm <br/> Token Game khác miễn phí</p>
+                  <p>{checkLanguage({vi: 'Stake KDG nhận thêm ', en: 'Stake KDG gets another '}, language)}<br/> Token Game {checkLanguage({vi: 'khác miễn phí', en: 'for free'}, language)}</p>
                 </div>
               </div>
           </div>
@@ -154,7 +154,7 @@ export default function App({...prop}) {
                       <span className="name">KDG</span>
                     </div>
                   </div>
-                  <div className="block-name">Tổng Stake</div>
+                  <div className="block-name">{checkLanguage({vi: 'Tổng Stake (KDG)', en: 'Total Stake (KDG)'}, language)}</div>
                 </div>
               </div>
               <div className="item">
@@ -165,7 +165,7 @@ export default function App({...prop}) {
                       <span className="name">KDG</span>
                     </div>
                   </div>
-                  <div className="block-name">Lợi Nhuận</div>
+                  <div className="block-name">{checkLanguage({vi: 'Lợi Nhuận (KDG)', en: 'Profit (KDG)'}, language)}</div>
                 </div>
               </div>
               <div className="item">
@@ -175,7 +175,7 @@ export default function App({...prop}) {
                       <div className="number"> {Level ? Level : 0} </div>
                     </div>
                   </div>
-                  <div className="block-name">Cấp độ</div>
+                  <div className="block-name">{checkLanguage({vi: 'Cấp độ', en: 'Level'}, language)}</div>
                 </div>
               </div>
             </div>

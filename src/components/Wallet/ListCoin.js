@@ -557,7 +557,7 @@ export default function ListCoin(){
                     <div className="item">
                     <div onClick={async()=>{
                         setVisibleDeposit(true); 
-                        setCoin('USDT'); 
+                        setCoin('USDT-ERC20'); 
                         setAddress(ercWallet)
                         const img = await QRCode.toDataURL(ercWallet)
                         setAddressQR(img)
@@ -568,7 +568,7 @@ export default function ListCoin(){
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('USDT');setBalance(balance.usdt_erc20_balance)}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('USDT-ERC20');setBalance(balance.usdt_erc20_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>
@@ -595,7 +595,7 @@ export default function ListCoin(){
                     <div className="item">
                     <div onClick={async()=>{
                         setVisibleDeposit(true); 
-                        setCoin('USDT'); 
+                        setCoin('USDT-TRC20'); 
                         setAddress(trxWallet)
                         const img = await QRCode.toDataURL(trxWallet)
                         setAddressQR(img)
@@ -606,7 +606,7 @@ export default function ListCoin(){
                     </div>
                     </div>
                     <div className="item">
-                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('USDT');setBalance(balance.usdt_trc20_balance)}} className='button'>
+                    <div onClick={()=>{setVisibleWithdraw(true); setCoin('USDT-TRC20');setBalance(balance.usdt_trc20_balance)}} className='button'>
                         <img alt="withdraw" src={withdraw}/>
                         <p> {checkLanguage({vi: 'Rút', en: 'Withdraw'}, language)} </p>
                     </div>

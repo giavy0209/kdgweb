@@ -131,12 +131,12 @@ export default function App({ ...prop }) {
                                         stake_history.status === 0 ? 
                                         <td></td>
                                         :
-                                        stake_history.status === 2 ? 
+                                        stake_history.status === 1 ? 
                                         <td className='green'>
                                             {checkLanguage({vi : 'Đang nhận lãi' , en : 'Receive profit'} , language)}
                                         </td>
                                         :
-                                        stake_history.status === 1 ? 
+                                        stake_history.status === 2 ? 
                                         <td className='yellow'>
                                             <button
                                             onClick={()=>handleDoneStaking(stake_history._id)}
