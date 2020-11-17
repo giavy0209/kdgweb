@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import block1Icon from '../../assets/img/stake/block1-icon.png'
 import { checkLanguage } from '../../helpers'
 import { useSelector } from 'react-redux'
@@ -11,6 +11,8 @@ import TOMO from '../../assets/img/TOMO.png'
 import KNC from '../../assets/img/KNC.png'
 import MCH from '../../assets/img/MCH.png'
 import '../../assets/css/staking.scss'
+import { useEffect } from 'react'
+import callapi from '../../axios'
 
 const LIST_COIN = [
   {
@@ -63,13 +65,52 @@ const LIST_COIN = [
     can_join : false
   },
 ]
+
+const handleBlock1Loaded = function () {
+  var listBlock1 = document.querySelectorAll('.item-block1')
+  var heightest = listBlock1[0].offsetHeight
+  listBlock1.forEach(el => {
+    if(el.offsetHeight > heightest) heightest = el.offsetHeight
+  },[])
+  listBlock1.forEach(el => {
+    el.style.height = heightest + 'px'
+  })
+}
+
 export default function App({...prop}) {
   const history = useHistory()
   const language = useSelector(state=>state.lang)
+
+  const [Sum , setSum]  =useState(0)
+  const [Profit, setProfit] = useState(0);
+  
+  const Level = useSelector(state => state && state.user && state.user.staking_level)
+
+  const getStakingInfo = useCallback(async () => {
+    const res = (await callapi().get('/api/user_staking_info')).data
+    const stakingInfo = res.data
+    setProfit(stakingInfo.totalProfit)
+    setSum(stakingInfo.totalStake)
+    console.log(stakingInfo);
+  },[])
+
+  useEffect(()=>{
+    getStakingInfo()
+  },[])
+
+
   return(
     <>
+      <div className="stake">
+        <div className="banner">
+          <div className="content">
+            <div className="text1">GIỚI THIỆU BẠN BÈ</div>
+            <div className="text2">NHẬN NGAY ƯU ĐÃI</div>
+            <div onClick={()=>history.push('/staking/share')} className="text3">Chia Sẻ Ngay</div>
+          </div>
+        </div>
+      </div>
       <div className="kdg-container stake">
-
         <div className="block1">
           <div className="block-title">
             <h2 className="title">Kingdom Staking</h2>
@@ -80,7 +121,7 @@ export default function App({...prop}) {
           </div>
           <div className="kdg-row kdg-column-3 list-block1">
             <div className="item">
-              <div className="item-block1">
+              <div onLoad={handleBlock1Loaded} className="item-block1">
                 <img src={block1Icon} alt=""/>
                 <p>Lợi tức cao lên tới <br/> 48%/năm</p>
               </div>
@@ -107,26 +148,34 @@ export default function App({...prop}) {
             <div className="kdg-row kdg-column-3 list-block2">
               <div className="item">
                 <div className="block2-item">
-                  <div className="inside-block">
-                    <div className="number"> {10000.123123123.toFixed(2)} </div>
-                    <span className="name">KDG</span>
+                  <div className="outside-block">
+                    <div className="inside-block">
+                      <div className="number"> {Sum} </div>
+                      <span className="name">KDG</span>
+                    </div>
                   </div>
+                  <div className="block-name">Tổng Stake</div>
                 </div>
               </div>
               <div className="item">
                 <div className="block2-item">
-                  <div className="inside-block">
-                    <div className="number"> {10000.123123123.toFixed(2)} </div>
-                    <span className="name">KDG</span>
+                  <div className="outside-block">
+                    <div className="inside-block">
+                      <div className="number"> {Profit} </div>
+                      <span className="name">KDG</span>
+                    </div>
                   </div>
+                  <div className="block-name">Lợi Nhuận</div>
                 </div>
               </div>
               <div className="item">
                 <div className="block2-item">
-                  <div className="inside-block">
-                    <div className="number"> {10000.123123123.toFixed(2)} </div>
-                    <span className="name">KDG</span>
+                  <div className="outside-block">
+                    <div className="inside-block">
+                      <div className="number"> {Level ? Level : 0} </div>
+                    </div>
                   </div>
+                  <div className="block-name">Cấp độ</div>
                 </div>
               </div>
             </div>

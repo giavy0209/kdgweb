@@ -188,6 +188,17 @@ body * {
     src: url(../fonts/Fabrik.otf);
     font-weight: 400;
 }
+@font-face {
+    font-family: Aurora;
+    src: url(../fonts/Aurora.ttf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Azuki;
+    src: url(../fonts/Azuki.ttf);
+    font-weight: 400;
+}
 
 :before, :after  {
     box-sizing: border-box;
@@ -241,6 +252,11 @@ body {
     font-size: 0;
     margin-left: -9px;
     margin-right: -9px;
+    &.va-t{
+        [class*="kdg-col-"]{
+            vertical-align: top;
+        }
+    }
 }
 .kdg-row [class*="kdg-col-"],
 .kdg-row[class*="kdg-column-"] .item{
@@ -277,6 +293,17 @@ body {
 
 .kdg-col-2{
     width:16.666667%;
+}
+
+.kdg-col-1{
+    width:8.333333%;
+}
+
+.kdg-pull-1{
+    margin-left:8.333333%;
+}
+.kdg-push-1{
+    margin-right:8.333333%;
 }
 
 .kdg-column-2 .item{

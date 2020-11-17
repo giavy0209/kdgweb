@@ -17,7 +17,8 @@ export default function App({components,reqLogin,type,name}) {
     }, [location]);
 
     useEffect(()=>{
-        var title = checkLanguage(name,language).replace(/<[^>]*>/g, ' ').replace(/\s{2,}/g, ' ').trim();
+        console.log(language);
+        var title = checkLanguage(name,language) ? checkLanguage(name,language).replace(/<[^>]*>/g, ' ').replace(/\s{2,}/g, ' ').trim() : '';
         document.title = title
     },[language,name])
 

@@ -4,10 +4,6 @@ import Storage from '../helpers/storage'
 import { storage } from '../helpers';
 import Axios from 'axios';
 
-import socket from '../socket'
-
-
-
 export const CHANGE_LOADING = 'CHANGE_LOADING';
 export const CHANGE_NEWS = 'CHANGE_NEWS';
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
@@ -126,9 +122,9 @@ export function asyncGetNewsById(id,next, language){
     }
 }
 
-export function asyncGetBalance(userid) {
+export function asyncGetBalance() {
     return async dispatch => {
-        const res = (await callapi().get(`/api/balance?userid=${userid}`)).data
+        const res = (await callapi().get(`/api/balance`)).data
         
         const {
             eth_balance,
@@ -141,7 +137,6 @@ export function asyncGetBalance(userid) {
             kdg_balance,
             usdt_trc20_balance,
         }=res
-        console.log(res);
         dispatch(actChangeBalance({ eth_balance, usdt_erc20_balance,usdt_trc20_balance, trx_balance, kdg_balance , knc_balance, mch_balance,tomo_balance,btc_balance}))
     }
 }
@@ -153,12 +148,12 @@ export function asyncLogin(submitData) {
         try {
             dispatch(actChangeLoading(true))
             res = ((await callapi().post('/api/authorize', submitData)))
+            console.log(res);
             dispatch(actChangeUser(res.data.data))
             dispatch(asyncGetBalance(res.data._id))
             Storage.setToken(res.data.data._id)
             Storage.setJWT(res.data.jwtToken)
 
-            socket.emit('auth',res.data.jwtToken)
             localStorage.setItem('email', submitData.email)
             localStorage.setItem('password', submitData.password)
             localStorage.setItem('login_time', new Date())
@@ -167,6 +162,7 @@ export function asyncLogin(submitData) {
             dispatch(actChangeLoading(false))
             return { ok: true ,res}
         } catch (error) {
+            console.log(error);
             dispatch(actChangeLoading(false))
             return { ok: false  ,res}
         }

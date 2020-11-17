@@ -50,6 +50,7 @@ export default function App({...rest}) {
         }
         dispatch(asyncLogin(submitData))
         .then(res=>{
+            console.log(res);
             if(res.ok){
                 history.push('/home-wallet')
             }else{

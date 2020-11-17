@@ -11,9 +11,12 @@ import Ecosystem from './Ecosystem'
 import Footer from './Footer'
 import Account from './Account'
 import LuckySpin from './LuckySpin'
-import Staking from './Staking'
-import StakingHistory from './Staking/StakingHistory'
-import StakingJoin from './Staking/StakingJoin'
+import {
+    Staking,
+    StakingHistory,
+    StakingShare,
+    StakingJoin,
+} from './Staking'
 import Wallet from './Wallet'
 import News from './News'
 import HomeWallet from './HomeWallet'
@@ -33,12 +36,13 @@ export {
     Ecosystem,
     Account,
     LuckySpin,
-    Staking,
-    StakingHistory,
-    StakingJoin,
     News,
     Wallet,
     HomeWallet,
     ChooseLanguage,
-    GameHub
+    GameHub,
+    Staking,
+    StakingHistory,
+    StakingJoin,
+    StakingShare,
 }
