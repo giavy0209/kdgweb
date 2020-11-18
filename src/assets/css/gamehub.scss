@@ -20,7 +20,7 @@
         position: relative;
         &::before{
             content: '';
-            padding-top: 52.3%;
+            padding-top: 25%;
             display: block;
         }
         .content{
@@ -82,6 +82,25 @@
         }
     }
 
+    .product {
+        margin-top: 100px;
+
+        .title {
+            font-size: 35px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .desc {
+            width: 600px;
+            margin: auto;
+            text-align: center;
+            color: #ddd9d8;
+            font-size: 18px;
+        }
+    }
+
     .info{
         margin-top: 90px;
         padding: 100px 0;
@@ -117,6 +136,15 @@
                     margin-top: 12px;
                 }
             }
+        }
+        .button {
+            background-image: linear-gradient(to bottom right, #dfb415, #a47b00, #edda8b, #ddb744);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #111b2d;
+            display: inline-block;
+            font-weight: 500;
+            margin-top: 30px;
         }
     }
     .games{

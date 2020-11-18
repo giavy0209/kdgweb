@@ -8,6 +8,7 @@ import { atcChangeLanguage } from '../../store/action'
 import menubar from '../../assets/img/menubar.png'
 
 import bgbanner from '../../assets/img/gamehub/bgbanner.png'
+import bgbanner1 from '../../assets/img/gamehub/bgbanner1.png'
 import bgdes from '../../assets/img/gamehub/bgdes.png'
 import bginfo from '../../assets/img/gamehub/bginfo.jpg'
 import bggames from '../../assets/img/gamehub/bggames.png'
@@ -186,7 +187,7 @@ export default function App(){
     return(
         <>
         <div className='gamehub'>
-            <header style={{backgroundImage: `url(${bgbanner})`}} className="header">
+            <header style={{backgroundImage: `url(${bgbanner1})`}} className="header">
                 <div className="kdg-container">
                     <div className="top-header">
                         <div className="social">
@@ -226,9 +227,9 @@ export default function App(){
                 </div>
                 <div className='banner'>
                     <div className='content'>
-                        <span className="top">
+                        {/* <span className="top">
                             KINGDOM
-                        </span><br />
+                        </span><br /> */}
                         <span className='bottom'>
                             GAME HUB
                         </span>
@@ -254,6 +255,13 @@ export default function App(){
                     </p>
                 </div>
                 <img className="border bottom" alt="" src={borderbottom} />
+            </div>
+
+            <div className="product">
+                <div className="kdg-container">
+                    <p className="title">SẢN PHẨM</p>
+                    <p className="desc">Với xu thế công nghệ và giải trí phát triển như hiện nay, Kingdom Game 4.0 luôn lựa chọn và cung cấp những sản phẩm đón đầu xu thế</p>
+                </div>
             </div>
 
             <div className='info' style={{backgroundImage: `url(${bginfo})`}}>
@@ -286,6 +294,7 @@ export default function App(){
                                     <span>{checkLanguage({vi: 'Giữ chân người dùng lâu dài', en: 'Long-term retention of users'},language)}</span>
                                 </li>
                             </ul>
+                            <a className="button" target="_blank" rel="noopener noreferrer" href="/gamehub-landing"> {checkLanguage({ vi: 'Đăng Ký', en: 'Register' }, language)} </a>
                         </div>
                         <div className='kdg-col-4'></div>
                         <div className='kdg-col-4 va-t'>

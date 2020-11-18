@@ -517,6 +517,7 @@ header {
                 line-height: 20px;
                 margin-left: 8px;
                 background: linear-gradient(to right,#efe179, #c8aa58,#efe179, #c8aa58,#efe179, #c8aa58,);
+                background-clip: text;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 align-self: flex-end;
@@ -1111,7 +1112,6 @@ header {
 }
 
 .ecosystem{
-    margin-top: 90px;
     text-align: center;
     position: relative;
     margin-top: 650px;
@@ -1403,6 +1403,7 @@ footer{
         font-size: 22px;
         margin-left: 8px;
         background: -webkit-linear-gradient(#f3e77c, #ebdb75,#f3e77c, #ebdb75,#f3e77c, #ebdb75,);
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 35px;
