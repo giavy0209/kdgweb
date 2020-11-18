@@ -23,7 +23,7 @@
             display: inline-block;
             width: 250px;
             position: absolute;
-            top: 15px;
+            top: 20px;
             left: 15px;
             box-shadow: 0 2px 4px 4px rgba(255, 255, 255, .5);
         }
@@ -61,7 +61,9 @@
             height: calc(100% - 112px);
             background-color: #3d414a;
             padding-left: 285px;
+            padding-right: 20px;
             padding-top: 20px;
+            padding-bottom: 20px;
             font-size: 20px;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;

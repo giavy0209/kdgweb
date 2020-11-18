@@ -49,31 +49,6 @@ export default function App(){
     // const [List , setList] = useState(listGame)
     const language = useSelector(state=>state && state.lang)
 
-    // const onClickListGame = e => {
-    //     if (e.target.tagName === 'IMG') {
-
-    //         let overlay = document.createElement('div');
-    //         overlay.id = 'overlay';
-    //         document.body.appendChild(overlay);
-
-    //         let modalContainer = document.createElement('div');
-    //         modalContainer.id = 'modal-container';
-    //         overlay.appendChild(modalContainer);
-
-    //         let imgSrc = e.target.src;
-    //         let image = document.createElement('img');
-    //         image.id = 'image';
-    //         image.src = imgSrc;
-    //         modalContainer.innerHTML = ``
-    //         modalContainer.appendChild(image);
-
-    //         overlay.addEventListener('click', e => {
-    //             console.log(imgSrc);
-    //             e.target.id === 'overlay' && overlay.parentElement.removeChild(overlay);
-    //         });
-    //     }
-    // }
-
     const listGame = useMemo(()=>{
         checkLanguage({vi: '', en: ''},language)
         var list = [
@@ -171,7 +146,7 @@ export default function App(){
             }
         }
     }) 
-    
+
     const logoHeader = useSelector(state=>{
         return state && state.settings && state.settings.logo && state.settings.logo.logo_header
     })
@@ -197,7 +172,6 @@ export default function App(){
         })
     },[])
 
-
     const handleScroll = useCallback(type =>{
         var track = document.querySelector('.track')
         var itemWidth = track.querySelector('.item').offsetWidth
@@ -216,21 +190,21 @@ export default function App(){
         <div onClick={()=>setModalData(null)} id="overlay">
             <div id="modal-container" onClick={e => e.stopPropagation()}>
                 <img id="image" src={ModalData.img} />
-                <div class="rate">
-                    <span class="rating">Rating</span>
-                    <span class="circle">3.5</span>
+                <div className="rate">
+                    <span className="rating">Rating</span>
+                    <span className="circle">3.5</span>
                     <Rate defaultValue={3.5} disabled allowHalf />
                 </div>
-                <div class="info">
-                    <div class="date">2020</div>
-                    <div class="name">{ModalData.title}</div>
-                    <div class="desc">GameNow has announced the SEA launch of their latest mobile game, MU Origin 2. Players from the SEA region can now.</div>
-                    <div class="tags">
-                        <div class="tag">18+</div>
-                        <div class="tag">MMORPG</div>
-                        <div class="tag">Đấu trí</div>
+                <div className="info">
+                    <div className="date">2020</div>
+                    <div className="name">{ModalData.title}</div>
+                    <div className="desc">GameNow has announced the SEA launch of their latest mobile game, MU Origin 2. Players from the SEA region can now.</div>
+                    <div className="tags">
+                        <div className="tag">18+</div>
+                        <div className="tag">MMORPG</div>
+                        <div className="tag">Đấu trí</div>
                     </div>
-                    <div class="button">CHƠI GAME</div>
+                    <div className="button">CHƠI GAME</div>
                 </div>
             </div>
         </div>}
@@ -428,9 +402,9 @@ export default function App(){
                         <div className='track'>
                             <div style={window.innerWidth <= 768 ? {width: listGame.length * 100 + '%'} : {}} className='kdg-row kdg-column-4 list-game'>
                             {
-                                listGame.map(o =>
+                                listGame.map((o, index) =>
                                     (Type === o.type || Type === 0) &&
-                                    <div className='item' onClick={()=>setModalData(o)}>
+                                    <div key={index} className='item' onClick={()=>setModalData(o)}>
                                         <div className='game'>
                                             <img alt="" src={o.img} />
                                             <p className='list-game-title'>{o.title}</p>
