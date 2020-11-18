@@ -2,13 +2,8 @@ import '../../assets/css/form-gamehub.scss';
 import React from 'react';
 
 import { Modal, Form, Input, Select, Checkbox, Button } from 'antd';
-
-
-
-
-
-
 const { Option } = Select;
+
 const device = [
     { value: 'laptop', display: 'Desktop/Laptop' },
     { value: 'mobile', display: 'Smartphone' },
