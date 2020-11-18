@@ -35,8 +35,8 @@ const calcDate = function(type) {
     var day = create_date.getDate()
     var month = create_date.getMonth() + 1
     var year = create_date.getFullYear()
-    var VN_8AM_TIME = new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`)
-    var start_date = new Date(`${month}-${day}-${year} 08:00:00 GMT+0700`);
+    var VN_8AM_TIME = new Date(`${year}-${month}-${day} 08:00:00.000+0700`)
+    var start_date = new Date(`${year}-${month}-${day} 08:00:00.000+0700`);
     if(create_date < VN_8AM_TIME){
         start_date.setDate(start_date.getDate() + 1)
     }else{
