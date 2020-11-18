@@ -1,7 +1,12 @@
 import '../../assets/css/form-gamehub.scss';
 import React from 'react';
 
-import { Modal, Form, Input, Select, Checkbox, Button } from 'antd';
+import { Modal, Form, Input, Select, Checkbox, Button, message } from 'antd';
+import callapi from '../../axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkLanguage } from '../../helpers';
+import { actChangeLoading } from '../../store/action';
+
 const { Option } = Select;
 
 const device = [
@@ -44,17 +49,40 @@ const old = [
 
 const FormGameHub = ({ visible, onCancel }) => {
     const [form] = Form.useForm();
-
+    const dispatch = useDispatch()
+    const language = useSelector(state => state.lang)
     const onSubmit = () => {
         form.validateFields()
-            .then((values) => {
-                form.resetFields();
-                console.log("Success", values);
-                onCancel();
-            })
-            .catch((info) => {
-                console.log('Validate Failed:', info);
-            });
+        .then(async (values) => {
+            dispatch(actChangeLoading(true))
+            try {
+                const res = (await callapi().post('/api/gamehub',values)).data
+                if(res.status === 1) {
+                    form.resetFields();
+                    onCancel();
+                    message.success(checkLanguage({
+                        vi : 'Gửi thông tin thành công, vui lòng chờ nhân viên liên hệ',
+                        en : 'Submit info successfully, please wait for contact from our staff'
+                    }, language))
+                }else{
+                    message.error(checkLanguage({
+                        vi : 'Gửi thông tin không thành công, vui lòng kiểm tra lại thông tin',
+                        en : 'Submit info fail, please check your info and submit again'
+                    }, language))
+                }
+
+                
+            } catch (error) {
+                message.error(checkLanguage({
+                    vi : 'Gửi thông tin không thành công, vui lòng kiểm tra lại thông tin',
+                    en : 'Submit info fail, please check your info and submit again'
+                }, language))
+            }
+            dispatch(actChangeLoading(false))
+        })
+        .catch((info) => {
+            console.log('Validate Failed:', info);
+        });
     }
 
     const renderOption = lists => {
@@ -102,7 +130,7 @@ const FormGameHub = ({ visible, onCancel }) => {
                         </Form.Item>
 
                         <Form.Item
-                            name="descriptionGame"
+                            name="description"
                             rules={[
                                 {
                                     required: true,
@@ -114,7 +142,7 @@ const FormGameHub = ({ visible, onCancel }) => {
                         </Form.Item>
 
                         <Form.Item
-                            name="mechanicsGame"
+                            name="mechanics"
                             rules={[
                                 {
                                     required: true,
@@ -145,7 +173,7 @@ const FormGameHub = ({ visible, onCancel }) => {
                         </Form.Item>
 
                         <Form.Item
-                            name="favoriteOfGame"
+                            name="favorite"
                             rules={[
                                 {
                                     required: true,
@@ -157,7 +185,7 @@ const FormGameHub = ({ visible, onCancel }) => {
                         </Form.Item>
 
                         <Form.Item
-                            name="isPublicStore"
+                            name="publicStore"
                             rules={[
                                 {
                                     required: true,
@@ -205,7 +233,7 @@ const FormGameHub = ({ visible, onCancel }) => {
                         </Form.Item>
 
                         <Form.Item
-                            name="typeGame"
+                            name="type"
                             rules={[
                                 {
                                     required: true,
@@ -261,7 +289,7 @@ const FormGameHub = ({ visible, onCancel }) => {
                         </Form.Item>
 
                         <Form.Item
-                            name="highlightGame"
+                            name="highlight"
                             rules={[
                                 {
                                     required: true,
