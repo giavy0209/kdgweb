@@ -161,7 +161,7 @@ export default function App({...prop}) {
                 <div className="block2-item">
                   <div className="outside-block">
                     <div className="inside-block">
-                      <div className="number"> {Profit} </div>
+                      <div className="number"> {Math.round(Profit * 1000) / 1000} </div>
                       <span className="name">KDG</span>
                     </div>
                   </div>
