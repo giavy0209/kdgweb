@@ -247,7 +247,7 @@ export default function App () {
                 </div>
 
                 <div className="block2">
-                    <div className="title">{checkLanguage({vi : 'Chia sẽ' , en : 'Share'}, language)}</div>
+                    <div className="title">{checkLanguage({vi : 'Chia sẻ' , en : 'Share'}, language)}</div>
                     <div className="kdg-row">
                         <div className="kdg-col-6">
                             <div className="analytic-child">
@@ -293,12 +293,12 @@ export default function App () {
             <div className="kdg-container">
                 <div className="block3">
                     <div className="title">
-                        {checkLanguage({vi : 'LINK/ MÃ GIỚI THIỆU' , en : 'LINK/ REFFERER CODE'}, language)}
+                        {checkLanguage({vi : 'LINK/ MÃ GIỚI THIỆU' , en : 'LINK/ REFERRER CODE'}, language)}
                     </div>
                     <div className="block-url">
                         <div className="kdg-row va-t">
                             <div className="kdg-col-5 kdg-pull-1 kdg-push-1">
-                                <div className="name">{checkLanguage({vi : 'Link giới thiệu' , en : 'Link refferer'}, language)}</div>
+                                <div className="name">{checkLanguage({vi : 'Link giới thiệu' , en : 'Link referrer'}, language)}</div>
                                 <div className="block-content">
                                     <div className="left">
                                         https://www.kingdomgame.org/reg/{user && user.ref_code}
@@ -306,7 +306,7 @@ export default function App () {
                                     <div 
                                     onClick={()=>handleCopy(`https://www.kingdomgame.org/reg/${user && user.ref_code}`)}
                                     className="right">
-                                        {checkLanguage({vi : 'Sao chép liên kết để mời mọi người' , en : 'Copy refferer link'}, language)}
+                                        {checkLanguage({vi : 'Sao chép liên kết để mời mọi người' , en : 'Copy referrer link'}, language)}
                                     </div>
                                 </div>
                             </div>
@@ -319,7 +319,7 @@ export default function App () {
                                     <div 
                                     onClick={()=>handleCopy(user && user.ref_code)}
                                     className="right">
-                                        {checkLanguage({vi : 'Sao chép mã lời mời' , en : 'Copy refferer code'}, language)}
+                                        {checkLanguage({vi : 'Sao chép mã lời mời' , en : 'Copy referrer code'}, language)}
                                     </div>
                                 </div>
                             </div>
@@ -334,7 +334,7 @@ export default function App () {
                 </div>
 
                 <div className="block5">
-                    <div className="title">{checkLanguage({vi : 'Xếp HẠNG HOA HỒNG GIỚI THIỆU' , en : 'RANKING REFFERER REWARD'}, language)}</div>
+                    <div className="title">{checkLanguage({vi : 'Xếp HẠNG HOA HỒNG GIỚI THIỆU' , en : 'RANKING REFERRER REWARD'}, language)}</div>
                     <div className="block5-data">
                         <table>
                             <thead>
@@ -362,11 +362,14 @@ export default function App () {
                 </div>
 
                 <div className="block4">
-                    <div className="title">{checkLanguage({vi : 'HOA HỒNG GIỚI THIỆU' , en : 'REFFERER REWARD'}, language)}</div>
+                    <div className="title">{checkLanguage({vi : 'HOA HỒNG GIỚI THIỆU' , en : 'REFERRER REWARD'}, language)}</div>
+
                     <div onClick={()=>setVisibleTree(true)} className="open-tree">{checkLanguage({vi : 'Cây hoa hồng' , en : 'Referer tree'}, language)} >></div>
+
                     <div className="list-tab">
-                        <div onClick={()=>setType(1)} className={`tab ${Type === 1 ? 'active' : ''}`}>{checkLanguage({vi : 'Kết quả giới thiệu' , en : 'Kết quả giới thiệu'}, language)}</div>
-                        <div onClick={()=>setType(2)} className={`tab ${Type === 2 ? 'active' : ''}`}>{checkLanguage({vi : 'Hoa hồng giới thiệu' , en : 'Hoa hồng giới thiệu'}, language)}</div>
+                        <div onClick={()=>setType(1)} className={`tab ${Type === 1 ? 'active' : ''}`}>{checkLanguage({vi : 'Kết quả giới thiệu' , en : 'Inviting record'}, language)}</div>
+                        <div onClick={()=>setType(2)} className={`tab ${Type === 2 ? 'active' : ''}`}>{checkLanguage({vi : 'Hoa hồng giới thiệu' , en : 'Earning record'}, language)}</div>
+                        <div onClick={()=>setVisibleTree(true)} className="open-tree">{checkLanguage({vi : 'Cây hoa hồng' , en : 'Referer tree'}, language)} >></div>
                     </div>
                     <div className="block4-data">
                         <table>
@@ -396,13 +399,12 @@ export default function App () {
                                     </tr>)
                                     : 
                                     ListChild.map(o => {
-                                        
                                         var level = o.type ? o.type.replace('ref-staking-level-' , '') : 1
                                         return <tr>
                                             <td> {renderDate(o.create_date)} </td>
-                                            <td> {o.from && o.from.email} </td>
+                                            <td> {o.value !== 0 && o.from && o.from.email} </td>
                                             <td> {level} </td>
-                                            <td> { o.value } </td>
+                                            <td> {o.value !== 0 &&  o.value } </td>
                                         </tr>
                                     })
                                 }
@@ -450,7 +452,7 @@ export default function App () {
                         <p className="tab">- F2: <span className="yellow">2%</span></p>
                         <p className="tab">- F3: <span className="yellow">1%</span></p>
 
-                        <p><span className="yellow">{checkLanguage({vi : '*** Lưu ý:' , en : '*** Note:'}, language)}</span> {checkLanguage({vi : '' , en : ''}, language)}Để nhận được hoa hồng stake, bạn phải có ít nhất một gói staking đang hoạt động.</p>
+                        <p><span className="yellow">{checkLanguage({vi : '*** Lưu ý:' , en : '*** Note:'}, language)}</span> {checkLanguage({vi : 'Để nhận được hoa hồng stake, bạn phải có ít nhất một gói staking đang hoạt động.' , en : 'To receive the rank bonus, you must have at least one active staking package.'}, language)}</p>
                         <p>4) {checkLanguage({vi : 'Thưởng cấp bậc: Bạn sẽ được thưởng cấp bậc nếu như đạt đủ điều kiện.' , en : 'Level Reward: You will be awarded if all conditions are met.'}, language)} </p>
                         <p className="tab yellow">- Level 1: </p>
                         <p className="tab2">+ {checkLanguage({vi : 'Đủ' , en : ''}, language)} 10F1</p>

@@ -138,7 +138,7 @@ export default function App() {
                         </div>
                     </div>
                     <div className="block2">
-                        <div className="title">{checkLanguage({vi: 'Các Gói Stake', en: 'There are packages of Stake'}, language)}</div>
+                        <div className="title">{checkLanguage({vi: 'Các Gói Stake', en: 'Lookup Options'}, language)}</div>
                         <p className="sub-title">{checkLanguage({vi: 'Chọn một trong số các gói stake dưới đây:', en: 'Choose one of the Staking packages below'}, language)}</p>
 
                         <div className="kdg-row kdg-column-4 list-block2">
@@ -153,7 +153,7 @@ export default function App() {
                                                     <FontAwesomeIcon icon={faCheck} />
                                                 </div>
                                             </span>
-                                            <span className="des"> {_stake.type} {checkLanguage({vi : 'Tháng', en: 'Month'}, language)} </span>
+                                            <span className="des"> {_stake.type} {checkLanguage({vi : 'Tháng', en: 'Months'}, language)} </span>
                                         </div>
                                     </div>
                                 )
@@ -185,7 +185,7 @@ export default function App() {
                                 <div className="dot"></div>
                                 <div className="des">
                                     <div className="text">
-                                        {checkLanguage({vi: 'Thời gian mở khóa', en: 'Unlock time'}, language)}
+                                        {checkLanguage({vi: 'Thời gian mở khóa', en: 'Unlocking time'}, language)}
                                     </div>
                                     <div className="date"> {renderDate(calcDate(Selected).unlock_date)} </div>
                                 </div>
@@ -195,7 +195,7 @@ export default function App() {
                                 <div className="dot"></div>
                                 <div className="des">
                                     <div className="text">
-                                        {checkLanguage({vi: 'Thời gian xác nhận kết thúc', en: 'Confirm time'}, language)}
+                                        {checkLanguage({vi: 'Thời gian xác nhận kết thúc', en: 'Confirmimg time'}, language)}
                                     </div>
                                     <div className="date"> {renderDate(calcDate(Selected).confirm_date)} </div>
                                 </div>
@@ -223,7 +223,7 @@ export default function App() {
                                         <span className="coin-name">KDG</span>
                                     </div>
                                     <div className={`error ${Validate.min ? '' : 'show'}`}>
-                                        <span className="error-icon"><FontAwesomeIcon icon={faTimesCircle} /></span> {checkLanguage({vi: 'Số lượng đầu tư tối thiểu là 200 KDG', en: 'Minimun stake is 200 KDG'}, language)}
+                                        <span className="error-icon"><FontAwesomeIcon icon={faTimesCircle} /></span> {checkLanguage({vi: 'Số lượng đầu tư tối thiểu là 200 KDG', en: 'Minimum stake is 200 KDG'}, language)}
                                     </div>
                                 </div>
                             </div>
@@ -232,7 +232,7 @@ export default function App() {
                                 <div className="calc-group">
                                     <div className="top">
                                         <div className="name">{checkLanguage({vi: 'Lợi nhuận ngày', en: 'Daily interest'}, language)}</div>
-                                        <div className="data"> {(calcDate(Selected).profit_per_day * Value).toFixed(2)} </div>
+                                        <div className="data"> {(calcDate(Selected).profit_per_day * Value).toFixed(2)} KDG</div>
                                     </div>
                                     <div className="bottom">
                                         <div className="name">{checkLanguage({vi: 'Tổng gốc & lãi', en: 'Total principal & interest'}, language)}</div>
@@ -254,11 +254,11 @@ export default function App() {
                                 <div className="content">
                                     <p>{checkLanguage({vi: '- Có các gói stake như sau:', en: 'There are packages of Stake as follows:'}, language)}</p>
                                     <div className="row-content">
-                                        <span className="bold">01 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 1% / tháng', en: 'Interest rate is 1% / month'}, language)}
+                                        <span className="bold">01 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 1% / tháng', en: 'Interest rate is 1% / month'}, language)}-
                                         <span className="bold">06 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 3% / tháng', en: 'Interest rate is 3% / month'}, language)}
                                     </div>
                                     <div className="row-content">
-                                        <span className="bold">03 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 2% / tháng', en: 'Interest rate is 2% / month'}, language)}
+                                        <span className="bold">03 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 2% / tháng', en: 'Interest rate is 2% / month'}, language)}-
                                         <span className="bold">12 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 4% / tháng', en: 'Interest rate is 4% / month'}, language)}
                                     </div>
                                 </div>

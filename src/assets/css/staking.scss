@@ -1101,6 +1101,11 @@
             color: #fac800;
             text-decoration: underline;
             font-size: 16px;
+            display: none;
+            @media only screen and (max-width : 768px){
+                display: inline-block;
+                padding: 5px;
+            }
         }
         .list-tab{
             margin-top: 30px;
@@ -1118,6 +1123,12 @@
                 @media only screen and (max-width : 768px){
                     padding: 5px 10px;
                     font-size: 12px;
+                }
+            }
+            .open-tree{
+                display: inline-block;
+                @media only screen and (max-width : 768px){
+                    display: none;
                 }
             }
         }

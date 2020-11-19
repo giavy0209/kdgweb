@@ -25,43 +25,36 @@ const LIST_COIN = [
   {
     name : 'ETH',
     icon : ETH,
-    min_lock : 30,
-    profit : 48,
+    min_lock : 60,
+    profit : 8,
     can_join : false
   },
   {
     name : 'USDT',
     icon : USDT,
-    min_lock : 30,
-    profit : 48,
+    min_lock : 60,
+    profit : 6,
     can_join : false
   },
   {
     name : 'TRX',
     icon : TRX,
-    min_lock : 30,
-    profit : 48,
+    min_lock : 60,
+    profit : 10,
     can_join : false
   },
   {
     name : 'TOMO',
     icon : TOMO,
-    min_lock : 30,
-    profit : 48,
-    can_join : false
-  },
-  {
-    name : 'KNC',
-    icon : KNC,
-    min_lock : 30,
-    profit : 48,
+    min_lock : 60,
+    profit : 15,
     can_join : false
   },
   {
     name : 'MCH',
     icon : MCH,
-    min_lock : 30,
-    profit : 48,
+    min_lock : 60,
+    profit : 15,
     can_join : false
   },
 ]
