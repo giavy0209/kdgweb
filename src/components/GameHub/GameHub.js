@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
+import { Rate } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faEnvelope, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { useHistory } from 'react-router-dom'
@@ -7,7 +8,6 @@ import { checkLanguage, smoothscroll } from '../../helpers'
 import { atcChangeLanguage } from '../../store/action'
 import menubar from '../../assets/img/menubar.png'
 
-import bgbanner from '../../assets/img/gamehub/bgbanner.png'
 import bgbanner1 from '../../assets/img/gamehub/bgbanner1.png'
 import bgdes from '../../assets/img/gamehub/bgdes.png'
 import bginfo from '../../assets/img/gamehub/bginfo.jpg'
@@ -45,6 +45,7 @@ import '../../assets/css/gamehub.scss'
 export default function App(){
 
     const [Type , setType] = useState(0)
+    const [ModalData , setModalData] = useState(null)
     // const [List , setList] = useState(listGame)
     const language = useSelector(state=>state && state.lang)
 
@@ -145,7 +146,7 @@ export default function App(){
             }
         }
     }) 
-    
+
     const logoHeader = useSelector(state=>{
         return state && state.settings && state.settings.logo && state.settings.logo.logo_header
     })
@@ -171,7 +172,6 @@ export default function App(){
         })
     },[])
 
-
     const handleScroll = useCallback(type =>{
         var track = document.querySelector('.track')
         var itemWidth = track.querySelector('.item').offsetWidth
@@ -186,6 +186,29 @@ export default function App(){
 
     return(
         <>
+        {ModalData &&
+        <div onClick={()=>setModalData(null)} id="overlay">
+            <div id="modal-container" onClick={e => e.stopPropagation()}>
+                <img id="image" src={ModalData.img} />
+                <div className="rate">
+                    <span className="rating">Rating</span>
+                    <span className="circle">3.5</span>
+                    <Rate defaultValue={3.5} disabled allowHalf />
+                </div>
+                <div className="info">
+                    <div className="date">2020</div>
+                    <div className="name">{ModalData.title}</div>
+                    <div className="desc">GameNow has announced the SEA launch of their latest mobile game, MU Origin 2. Players from the SEA region can now.</div>
+                    <div className="tags">
+                        <div className="tag">18+</div>
+                        <div className="tag">MMORPG</div>
+                        <div className="tag">Đấu trí</div>
+                    </div>
+                    <div className="button">CHƠI GAME</div>
+                </div>
+            </div>
+        </div>}
+
         <div className='gamehub'>
             <header style={{backgroundImage: `url(${bgbanner1})`}} className="header">
                 <div className="kdg-container">
@@ -294,7 +317,7 @@ export default function App(){
                                     <span>{checkLanguage({vi: 'Giữ chân người dùng lâu dài', en: 'Long-term retention of users'},language)}</span>
                                 </li>
                             </ul>
-                            <a className="button" target="_blank" rel="noopener noreferrer" href="/gamehub-landing"> {checkLanguage({ vi: 'Đăng Ký', en: 'Register' }, language)} </a>
+                            <button style={{ marginTop: '20px' }} className="button" onClick={() => history.push('/gamehub-landing')}>{checkLanguage({ vi: 'Đăng Ký Ngay', en: 'Register Now' }, language)}</button>
                         </div>
                         <div className='kdg-col-4'></div>
                         <div className='kdg-col-4 va-t'>
@@ -307,37 +330,33 @@ export default function App(){
                                     <span>
                                         {checkLanguage({vi: 'Hệ sinh thái game phong phú và đa dạng', en: 'Collective game ecosystem'},language)}
                                     </span>
-                                    
                                 </li>
                                 <li>
                                     <span><img src={li7} alt="" /></span>
                                     <span>
                                         {checkLanguage({vi: 'Chơi game tạo ra thu nhập ổn định', en: 'Playing games generates stable income'},language)}
                                     </span>
-                                    
                                 </li>
                                 <li>
                                     <span><img src={li8} alt="" /></span>
                                     <span>
                                         {checkLanguage({vi: 'Tích hợp ví điện tử đa năng, thanh toán dễ dàng', en: 'Integrated multi-function electronic wallet, easy payment'},language)}
                                     </span>
-                                    
                                 </li>
                                 <li>
                                     <span><img src={li9} alt="" /></span>
                                     <span>
                                         {checkLanguage({vi: 'Chương trình hoa hồng giới thiệu người chơi hấp dẫn', en: 'Attractive commission program when inviting others for players'},language)}
                                     </span>
-                                    
                                 </li>
                                 <li>
                                     <span><img src={li10} alt=""/></span>
                                     <span>
                                         {checkLanguage({vi: 'Hỗ trợ nhanh chóng và thân thiện', en: 'Quick and friendly support'},language)}
                                     </span>
-                                    
                                 </li>
                             </ul>
+                            <button style={{ marginTop: '20px' }} className="button" onClick={() => window.scroll(0, 2200)}>{checkLanguage({ vi: 'Xem Game', en: 'Game List' }, language)}</button>
                         </div>
                     </div>
                 </div>
@@ -348,7 +367,7 @@ export default function App(){
                 <img className="border top" alt="" src={bordertop} />
                 <div className='kdg-container'>
                     <p className='title'>
-                    {checkLanguage({vi: 'DANH SÁCH GAME', en: 'GAME LIST'},language)}
+                        {checkLanguage({vi: 'DANH SÁCH GAME', en: 'GAME LIST'},language)}
                     </p>
                     <div className='tabs'>
                         <span 
@@ -383,17 +402,17 @@ export default function App(){
                         <div className='track'>
                             <div style={window.innerWidth <= 768 ? {width: listGame.length * 100 + '%'} : {}} className='kdg-row kdg-column-4 list-game'>
                             {
-                                listGame.map(o => 
-                                (Type === o.type || Type === 0) && <div className='item'>
-                                    <div className='game'>
-                                        <img alt="" src={o.img} />
-                                        <p className='list-game-title'>{o.title}</p>
-                                        <p className='list-game-subtitle'> {o.subTitle} </p>
-
-                                        <p className='type'> {o.desType} </p>
-                                        <p className='date'> {o.desDate} </p>
+                                listGame.map((o, index) =>
+                                    (Type === o.type || Type === 0) &&
+                                    <div key={index} className='item' onClick={()=>setModalData(o)}>
+                                        <div className='game'>
+                                            <img alt="" src={o.img} />
+                                            <p className='list-game-title'>{o.title}</p>
+                                            <p className='list-game-subtitle'>{o.subTitle}</p>
+                                            <p className='type'>{o.desType}</p>
+                                            <p className='date'>{o.desDate}</p>
+                                        </div>
                                     </div>
-                                </div>    
                                 )
                             }
                             </div>

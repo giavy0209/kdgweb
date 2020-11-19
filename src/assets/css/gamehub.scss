@@ -1,3 +1,130 @@
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, .7);
+    z-index: 99;
+
+    #modal-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: block;
+        width: 60%;
+        height: 400px;
+        background-color: #0d121d;
+        border-radius: 5px;
+
+        #image {
+            display: inline-block;
+            width: 250px;
+            position: absolute;
+            top: 20px;
+            left: 15px;
+            box-shadow: 0 2px 4px 4px rgba(255, 255, 255, .5);
+        }
+
+        .rate {
+            display: flex;
+            align-items: center;
+            height: 112px;
+            margin-left: 285px;
+
+            .rating {
+                margin-right: 30px;
+                font-size: 18px;
+                text-transform: uppercase;
+            }
+
+            .circle {
+                width: 50px;
+                height: 50px;
+                margin-right: 20px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fac800;
+                border-radius: 50%;
+                vertical-align: middle;
+                font-size: 18px;
+                color: #303030;
+                font-weight: 600;
+                margin-right: 20px;
+            }
+        }
+
+        .info {
+            height: calc(100% - 112px);
+            background-color: #3d414a;
+            padding-left: 285px;
+            padding-right: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            font-size: 20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+
+            .date {
+                color: #ddd9d8;
+                font-weight: 300;
+            }
+
+            .name {
+                font-weight: 500;
+                text-transform: uppercase;
+                margin-bottom: 10px;
+            }
+
+            .desc {
+                color: #ddd9d8;
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+
+            .tags {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+
+                .tag {
+                    font-size: 16px;
+                    color: #FFF;
+                    text-align: center;
+                    height: 30px;
+                    line-height: 30px;
+                    min-width: 90px;
+                    padding: 0 20px;
+                    border-radius: 10px;
+                    background-color: #31343b;
+
+                    &:not(last-child) {
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            .button {
+                display: inline-block;
+                color: #FFF;
+                font-size: 18px;
+                text-transform: uppercase;
+                min-width: 135px;
+                padding: 0 20px;
+                height: 40px;
+                line-height: 40px;
+                background-color: #fac800;
+                border-radius: 10px;
+            }
+        }
+    }
+}
+
 .gamehub {
     .border{
         position: absolute;
@@ -138,13 +265,17 @@
             }
         }
         .button {
-            background-image: linear-gradient(to bottom right, #dfb415, #a47b00, #edda8b, #ddb744);
-            border-radius: 8px;
-            padding: 10px 15px;
-            color: #111b2d;
-            display: inline-block;
+            min-height: 50px;
+            height: 50px;
+            background-color: #FAC800;
+            color: #303030;
+            font-size: 16px;
             font-weight: 500;
-            margin-top: 30px;
+            text-transform: uppercase;
+            padding: 0 30px;
+            border: 0;
+            border-radius: 1000px;
+            cursor: pointer;
         }
     }
     .games{
@@ -193,14 +324,15 @@
                 transform: translate(0 , -50%);
             }
         }
-        .list-game{
+        .list-game {
             margin: 0 -7px;
-            .item{
+            .item {
+                cursor: pointer;
                 padding: 0 7px;
-                img{
+                img {
                     width: 100%;
                 }
-                .game{
+                .game {
                     .list-game-title{
                         margin-top: 15px;
                         font-size: 20px;

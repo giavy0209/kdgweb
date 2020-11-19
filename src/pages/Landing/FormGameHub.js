@@ -8,6 +8,7 @@ import { checkLanguage } from '../../helpers';
 import { actChangeLoading } from '../../store/action';
 
 const { Option } = Select;
+
 const device = [
     { value: 'laptop', display: 'Desktop/Laptop' },
     { value: 'mobile', display: 'Smartphone' },

@@ -27,7 +27,7 @@ import '../../assets/css/gamehub-landing.scss';
 
 const Landing = () => {
 
-    const [visible, setIsvisible] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     const [Type , setType] = useState(0);
     const language = useSelector(state => state && state.lang);
@@ -92,11 +92,11 @@ const Landing = () => {
         }
     }, []);
 
-    const openForm = () => setIsvisible(true);
+    const openForm = () => setVisible(true);
 
     return(
         <>
-            <FormGameHub visible={visible} onCancel={() => setIsvisible(false)} />
+            <FormGameHub visible={visible} onCancel={() => setVisible(false)} />
             <div className="gamehub-landing">
                 <header className="header" style={{backgroundImage: `url(${bgbannerlanding})`}}>
                     <div className="kdg-container">
