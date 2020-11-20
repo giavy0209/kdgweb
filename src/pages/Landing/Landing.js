@@ -143,23 +143,22 @@ const Landing = () => {
                     <div className="banner-text">
                         <div className="kdg-container">
                             <div className="banner-text__top">
-                                <p>Cơ Hội Mang Sản Phẩm Game Của Bạn Ra Mắt Công Chúng</p>
-                                <p>ĐĂNG KÝ LÀM ĐỐI TÁC KINGDOM GAME</p>
+                                <p>{checkLanguage({vi : 'Cơ Hội Mang Sản Phẩm Game Của Bạn Ra Mắt Công Chúng' ,en : 'Opportunity To Bring Your Game Product To The Public'} , language)}</p>
+                                <p>{checkLanguage({vi : 'ĐĂNG KÝ LÀM ĐỐI TÁC KINGDOM GAME' ,en : 'REGISTERED AS PARTNER OF KINGDOM GAME 4.0'} , language)}</p>
                             </div>
                             <div className="banner-text__bottom">
-                                <p>Bạn là lập trình viên Game sở hữu những tác phẩm Game tuyệt vời?</p>
-                                <p>Vậy bạn có thắc mắc tại sao nên hợp tác với chúng tôi không? Cùng tìm câu trả lời nào!</p>
+                                <p>{checkLanguage({vi : 'Bạn là lập trình viên Game sở hữu những tác phẩm Game tuyệt vời?' ,en : 'Are you a programmer and own great games? '} , language)}</p>
+                                <p>{checkLanguage({vi : 'Vậy bạn có thắc mắc tại sao nên hợp tác với chúng tôi không? Cùng tìm câu trả lời nào!' ,en : "Why are we your perfect partner? Let's find the answer!"} , language)}</p>
                             </div>
                         </div>
                     </div>
                     <div className="action">
                         <div className="action__register">
-                            <span>Trở thành đối tác của Kingdom Game 4.0</span>
-                            <button onClick={openForm}>ĐĂNG KÝ NGAY</button>
+                            <span>{checkLanguage({vi : 'Trở thành đối tác của Kingdom Game 4.0' ,en : 'COOPERATION WITH US'} , language)}</span>
+                            <button onClick={openForm}>{checkLanguage({vi : 'ĐĂNG KÝ NGAY' ,en : 'REGISTER NOW'} , language)}</button>
                         </div>
                         <div className="action__contact">
                             <div>
-                                <p>Liên hệ nhận tư vấn</p>
                                 <p>
                                     <img src={envelop} />
                                     <span>contact@kingdomgame.co</span>
@@ -172,47 +171,78 @@ const Landing = () => {
                 <div className="part1">
                     <div className="kdg-container">
                         <div className="general-title">
-                            <h2>HỢP TÁC VỚI CHÚNG TÔI</h2>
+                            <h2>{checkLanguage({vi : 'HỢP TÁC VỚI CHÚNG TÔI' ,en : 'COOPERATION WITH US'} , language)}HỢP TÁC VỚI CHÚNG TÔI</h2>
                         </div>
                         <div className="part1__body">
                             <div className="part1__body__left">
                                 <div className="title">
                                     <span className="title__number">1</span>
-                                    <span className="title__text">Chúng tôi sẽ đưa tác phẩm Game của bạn tới tay người dùng cùng với bạn</span>
+                                    <span className="title__text">{checkLanguage({vi : 'Chúng tôi sẽ đưa tác phẩm Game của bạn tới tay người dùng cùng với bạn' ,en : "WE WILL BRING YOUR GAMES TO THE USER'S HANDS BY THE BEST WAY"} , language)}</span>
                                 </div>
-                                <p className="dot">
-                                    Nếu bạn đang có ý định tự <span>xuất bản trò chơi</span> hoặc <span>xây dựng một doanh nghiệp</span> cho riêng mình, đây là một ý tưởng tốt. Bạn có <span>toàn quyền kiểm soát</span> sáng tạo và bạn sẽ kiếm được rất <span>nhiều tiền</span> nếu trò chơi thành công… nhưng nó sẽ đòi hỏi rất nhiều công sức của bạn.
+                                <p 
+                                dangerouslySetInnerHTML={{__html : checkLanguage({vi : `
+                                Nếu bạn đang có ý định tự <span>xuất bản trò chơi</span> hoặc <span>xây dựng một doanh nghiệp</span> cho riêng mình, đây là một ý tưởng tốt. Bạn có <span>toàn quyền kiểm soát</span> sáng tạo và bạn sẽ kiếm được rất <span>nhiều tiền</span> nếu trò chơi thành công… nhưng nó sẽ đòi hỏi rất nhiều công sức của bạn.
+                                ` ,en : `
+                                If you're thinking of publishing your own game or building your own business, this is a good idea. You have full creative control and you'll make a lot of money if your games succeed ... but it will take a lot of effort and time ... 
+Or If you just want to design a game, then send it to a publisher, the Kingdom Game Hub is a great choice for you. Because we already have a large national community of gamers with over 26,000 players, more than 1,200 active members per month, our goal is to reach 300,000 by 2020. 
+                                `} , language)}}
+                                className="dot">
                                 </p>
-                                <p className="dot">
-                                    Còn nếu bạn chỉ muốn thiết kế trò chơi, gửi đến một nhà xuất bản thì Kingdom Game Hub là lựa chọn đúng đắn với bạn. Bởi vì chúng tôi đã có cộng đồng người chơi Game đông đảo trên toàn quốc với hơn 26 nghìn người đăng ký tài khoản, hơn 1200 thành viên tích cực mỗi tháng, mục tiêu 300 nghìn người dùng hết năm 2020.
+                                <p 
+                                dangerouslySetInnerHTML={{__html : checkLanguage({vi : `
+                                Còn nếu bạn chỉ muốn thiết kế trò chơi, gửi đến một nhà xuất bản thì Kingdom Game Hub là lựa chọn đúng đắn với bạn. Bởi vì chúng tôi đã có cộng đồng người chơi Game đông đảo trên toàn quốc với hơn 26 nghìn người đăng ký tài khoản, hơn 1200 thành viên tích cực mỗi tháng, mục tiêu 300 nghìn người dùng hết năm 2020.
+                                ` ,en : `
+                                
+                                `} , language)}}
+                                className="dot">
                                 </p>
                                 <div className="title">
                                     <span className="title__number">2</span>
-                                    <span className="title__text">Chúng tôi sẽ giúp Game của bạn tiếp cận với công nghệ thanh toán mới - Công nghệ Blockchain</span>
+                                    <span className="title__text">{checkLanguage({vi : 'Chúng tôi sẽ giúp Game của bạn tiếp cận với công nghệ thanh toán mới - Công nghệ Blockchain' ,en : "WE WILL MAKE YOUR GAME ACCESS TO NEW PAYMENT TECHNOLOGY - BLOCKCHAIN ​​TECHNOLOGY"} , language)}</span>
                                 </div>
-                                <p className="dot">
-                                    Chúng tôi sở hữu <span>nền tảng Game tiến bộ</span> và đi theo <span>xu thế công nghệ Blockchain</span>. Chúng tôi đã thử nghiệm và áp dụng thành công vào các sản phẩm do chúng tôi phát hành và nhận được sự ủng hộ của cộng đồng.
+                                <p 
+                                dangerouslySetInnerHTML={{__html : checkLanguage({vi : `
+                                Chúng tôi sở hữu <span>nền tảng Game tiến bộ</span> và đi theo <span>xu thế công nghệ Blockchain</span>. Chúng tôi đã thử nghiệm và áp dụng thành công vào các sản phẩm do chúng tôi phát hành và nhận được sự ủng hộ của cộng đồng.
+                                ` ,en : `
+                                We own a progressive Game platform and follow the trend of Blockchain technology. We have tested and successfully applied the products which we published and have received the support of the community.
+                                `} , language)}}
+                                className="dot">
                                 </p>
                                 <div className="title">
                                     <span className="title__number">3</span>
-                                    <span className="title__text">Người chơi của bạn có thể kiếm thêm thu nhập trong lúc chơi Game</span>
+                                    <span className="title__text">{checkLanguage({vi : 'Người chơi của bạn có thể kiếm thêm thu nhập trong lúc chơi Game' ,en : 'YOUR PLAYERS CAN MAKE ADDITIONAL INCOME IN THE GAME'} , language)}</span>
                                 </div>
-                                <p className="dot">
-                                    Đây chính là <span>giá trị lớn nhất</span> chúng tôi cam kết đem lại với bạn. Việc <span>áp dụng Token vào thanh toán</span> trong Game và lợi ích của người chơi là đem chiến lợi phẩm quy đổi thành Token và bán. Chúng tôi đảm bảo sự thanh khoản đó.
+                                <p 
+                                dangerouslySetInnerHTML={{__html : checkLanguage({vi : `
+                                Đây chính là <span>giá trị lớn nhất</span> chúng tôi cam kết đem lại với bạn. Việc <span>áp dụng Token vào thanh toán</span> trong Game và lợi ích của người chơi là đem chiến lợi phẩm quy đổi thành Token và bán. Chúng tôi đảm bảo sự thanh khoản đó.
+                                ` ,en : `
+                                This is the greatest value we commit to bring to you. The application of Token to payment in the Game and the player's benefit is to convert the rewards into tokens and sell them. We guarantee that liquidity.
+                                `} , language)}}
+                                className="dot">
                                 </p>
                                 <div className="title">
                                     <span className="title__number">4</span>
-                                    <span className="title__text">Chúng tôi đam mê Game</span>
+                                    <span className="title__text">{checkLanguage({vi : 'Chúng tôi đam mê Game' ,en : 'WE LOVE GAME'} , language)}</span>
                                 </div>
-                                <p className="dot">
-                                    Chúng tôi không cố gắng tung ra những trò chơi mà chúng tôi hầu như không biết hoặc không quan tâm. Thay vào đó, chúng tôi tập trung rất nhiều thời gian, năng lượng và tiền bạc vào những trò chơi mà chúng tôi thực sự <span>yêu thích</span>, những trò chơi mà chúng tôi rất vui khi được chia sẻ với thế giới như thể chúng là của riêng chúng tôi. Nếu bạn muốn có <span>niềm đam mê</span> đó và <span>dẫn đầu cuộc chơi</span> của mình, bạn đã đến đúng nơi.
+                                <p 
+                                dangerouslySetInnerHTML={{__html : checkLanguage({vi : `
+                                Chúng tôi không cố gắng tung ra những trò chơi mà chúng tôi hầu như không biết hoặc không quan tâm. Thay vào đó, chúng tôi tập trung rất nhiều thời gian, năng lượng và tiền bạc vào những trò chơi mà chúng tôi thực sự <span>yêu thích</span>, những trò chơi mà chúng tôi rất vui khi được chia sẻ với thế giới như thể chúng là của riêng chúng tôi. Nếu bạn muốn có <span>niềm đam mê</span> đó và <span>dẫn đầu cuộc chơi</span> của mình, bạn đã đến đúng nơi.
+                                ` ,en : `
+                                We don't try to roll out games that we hardly know or care about. Instead, we focus a lot of time, energy, and money on games we really love, games that we are happy to share with the world as if they were our own. If you want to have that passion and stay ahead of your game, you've come to the right place.
+                                `} , language)}}
+                                className="dot">
                                 </p>
                                 <div className="title">
                                     <span className="title__number">5</span>
-                                    <span className="title__text">Chúng ta là đối tác, không phải vai trò nhà tuyển dụng - ứng viên</span>
+                                    <span className="title__text">{checkLanguage({vi : 'Chúng ta là đối tác, không phải vai trò nhà tuyển dụng - ứng viên' ,en : 'WE ARE A PARTNER, NOT RECRUITMENT - CANDIDATE ROLE'} , language)}</span>
                                 </div>
-                                <p className="dot">
-                                    Chúng tôi muốn tạo ra <span>phiên bản tốt nhất</span> cho trò chơi của bạn. Điều đó có nghĩa là cộng tác với bạn để đảm bảo chúng tôi luôn <span>đúng với tầm nhìn</span> của bạn đồng thời <span>cải thiện và nâng cao</span> các khía cạnh khác nhau của trò chơi. Chúng tôi sẽ hỏi ý kiến, suy nghĩ và sự cho phép của bạn trong suốt quá trình.
+                                <p 
+                                dangerouslySetInnerHTML={{__html : checkLanguage({vi : `
+                                Chúng tôi muốn tạo ra <span>phiên bản tốt nhất</span> cho trò chơi của bạn. Điều đó có nghĩa là cộng tác với bạn để đảm bảo chúng tôi luôn <span>đúng với tầm nhìn</span> của bạn đồng thời <span>cải thiện và nâng cao</span> các khía cạnh khác nhau của trò chơi. Chúng tôi sẽ hỏi ý kiến, suy nghĩ và sự cho phép của bạn trong suốt quá trình.
+                                ` ,en : `
+                                We want to create the best version of your game. That means working with you to ensure we stay true to your vision, while improving and enhancing various aspects of the game. We will ask for your opinion, thoughts and permission throughout the process.
+                                `} , language)}}
+                                className="dot">
                                 </p>
                             </div>
                             <div className="part1__body__right">
@@ -225,6 +255,7 @@ const Landing = () => {
                 <div className="part2">
                     <div className="kdg-container">
                         <div className="general-title">
+                            {checkLanguage({vi : '' ,en : ''} , language)}
                             <h2>YÊU CẦU VỀ GAME</h2>
                         </div>
                         <div className="part2__body">

@@ -18,6 +18,16 @@ import bordertop from '../../assets/img/gamehub/bordertop.png'
 import boobtop from '../../assets/img/gamehub/boobtop.png'
 import boobbottom from '../../assets/img/gamehub/boobbottom.png'
 
+import console from '../../assets/img/gamehub/console.png'
+import onlinepayment from '../../assets/img/gamehub/online-payment.png'
+import KDG from '../../assets/img/symbal.png'
+import swap from '../../assets/img/gamehub/return.png'
+
+import product1 from '../../assets/img/gamehub/product1.png'
+import product2 from '../../assets/img/gamehub/product2.png'
+import product3 from '../../assets/img/gamehub/product3.png'
+import product4 from '../../assets/img/gamehub/product4.png'
+
 import li1 from '../../assets/img/gamehub/li1.png'
 import li2 from '../../assets/img/gamehub/li2.png'
 import li3 from '../../assets/img/gamehub/li3.png'
@@ -40,13 +50,35 @@ import game8 from '../../assets/img/gamehub/game8.png'
 
 import Menu from '../Menu'
 
+
 import '../../assets/css/gamehub.scss'
+
+const listButton = [
+    {
+        icon : console,
+        name : (language) => checkLanguage({vi : 'Trò chơi trực tuyến' , en : 'Online game'}, language)
+    },
+    {
+        icon : onlinepayment,
+        name : (language) => checkLanguage({vi : 'Cổng thanh toán' , en : 'Payment gate'}, language)
+    },
+    {
+        icon : KDG,
+        name : (language) => checkLanguage({vi : 'KDG Reward' , en : 'KDG Reward'}, language)
+    },
+    {
+        icon : swap,
+        name : (language) => checkLanguage({vi : 'Swap' , en : 'Swap'}, language)
+    },
+]
 
 export default function App(){
 
+    const [ActiveProduct , setActiveProduct] = useState(0)
+
     const [Type , setType] = useState(0)
     const [ModalData , setModalData] = useState(null)
-    // const [List , setList] = useState(listGame)
+    
     const language = useSelector(state=>state && state.lang)
 
     const listGame = useMemo(()=>{
@@ -184,6 +216,26 @@ export default function App(){
         }
     },[])
 
+    useEffect(()=>{
+        document.querySelector('video').play()
+        document.querySelector('video').onended = () => {
+            document.querySelector('video').play()
+        }
+    },[])
+
+    useEffect(()=> {
+        const buttonTrack = document.querySelector('.product .track-button')
+        const buttonItem = document.querySelector('.product .track-button .item')
+
+        const slideTrack = document.querySelector('.product .track-slide')
+        const slideItem = document.querySelector('.product .track-slide .item')
+
+        smoothscroll(buttonTrack , buttonTrack.scrollLeft , ActiveProduct * buttonItem.offsetWidth - buttonItem.offsetWidth / 2, 0 , 0 , 300)
+        smoothscroll(slideTrack , slideTrack.scrollLeft , ActiveProduct * slideItem.offsetWidth, 0 , 0 , 300)
+
+    },[ActiveProduct])
+
+
     return(
         <>
         {ModalData &&
@@ -279,11 +331,105 @@ export default function App(){
                 </div>
                 <img className="border bottom" alt="" src={borderbottom} />
             </div>
+                        
+            <div className="img img-21-9" >
+                <video src='/images/clipgame.mp4' />
+            </div>
 
             <div className="product">
                 <div className="kdg-container">
-                    <p className="title">SẢN PHẨM</p>
+                    <p className="title"> {checkLanguage({vi : 'SẢN PHẨM' , en : 'PRODUCT'})} </p>
                     <p className="desc">Với xu thế công nghệ và giải trí phát triển như hiện nay, Kingdom Game 4.0 luôn lựa chọn và cung cấp những sản phẩm đón đầu xu thế</p>
+
+                    <div className="track-button">
+                        <div className="kdg-row kdg-column-4 list-button">
+                            {
+                                listButton.map((button, index) => 
+                                    <div key={index + 'product'} className="item">
+                                        <div
+                                        onClick={()=>setActiveProduct(index)}
+                                        className={`button ${ActiveProduct === index ? 'active' : ''}`}>
+                                            <img src={button.icon} alt=""/> {button.name(language)}
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </div>
+
+                    <div className="track-slide">
+                        <div className="kdg-row kdg-column-4 list-slide">
+                        <div className="item">
+                                <div className="slide">
+                                    <div className="kdg-row va-m">
+                                        <div className="kdg-col-8">
+                                            <img src={product1} alt=""/>
+                                        </div>
+                                        <div className="kdg-col-4">
+                                            <div className="title">
+                                                {checkLanguage({vi: 'Trò chơi trực tuyến' , en : 'Online game' } , language)}
+                                            </div>
+                                            <p className="des">
+                                                {checkLanguage({vi: 'Phát triển và sản xuất trò chơi trực tuyến, phát hành ra thị trường quốc tế. Nhập khẩu và Phát hành các trò chơi nổi tiếng thế giới.' , en : 'A convergence place for attractive game products and providing valuable purposes for players. The 24/7 support team solves all problems for gamers.' } , language)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <div className="slide">
+                                    <div className="kdg-row va-m">
+                                        <div className="kdg-col-8">
+                                            <img src={product2} alt=""/>
+                                        </div>
+                                        <div className="kdg-col-4">
+                                            <div className="title">
+                                                {checkLanguage({vi: 'Cổng thanh toán' , en : 'Payment gate' } , language)}
+                                            </div>
+                                            <p className="des">
+                                                {checkLanguage({vi: 'Áp dụng công nghệ thanh toán hiện đại và dẫn đầu xu thế. Loại bỏ được các hạn chế của việc thanh toán truyền thống và nâng cao lợi ích cho người dùng.' , en : 'Applying modern and top trend payment technology. Eliminate the limitations of the traditional payment system and enhance the benefits for users.' } , language)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <div className="slide">
+                                    <div className="kdg-row va-m">
+                                        <div className="kdg-col-8">
+                                            <img src={product3} alt=""/>
+                                        </div>
+                                        <div className="kdg-col-4">
+                                            <div className="title">
+                                                {checkLanguage({vi: 'KDG Reward' , en : 'KDG Reward' } , language)}
+                                            </div>
+                                            <p className="des">
+                                                {checkLanguage({vi: 'Điểm thưởng khích lệ người dùng và có thể quy đổi thành KDG Token, giúp người chơi vừa thoả mãn đam mê, vừa có thêm thu nhập.' , en : 'Users use bonus points and can be changed into KDG Token, which helps players satisfy enthusiasts, while earning additional income.' } , language)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="item">
+                                <div className="slide">
+                                    <div className="kdg-row va-m">
+                                        <div className="kdg-col-8">
+                                            <img src={product4} alt=""/>
+                                        </div>
+                                        <div className="kdg-col-4">
+                                            <div className="title">
+                                                {checkLanguage({vi: 'Swap' , en : 'Swap' } , language)}
+                                            </div>
+                                            <p className="des">
+                                                {checkLanguage({vi: 'Hình thức hoán đổi giữa các loại Token giúp người dùng dễ dàng và thuận tiện trong việc sử dụng hệ sinh thái của Kingdom Game 4.0' , en : 'Switching between types of Token helps users easily and conveniently use the Kingdom Game 4.0 ecosystem.' } , language)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
 
@@ -356,7 +502,7 @@ export default function App(){
                                     </span>
                                 </li>
                             </ul>
-                            <button style={{ marginTop: '20px' }} className="button" onClick={() => window.scroll(0, 2200)}>{checkLanguage({ vi: 'Xem Game', en: 'Game List' }, language)}</button>
+                            <button style={{ marginTop: '20px' }} className="button" onClick={() => window.scroll(0, document.querySelector('.games').offsetTop)}>{checkLanguage({ vi: 'Xem Game', en: 'Game List' }, language)}</button>
                         </div>
                     </div>
                 </div>
