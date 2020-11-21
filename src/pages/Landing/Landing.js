@@ -7,7 +7,9 @@ import { checkLanguage, smoothscroll } from '../../helpers';
 import { atcChangeLanguage } from '../../store/action';
 
 import menubar from '../../assets/img/menubar.png';
-import bgbannerlanding from '../../assets/img/gamehub/bgbannerlanding.png';
+import bgbannerlanding1 from '../../assets/img/gamehub/bgbannerlanding1.png';
+import bgbannerlanding2 from '../../assets/img/gamehub/bgbannerlanding2.png';
+import bgbannerlanding3 from '../../assets/img/gamehub/bgbannerlanding3.png';
 import bgbannerpart2 from '../../assets/img/gamehub/bgbannerpart2.png';
 import bgbannerpart4 from '../../assets/img/gamehub/bgbannerpart4.png';
 import part1 from '../../assets/img/gamehub/part1.png';
@@ -98,29 +100,31 @@ const Landing = () => {
         <>
             <FormGameHub visible={visible} onCancel={() => setVisible(false)} />
             <div className="gamehub-landing">
-                <header className="header" style={{backgroundImage: `url(${bgbannerlanding})`}}>
-                    <div className="kdg-container">
-                        <div className="top-header">
-                            <div className="social">
-                                {
-                                    listIcon && listIcon.map((o, index) =>
-                                        (<a target="_blank" rel="noopener noreferrer" href={o.link} key={index}>
-                                            <img alt="" src={o.img} />
-                                        </a>)
-                                    )
-                                }
-                            </div>
-                            <div>
-                                <FontAwesomeIcon color="#fac800" icon={faEnvelope}/>
-                                <span className="mail">{email}</span>
-                            </div>
-                            <div className="lang">
-                                <span>{language === 'vi' ? 'VI' : 'EN'}</span>
-                                <FontAwesomeIcon icon={faCaretDown}/>
-                                <ul className="dropdown">
-                                    <li onClick={()=>handleChooseLang('en')}>EN</li>
-                                    <li onClick={()=>handleChooseLang('vi')}>VI</li>
-                                </ul>
+                <header className="header" style={{backgroundImage: `url(${bgbannerlanding3})`}}>
+                    <div className="top-header-header">
+                        <div className="kdg-container">
+                            <div className="top-header">
+                                <div className="social">
+                                    {
+                                        listIcon && listIcon.map((o, index) =>
+                                            (<a target="_blank" rel="noopener noreferrer" href={o.link} key={index}>
+                                                <img alt="" src={o.img} />
+                                            </a>)
+                                        )
+                                    }
+                                </div>
+                                <div>
+                                    <FontAwesomeIcon color="#fac800" icon={faEnvelope}/>
+                                    <span className="mail">{email}</span>
+                                </div>
+                                <div className="lang">
+                                    <span>{language === 'vi' ? 'VI' : 'EN'}</span>
+                                    <FontAwesomeIcon icon={faCaretDown}/>
+                                    <ul className="dropdown">
+                                        <li onClick={()=>handleChooseLang('en')}>EN</li>
+                                        <li onClick={()=>handleChooseLang('vi')}>VI</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -150,9 +154,10 @@ const Landing = () => {
                                 <p>Bạn là lập trình viên Game sở hữu những tác phẩm Game tuyệt vời?</p>
                                 <p>Vậy bạn có thắc mắc tại sao nên hợp tác với chúng tôi không? Cùng tìm câu trả lời nào!</p>
                             </div>
+                            <button className="button-action" onClick={openForm}>ĐĂNG KÝ NGAY</button>
                         </div>
                     </div>
-                    <div className="action">
+                    {/* <div className="action">
                         <div className="action__register">
                             <span>Trở thành đối tác của Kingdom Game 4.0</span>
                             <button onClick={openForm}>ĐĂNG KÝ NGAY</button>
@@ -166,7 +171,7 @@ const Landing = () => {
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </header>
 
                 <div className="part1">
