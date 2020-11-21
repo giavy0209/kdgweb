@@ -338,7 +338,7 @@ export default function App(){
 
             <div className="product">
                 <div className="kdg-container">
-                    <p className="title"> {checkLanguage({vi : 'SẢN PHẨM' , en : 'PRODUCT'})} </p>
+                    <p className="title"> {checkLanguage({vi : 'SẢN PHẨM' , en : 'PRODUCT'}, language)} </p>
                     <p className="desc">Với xu thế công nghệ và giải trí phát triển như hiện nay, Kingdom Game 4.0 luôn lựa chọn và cung cấp những sản phẩm đón đầu xu thế</p>
 
                     <div className="track-button">
@@ -359,7 +359,7 @@ export default function App(){
 
                     <div className="track-slide">
                         <div className="kdg-row kdg-column-4 list-slide">
-                        <div className="item">
+                            <div className="item">
                                 <div className="slide">
                                     <div className="kdg-row va-m">
                                         <div className="kdg-col-8">
