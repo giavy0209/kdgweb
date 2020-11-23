@@ -11,9 +11,9 @@ import bgbannerlanding1 from '../../assets/img/gamehub/bgbannerlanding1.png';
 import bgbannerlanding2 from '../../assets/img/gamehub/bgbannerlanding2.png';
 import bgbannerlanding3 from '../../assets/img/gamehub/bgbannerlanding3.png';
 import bgbannerpart2 from '../../assets/img/gamehub/bgbannerpart2.png';
-import bgbannerpart4 from '../../assets/img/gamehub/bgbannerpart4.png';
-import part1 from '../../assets/img/gamehub/part1.png';
-import envelop from '../../assets/img/gamehub/envelop.svg';
+import bgbannerpart5 from '../../assets/img/gamehub/bgbannerpart5.png';
+import controlarrowleft from '../../assets/img/gamehub/controlarrowleft.svg';
+import controlarrowright from '../../assets/img/gamehub/controlarrowright.svg';
 import check from '../../assets/img/gamehub/check.svg';
 import remotecontrolgame from '../../assets/img/gamehub/remotecontrolgame.svg';
 import step1 from '../../assets/img/gamehub/step1.svg';
@@ -28,6 +28,8 @@ import FormGameHub from './FormGameHub';
 import '../../assets/css/gamehub-landing.scss';
 
 const Landing = () => {
+
+    const [indexBanner, setIndexBanner] = useState(1);
 
     const [visible, setVisible] = useState(false);
 
@@ -96,11 +98,20 @@ const Landing = () => {
 
     const openForm = () => setVisible(true);
 
+    const changeBanner = i => setIndexBanner(i);
+
     return(
         <>
             <FormGameHub visible={visible} onCancel={() => setVisible(false)} />
             <div className="gamehub-landing">
-                <header className="header" style={{backgroundImage: `url(${bgbannerlanding3})`}}>
+                <header className="header" style={{backgroundImage: `url(${indexBanner === 1 ? bgbannerlanding1 : indexBanner === 2 ? bgbannerlanding2 : bgbannerlanding3})`}}>
+                    <div className="control-dot">
+                        <div className={`control-dot__dot ${indexBanner === 1 ? 'active' : ''}`} onClick={() => changeBanner(1)}></div>
+                        <div className={`control-dot__dot ${indexBanner === 2 ? 'active' : ''}`} onClick={() => changeBanner(2)}></div>
+                        <div className={`control-dot__dot ${indexBanner === 3 ? 'active' : ''}`} onClick={() => changeBanner(3)}></div>
+                    </div>
+                    <img className="control-arrow-left" src={controlarrowleft} onClick={() => {indexBanner === 1 ? setIndexBanner(3) : setIndexBanner(indexBanner - 1)}}></img>
+                    <img className="control-arrow-right" src={controlarrowright} onClick={() => {indexBanner === 3 ? setIndexBanner(1) : setIndexBanner(indexBanner + 1)}}></img>
                     <div className="top-header-header">
                         <div className="kdg-container">
                             <div className="top-header">
@@ -205,6 +216,8 @@ const Landing = () => {
                                 <p className="dot">
                                     Đây chính là <span>giá trị lớn nhất</span> chúng tôi cam kết đem lại với bạn. Việc <span>áp dụng Token vào thanh toán</span> trong Game và lợi ích của người chơi là đem chiến lợi phẩm quy đổi thành Token và bán. Chúng tôi đảm bảo sự thanh khoản đó.
                                 </p>
+                            </div>
+                            <div className="part1__body__right">
                                 <div className="title">
                                     <span className="title__number">4</span>
                                     <span className="title__text">Chúng tôi đam mê Game</span>
@@ -220,20 +233,32 @@ const Landing = () => {
                                     Chúng tôi muốn tạo ra <span>phiên bản tốt nhất</span> cho trò chơi của bạn. Điều đó có nghĩa là cộng tác với bạn để đảm bảo chúng tôi luôn <span>đúng với tầm nhìn</span> của bạn đồng thời <span>cải thiện và nâng cao</span> các khía cạnh khác nhau của trò chơi. Chúng tôi sẽ hỏi ý kiến, suy nghĩ và sự cho phép của bạn trong suốt quá trình.
                                 </p>
                             </div>
-                            <div className="part1__body__right">
-                                <img src={part1} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="part2" style={{backgroundImage: `url(${bgbannerpart2})`}}>
+                    <div className="kdg-container">
+                        <div className="part2__container">
+                            <div className="part2__container__text">
+                                <p>Bạn còn chần chờ gì nữa?</p>
+                                <p>Trở thành đối tác của <br /> Kingdome Game ngay</p>
+                            </div>
+                            <div className="part2__container__action">
+                                <p>Chỉ tốn 1 phút để đăng ký</p>
+                                <button className="button-action" onClick={openForm}>ĐĂNG KÝ NGAY</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="part2">
+                <div className="part3">
                     <div className="kdg-container">
                         <div className="general-title">
                             <h2>YÊU CẦU VỀ GAME</h2>
                         </div>
-                        <div className="part2__body">
-                            <div className="part2__body__box mr-15">
+                        <div className="part3__body">
+                            <div className="part3__body__box">
                                 <p className="title1">Các loại trò chơi mà chúng tôi quan tâm</p>
                                 <p className="title2">Nội dung bạn gửi phải đáp ứng tất cả hoặc hầu hết các tiêu chí sau:</p>
                                 <div className="required">
@@ -244,10 +269,10 @@ const Landing = () => {
                                 <div className="required">
                                     <img src={remotecontrolgame} />
                                     <p>Thể loại:</p>
-                                    <p>Đố vui, Mô phỏng thể thao, Đóng Vai,...</p>
+                                    <p>Đố vui, Mô phỏng, Thể thao, Nhập Vai,...</p>
                                 </div>
                             </div>
-                            <div className="part2__body__box">
+                            <div className="part3__body__box">
                                 <p className="title1">Các loại trò chơi mà chúng tôi <span>Không</span> quan tâm</p>
                                 <p className="title2">Vui lòng không gửi trò chơi từ các danh mục này:</p>
                                 <div className="required">
@@ -263,47 +288,33 @@ const Landing = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="part2__banner" style={{backgroundImage: `url(${bgbannerpart2})`}}>
-                        <div className="kdg-container">
-                            <div className="part2__banner__container">
-                                <div className="part2__banner__container__text">
-                                    <p>Bạn còn chần chờ gì nữa?</p>
-                                    <p>Trở thành đối tác của Kingdome Game ngay</p>
-                                </div>
-                                <div className="part2__banner__container__action">
-                                    <button onClick={openForm}>ĐĂNG KÝ NGAY</button>
-                                    <p>Chỉ tốn 1 phút để đăng ký</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <div className="part3">
+                <div className="part4">
                     <div className="kdg-container">
                         <div className="general-title">
                             <h2>QUY TRÌNH</h2>
                         </div>
-                        <div className="part3__body">
-                            <div className="part3__body__step mr-50">
+                        <div className="part4__body">
+                            <div className="part4__body__step">
                                 <img src={step1} />
                                 <p>Bước 1</p>
                                 <p>Cung Cấp Thông Tin Tại Đây</p>
                                 <p>Cơ hội để trở thành đối tác của Kingdome Game chỉ khi bạn hoàn thành form đăng ký của chúng tôi. Vì vậy hay nhanh tay đăng ký <span className="register" onClick={openForm}>tại đây</span> để qua bước 2.</p>
                             </div>
-                            <div className="part3__body__step mr-50">
+                            <div className="part4__body__step">
                                 <img src={step2} />
                                 <p>Bước 2</p>
                                 <p>Kiểm Tra Chất Lượng</p>
                                 <p>Chúng tôi sẽ kiểm tra tác phẩm của bạn tuyệt vời như thế nào. Sau đó sẽ có người liên hệ với bạn nếu cần làm rõ thêm thông tin. Bước này sẽ <span>kéo dài trong vòng 2 tuần</span>. Bạn vui lòng kiểm tra email sau thời gian này để xem kết quả duyệt.</p>
                             </div>
-                            <div className="part3__body__step mr-50">
+                            <div className="part4__body__step">
                                 <img src={step3} />
                                 <p>Bước 3</p>
                                 <p>Hỗ Trợ Kỹ Thuật</p>
                                 <p>Đội kỹ thuật sẽ liên hệ để hỗ trợ kỹ thuật <span>tích hợp phương thức thanh toán</span> vào Game nếu Game của bạn vượt qua bước 2.</p>
                             </div>
-                            <div className="part3__body__step">
+                            <div className="part4__body__step">
                                 <img src={step4} />
                                 <p>Bước 4</p>
                                 <p>Hoàn Thành</p>
@@ -313,29 +324,28 @@ const Landing = () => {
                     </div>
                 </div>
 
-                <div className="part4" style={{backgroundImage: `url(${bgbannerpart4})`}}>
+                <div className="part5" style={{backgroundImage: `url(${bgbannerpart5})`}}>
                     <div className="kdg-container">
-                        <div className="part4__header">
+                        <div className="part5__header">
                             <p>Trước khi gửi thông tin, vui lòng:</p>
                             <p>Chúng tôi sẽ không xem xét các trò chơi mà không có bộ quy tắc được viết rõ ràng!</p>
                         </div>
-                        <div className="part4__body">
-                            <div className="part4__body__note mr-30">
+                        <div className="part5__body">
+                            <div className="part5__body__note">
                                 <img src={check} />
                                 <p>Kiểm tra các loại trò chơi của chúng tôi quan tâm nhất để biết được trò chơi của bạn có phù hợp với nền tảng Game của chúng tôi hay không.</p>
                             </div>
-                            <div className="part4__body__note mr-30">
+                            <div className="part5__body__note">
                                 <img src={check} />
                                 <p>Gửi mô tả ngắn gọn về ý tưởng trò chơi, hướng dẫn trò chơi, quy tắc và một hoặc nhiều ảnh Game của bạn dưới định dạng PDF.</p>
                             </div>
-                            <div className="part4__body__note">
+                            <div className="part5__body__note">
                                 <img src={check} />
                                 <p>Vui lòng đảm bảo rằng các quy tắc rõ ràng và dễ hiểu và tốt nhất là có một số ví dụ và hình ảnh minh họa.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <Footer />
         </>
