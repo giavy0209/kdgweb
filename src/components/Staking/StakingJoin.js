@@ -278,7 +278,7 @@ export default function App() {
                             <label className="checkbox-label" for="confirm">
                                 <span className="checkbox-box"></span> 
                                 <span>
-                                    {checkLanguage({vi: 'Tôi đã đọc và hiểu rõ', en: 'I have read and understood the risk warning before participating'}, language)} <span className="link">{checkLanguage({vi: 'cảnh báo rủi ro', en: 'the risk warning'}, language)}</span> {checkLanguage({vi: 'trước khi tham gia', en: 'before participating'}, language)}
+                                    {checkLanguage({vi: 'Tôi đã đọc và hiểu rõ', en: 'I have read and understood the risk warning before participating'}, language)} <a href='terms-of-service/1' target="_blank" className="link">{checkLanguage({vi: 'cảnh báo rủi ro', en: 'the risk warning'}, language)}</a> {checkLanguage({vi: 'trước khi tham gia', en: 'before participating'}, language)}
                                 </span>
                             </label>
 
