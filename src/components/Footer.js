@@ -62,7 +62,7 @@ export default function App({...prop}) {
     })
     return(
         <>
-            <footer>
+            <footer className="footer">
                 <div className="kdg-container">
                     <div className="kdg-row top-footer">
                         <div className="kdg-col-4 left">
