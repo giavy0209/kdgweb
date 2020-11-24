@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router-dom';
@@ -41,6 +41,11 @@ const Landing = () => {
     const email = useSelector(state => {
         return state.settings && state.settings.email && state.settings.email.email;
     });
+
+    useEffect(()=>{ 
+        window.scroll(0 , 0)
+    },[])
+
     const listIcon = useSelector(state => {
         if (state.settings && state.settings.top_icon) {
             var top_icon = state.settings.top_icon;
@@ -373,8 +378,9 @@ const Landing = () => {
                         </div>
                     </div>
                 </div>
+                
+                <Footer />
             </div>
-            <Footer />
         </>
     )
 }

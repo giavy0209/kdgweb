@@ -199,6 +199,18 @@ const FormGameHub = ({ visible, onCancel }) => {
                         >
                             <Input type="text" placeholder={checkLanguage({vi : "Tên (*)" , en : "Name"}, language)} />
                         </Form.Item>
+                        
+                        <Form.Item
+                            name="phone"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: checkLanguage({vi : "Số điện thoại không được để trống!" , en : "Phone number cannot empty"}, language)
+                                },
+                            ]}
+                        >
+                            <Input type="text" placeholder={checkLanguage({vi : "Số điện thoại (*)" , en : "Phone number"}, language)} />
+                        </Form.Item>
 
                         <Form.Item
                             name="address"
