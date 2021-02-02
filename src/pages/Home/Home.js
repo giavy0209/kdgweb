@@ -2,8 +2,6 @@ import React, { useMemo, useEffect } from 'react'
 import {checkComponent, checkLanguage} from '../../helpers'
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { asyncGetUserData, } from '../../store/action';
-import bg from '../../assets/img/home.png'
 export default function App({components,reqLogin,type,name}) {
     const history = useHistory()
     const dispatch = useDispatch()
@@ -17,7 +15,8 @@ export default function App({components,reqLogin,type,name}) {
     }, [location]);
 
     useEffect(()=>{
-        var title = checkLanguage(name,language).replace(/<[^>]*>/g, ' ').replace(/\s{2,}/g, ' ').trim();
+        console.log(language);
+        var title = checkLanguage(name,language) ? checkLanguage(name,language).replace(/<[^>]*>/g, ' ').replace(/\s{2,}/g, ' ').trim() : '';
         document.title = title
     },[language,name])
 
@@ -33,24 +32,8 @@ export default function App({components,reqLogin,type,name}) {
             })
         })
     },[history])
-
-    useMemo(()=>{
-        if(reqLogin){
-            if(token && JWT){
-                dispatch(asyncGetUserData(token))
-                .catch(e=>{
-                    history.replace('/login')
-                })
-            }else{
-                history.replace('/login')
-            }
-        }
-    },[history,dispatch,reqLogin,token,JWT])
     return (
         <>
-        {/* <div className="kdg-container">
-            <img id="background" src={bg} />
-        </div> */}
         {
         components && components.map((page,index) =>{
             const Component = checkComponent(page.type)

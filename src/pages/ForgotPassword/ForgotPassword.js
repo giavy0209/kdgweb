@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { asyncGetUserData, actChangeLoading, actChangeUser} from '../../store/action'
+import { actChangeLoading} from '../../store/action'
 import { useHistory } from 'react-router-dom'
 import {message} from 'antd'
 import '../../assets/css/login-reg.scss'
@@ -17,8 +17,6 @@ export default function App({...rest}) {
     const [Eye, setEye] = useState({password: false , new_password: false})
     const history = useHistory()
     const dispatch = useDispatch()
-    const token = useSelector(state => state.token)
-    const JWT = useSelector(state => state.JWT)
     const language = useSelector(state => state.lang)
 
     const loginURL = useSelector(state => {
@@ -28,23 +26,6 @@ export default function App({...rest}) {
     useEffect(()=>{
         document.title = checkLanguage({vi: 'Quên mật khẩu', en: 'Forgot password'}, language)
     },[language])
-
-    useMemo(()=>{
-        dispatch(actChangeLoading(true))
-        console.log(JWT);
-        if(token && JWT) {
-            dispatch(asyncGetUserData(token))
-            .then(res=>{
-                console.log(res);
-                dispatch(actChangeLoading(false))
-                if(res !== false){
-                    history.push('/home-wallet')
-                }
-            })
-            .catch(console.log())
-        }
-        dispatch(actChangeLoading(false))
-    },[dispatch,history,token,JWT])
 
 
     useEffect(()=>{
@@ -63,18 +44,35 @@ export default function App({...rest}) {
     
 
     async function getCode(email){
+        if(!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            return  message.error(checkLanguage({
+                vi : 'Email không đúng định dạng',
+                en : 'Invalid email'
+            }, language))
+        }
         dispatch(actChangeLoading(true))
         try {
-            const res = (await callapi().post('/api/create_forgot_password_code',{email})).data
-            console.log(res);
+            const res = (await callapi().post('/create_code?type=2',{email})).data
             if(res.status === 1){
                 setCountDownSendMail(120)
-                message.success(checkLanguage({vi: 'Chúng tôi vừa gửi mã code qua email của bạn. Vui lòng nhập vào ô bên dưới.', en: `We've sent a reset code via your email. Please enter in below.`}, language))
-            }else{
-                message.error(checkLanguage({vi: 'Email không tồn tại trong hệ thống hoặc bạn vừa yêu cầu gửi mail, vui lòng chờ 120 giây', en: `Email is not exist or you've just requested, please wait for 120 seconds`}, language))
+                message.success(checkLanguage({
+                    vi : 'Đã gửi mã code vào mail của bạn',
+                    en : 'Have sent code to your email'
+                }, language))
+            }
+            if(res.status === 101){
+                message.error(checkLanguage({
+                    vi : 'Email đã tồn tại',
+                    en : 'Email existed'
+                },language))
+            }
+            if(res.status === 102){
+                message.error(checkLanguage({
+                    vi : 'Vui lòng chờ 2 phút',
+                    en : 'Please wait 2 minutes'
+                },language))
             }
         } catch (error) {
-            console.log(error);
         }
         dispatch(actChangeLoading(false))
     }
@@ -86,18 +84,35 @@ export default function App({...rest}) {
         for(var pair of data.entries()) {
             submitData[pair[0]] = pair[1]
         }
+        if(!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(submitData.email)) {
+            return  message.error(checkLanguage({
+                vi : 'Email không đúng định dạng',
+                en : 'Invalid email'
+            }, language))
+        }
         dispatch(actChangeLoading(true))
-        const res = (await callapi().post('/api/forgot_password',submitData)).data
-        console.log(res);
+        const res = (await callapi().post('/forgot_password',submitData)).data
         dispatch(actChangeLoading(false))
         if(res.status === 1){
-            message.success(checkLanguage({vi: "Đổi mật khẩu thành công thành công", en: 'Reset password success'},language))
-            dispatch(actChangeUser({email: submitData.email}))
+            message.success(checkLanguage({
+                vi : 'Đặt lại mật khẩu thành công',
+                en : 'Reset password successfully'
+            },language))
             setTimeout(() => {
-                history.push(loginURL)
+                history.push(`${loginURL}/${submitData.email}`)
             }, 1000);
-        }else{
-            message.error(checkLanguage({vi: "Mã reset password không chính xác hoặc email không hợp lệ", en: 'Incorrect reset password code or email is not exist'},language))
+        }
+        if(res.status === 101){
+            message.error(checkLanguage({
+                vi : 'Email không tồn tại',
+                en : 'Email is not existed'
+            },language))
+        }
+        if(res.status === 102){
+            message.error(checkLanguage({
+                vi : 'Mã xác minh Email không đúng',
+                en : 'Incorrect email verification code'
+            },language))
         }
     }
 

@@ -6,14 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash, faCopy } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../Modal'
 import callapi from '../../axios'
-import { actChangeLoading, asyncGetUserData } from '../../store/action'
+import { actChangeLoading } from '../../store/action'
 import QRCode from 'qrcode'
 export default function App(){
     const userID = useSelector(state => state && state.user && state.user._id)
     const userEmail = useSelector(state => state && state.user && state.user.email)
     const language = useSelector(state => state.lang)
     const dispatch = useDispatch()
-    const [ValidForm , setValidForm] = useState({newpass: false, renewpass: false,oldpass: false})
+    const [ValidForm , setValidForm] = useState({newpass: false, renewpass: false,oldpass: true})
     const [Token, setToken] = useState('')
     const [Password, setPassword] = useState('')
     const [Visible, setVisible] = useState(false)
@@ -35,7 +35,7 @@ export default function App(){
         if(res.status === 100){
             message.error(checkLanguage({vi: 'Mật khẩu cũ không chính xác', en:'Wrong old password'},language))
         }
-    },[userID,dispatch,language])
+    },[userID,language])
     useEffect(()=>{
     }, [ValidForm])
 
@@ -48,14 +48,13 @@ export default function App(){
         dispatch(actChangeLoading(false))
         setSerect2FA(res.gaSecret)
         setVisible(true)
-    },[])
+    },[dispatch,userID,userEmail])
 
     const handleAdd2FA = useCallback(async()=>{
         dispatch(actChangeLoading(true))
         var res = (await callapi().post('/api/verify_2fa', {userId:userID ,token: Token })).data
 
         if(res.status === 1){
-            dispatch(asyncGetUserData())
             message.success(checkLanguage({vi: 'Cài đặt 2FA thành công', en: '2FA activate successfully'}, language))
             dispatch(actChangeLoading(false))
             setVisible(false)
@@ -64,7 +63,7 @@ export default function App(){
             dispatch(actChangeLoading(false))
 
         }
-    },[Token,userID])
+    },[Token,userID,dispatch,language])
 
     const handleCopy = e=>{
         var input = document.createElement('input');
@@ -82,7 +81,6 @@ export default function App(){
         dispatch(actChangeLoading(true))
         var res = (await callapi().post('/api/disable_2fa', {userId:userID ,token: Token , password : Password})).data
         if(res.status === 1){
-            dispatch(asyncGetUserData())
             message.success(checkLanguage({vi: 'Hủy 2FA thành công', en: 'Disable 2FA successfully'}, language))
             dispatch(actChangeLoading(false))
             setVisibleDisable(false)
@@ -91,7 +89,7 @@ export default function App(){
             dispatch(actChangeLoading(false))
 
         }
-    },[Token,userID, Password])
+    },[Token,userID, Password,language, dispatch])
     return(
         <>
         <Modal
@@ -116,7 +114,7 @@ export default function App(){
                     onChange={e=>setToken(e.target.value)}
                     style={{padding: 10, width: 360}}
                     onKeyPress={e=>{
-                        if(e.key == 'Enter'){
+                        if(e.key === 'Enter'){
                             handleAdd2FA()
                         }
                     }}
@@ -142,7 +140,7 @@ export default function App(){
                     onChange={e=>setToken(e.target.value)}
                     style={{padding: 10, width: '100%'}}
                     onKeyPress={e=>{
-                        if(e.key == 'Enter'){
+                        if(e.key === 'Enter'){
                             handleDisable2FA()
                         }
                     }}
@@ -152,7 +150,7 @@ export default function App(){
                     onChange={e=>setPassword(e.target.value)}
                     style={{padding: 10, width: '100%', marginTop: 10}}
                     onKeyPress={e=>{
-                        if(e.key == 'Enter'){
+                        if(e.key === 'Enter'){
                             handleDisable2FA()
                         }
                     }}
@@ -185,17 +183,6 @@ export default function App(){
                     }}
                     size="1x" color="#fff" className="eye" icon={Eye.oldpass ? faEye : faEyeSlash}/>
                     <input 
-                    onChange={e=>{
-                        if(!e.target.value.match(validateForm.password)){
-                            e.target.nextElementSibling.classList.add('show')
-                            e.target.nextElementSibling.innerText = checkLanguage({vi: 'Password phải ít nhất 8 ký tự cả chữ và số',en: 'At least 8 digits, include word and number'},language)
-                            setValidForm({...ValidForm, oldpass: false})
-                        }else{
-                            e.target.nextElementSibling.classList.remove('show')
-                            e.target.nextElementSibling.innerText = ''
-                            setValidForm({...ValidForm, oldpass: true})
-                        }
-                    }}
                     type={Eye.oldpass ? '' : 'password'}
                     name="oldpass" placeholder={checkLanguage({vi: 'Nhập mật khẩu cũ', en: 'Enter your old password'}, language)}/>
                     <span className="validate-error"></span>

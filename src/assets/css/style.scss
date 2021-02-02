@@ -1,4 +1,4 @@
-/*=========== 00. RESET CSS ================ */	
+/*=========== 00. RESET CSS ================ */
 .maskdownload{
     position: fixed;
     top: 0;
@@ -188,6 +188,17 @@ body * {
     src: url(../fonts/Fabrik.otf);
     font-weight: 400;
 }
+@font-face {
+    font-family: Aurora;
+    src: url(../fonts/Aurora.ttf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Azuki;
+    src: url(../fonts/Azuki.ttf);
+    font-weight: 400;
+}
 
 :before, :after  {
     box-sizing: border-box;
@@ -241,6 +252,11 @@ body {
     font-size: 0;
     margin-left: -9px;
     margin-right: -9px;
+    &.va-t{
+        [class*="kdg-col-"]{
+            vertical-align: top;
+        }
+    }
 }
 .kdg-row [class*="kdg-col-"],
 .kdg-row[class*="kdg-column-"] .item{
@@ -277,6 +293,17 @@ body {
 
 .kdg-col-2{
     width:16.666667%;
+}
+
+.kdg-col-1{
+    width:8.333333%;
+}
+
+.kdg-pull-1{
+    margin-left:8.333333%;
+}
+.kdg-push-1{
+    margin-right:8.333333%;
 }
 
 .kdg-column-2 .item{
@@ -362,6 +389,13 @@ body {
     content: '';
     display: block;
     padding-top: 56.25%;
+    background-color: transparent;
+}
+
+.img-21-9::before {
+    content: '';
+    display: block;
+    padding-top: 42.6%;
     background-color: transparent;
 }
 .img-1-1::before {
@@ -490,6 +524,7 @@ header {
                 line-height: 20px;
                 margin-left: 8px;
                 background: linear-gradient(to right,#efe179, #c8aa58,#efe179, #c8aa58,#efe179, #c8aa58,);
+                background-clip: text;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 align-self: flex-end;
@@ -1084,7 +1119,6 @@ header {
 }
 
 .ecosystem{
-    margin-top: 90px;
     text-align: center;
     position: relative;
     margin-top: 650px;
@@ -1376,6 +1410,7 @@ footer{
         font-size: 22px;
         margin-left: 8px;
         background: -webkit-linear-gradient(#f3e77c, #ebdb75,#f3e77c, #ebdb75,#f3e77c, #ebdb75,);
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 35px;

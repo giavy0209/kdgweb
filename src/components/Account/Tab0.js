@@ -1,13 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { asyncGetUserData } from '../../store/action'
 import { message } from 'antd'
 import { checkLanguage } from '../../helpers'
 import callapi from '../../axios'
 function isValidDate(dateString) {
     var regEx = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
     if(!dateString.match(regEx)) return false;  // Invalid format
-    var [date, month, year] = dateString.split('/')
+    var [month, year] = dateString.split('/')
     var d = new Date(year, month - 1,0);
     var dNum = d.getTime();
     if(!dNum && dNum !== 0) return false; // NaN value, Invalid date
@@ -34,7 +33,6 @@ export default function App(){
         
         const res = (await callapi().put(`/api/user`,submitData)).data
         if(res){}
-        dispatch(asyncGetUserData())
         message.success('Cập nhật thông tin thành công')
     },[userID,dispatch])
     const user = useSelector(state=> state.user)

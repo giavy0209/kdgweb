@@ -35,7 +35,7 @@ const calcTime = (sec)=>{
         }
     }else{
         var minus = Math.floor(sec / 60)
-        var sec = Math.floor(sec % 60)
+        sec = Math.floor(sec % 60)
         if(minus / 60 < 1){
             if((minus + '').length === 1){
                 minus = '0' + minus

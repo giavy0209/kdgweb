@@ -570,6 +570,58 @@ main{
     }
 }
 
+.model-swap {
+    font-size: 16px;
+    color: #414042;
+    width: 80%;
+    margin: 0 auto;
+    padding: 25px 0;
+    font-weight: 500;
+    
+    .input-hidden {
+        display: none;
+    }
+    .input-group{
+        +.input-group{
+            margin-top: 20px;
+        }
+        >*{
+            width: 100%;
+        }
+        &.google-authen{
+            input{
+                width: 38px;
+                height: 38px;
+                padding: 12px 10px;
+                +input{
+                    margin-left: 10px;
+                }
+            }
+        }
+        input{
+            padding: 12px 10px;
+            font-size: 14px;
+            color: #8a8c8e;
+            border: none;
+            background-color: #f1f3f4;
+            border-radius: 5px;
+            font-weight: 400;
+            margin-top: 8px;
+        }
+    }
+    button{
+        width: 195px;
+        padding: 10px 0;
+        color: #fff;
+        background-image: linear-gradient(#e9c35a, #e7d381, #c29400);
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+        margin-top: 42px;
+    }
+}
 
 @media only screen and (max-width: 992px){
     .section-prices{

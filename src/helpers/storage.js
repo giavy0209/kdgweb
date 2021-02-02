@@ -1,27 +1,36 @@
 
-const keyToken = "user";
-const keyJWT = "jwt";
+const keyToken = "jwt";
+const keyRefresh = "refresh";
 
 const Storage = {
   setToken(token) {
-    localStorage.setItem(keyToken, token)
+    localStorage.setItem(keyToken, JSON.stringify(token))
   },
   getToken() {
-    return localStorage.getItem(keyToken);
+    const data = localStorage.getItem(keyToken);
+    if(data)return JSON.parse(data);
+    else return null
   },
-  clearToken(){
+  clearToken() {
     localStorage.clear(keyToken)
   },
-  setJWT(token) {
-    localStorage.setItem(keyJWT, token)
+  setRefresh(token) {
+    localStorage.setItem(keyRefresh, JSON.stringify(token))
   },
-  getJWT() {
-    return localStorage.getItem(keyJWT);
+  getRefresh() {
+    const data = localStorage.getItem(keyRefresh)
+    if(data)return JSON.parse(data);
+    else return null
   },
-  clearJWT(){
-    localStorage.clear(keyJWT)
+  clearRefresh() {
+    localStorage.clear(keyRefresh)
+  },
+  setItem(key , item) {
+    localStorage.setItem(key , JSON.stringify(item))
+  },
+  getItem(key) {
+    return JSON.parse(localStorage.getItem(key))
   }
-
 }
 
 export default Storage

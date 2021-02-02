@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { asyncGetUserData, actChangeLoading, actChangeUser} from '../../store/action'
+import { actChangeLoading} from '../../store/action'
 import { useHistory, useParams } from 'react-router-dom'
 import {message} from 'antd'
 import '../../assets/css/login-reg.scss'
@@ -30,21 +30,6 @@ export default function App({...rest}) {
         return state.settings && state.settings.login_button.url 
     })
 
-    useMemo(()=>{
-        dispatch(actChangeLoading(true))
-        if(token && JWT) {
-            dispatch(asyncGetUserData(token))
-            .then(res=>{
-                dispatch(actChangeLoading(false))
-                if(res !== false){
-                    history.push('/home-wallet')
-                }
-            })
-        }
-        dispatch(actChangeLoading(false))
-    },[dispatch,history,token,JWT])
-
-
     useEffect(()=>{
         if(CountDownSendMail !== null){
             if(CountDownSendMail <= 0) {
@@ -62,18 +47,35 @@ export default function App({...rest}) {
     const [check,setcheck] = useState(false)
 
     async function getCode(email){
+        if(!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            return  message.error(checkLanguage({
+                vi : 'Email không đúng định dạng',
+                en : 'Invalid email'
+            }, language))
+        }
         dispatch(actChangeLoading(true))
         try {
-            const res = (await callapi().post('/api/create_register_code',{email})).data
-            console.log(res);
+            const res = (await callapi().post('/create_code?type=1',{email})).data
             if(res.status === 1){
                 setCountDownSendMail(120)
-                message.success(checkLanguage({vi: 'Mã code đã được gửi vào email của bạn!', en: 'Code has just sent to your email. Please check!'}, language))
-            }else{
-                message.error(checkLanguage({vi: 'Email đã tồn tại trong hệ thống hoặc bạn vừa yêu cầu gửi mail, vui lòng chờ 120 giây', en: `Email is already exist or you've just requested, please wait for 120 seconds`}, language))
+                message.success(checkLanguage({
+                    vi : 'Đã gửi mã code vào mail của bạn',
+                    en : 'Have sent code to your email'
+                }, language))
+            }
+            if(res.status === 101){
+                message.error(checkLanguage({
+                    vi : 'Email đã tồn tại',
+                    en : 'Email existed'
+                },language))
+            }
+            if(res.status === 102){
+                message.error(checkLanguage({
+                    vi : 'Vui lòng chờ 2 phút',
+                    en : 'Please wait 2 minutes'
+                },language))
             }
         } catch (error) {
-            console.log(error);
         }
         dispatch(actChangeLoading(false))
     }
@@ -85,19 +87,32 @@ export default function App({...rest}) {
         for(var pair of data.entries()) {
             submitData[pair[0]] = pair[1]
         }
+        if(!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(submitData.email)) {
+            return  message.error(checkLanguage({
+                vi : 'Email không đúng định dạng',
+                en : 'Invalid email'
+            }, language))
+        }
         dispatch(actChangeLoading(true))
-        const res = (await callapi().post('/api/register_user',submitData)).data
+        const res = (await callapi().post('/user',submitData)).data
         dispatch(actChangeLoading(false))
         if(res.status === 1){
             message.success(checkLanguage({vi: "Đăng ký thành công", en: 'Register success'},language))
-            dispatch(actChangeUser({email: submitData.email}))
             setTimeout(() => {
-                history.push(loginURL)
+                history.push(`${loginURL}/${submitData.email}`)
             }, 1000);
-        }else{
-            if(res.msg === 'register code is wrong'){
-                message.error(checkLanguage({vi: "Mã xác minh Email không chính xác", en: 'Incorrect verification code'},language))
-            }
+        }
+        if(res.status === 101){
+            message.error(checkLanguage({
+                vi : 'Email đã tồn tại',
+                en : 'Email existed'
+            },language))
+        }
+        if(res.status === 102){
+            message.error(checkLanguage({
+                vi : 'Mã xác minh Email không đúng',
+                en : 'Incorrect email verification code'
+            },language))
         }
     }
 

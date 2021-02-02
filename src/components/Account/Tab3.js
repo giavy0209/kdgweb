@@ -4,7 +4,10 @@ import flag from '../../assets/img/flag.png'
 import frontid from '../../assets/img/frontid.png'
 import backid from '../../assets/img/backid.png'
 import self from '../../assets/img/self.png'
-import {asyncGetListContries, actChangeLoading, asyncGetUserData} from '../../store/action'
+import selfleft from '../../assets/img/selfleft.png'
+import selfright from '../../assets/img/selfright.png'
+import selfup from '../../assets/img/selfup.png'
+import {asyncGetListContries, actChangeLoading} from '../../store/action'
 import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
@@ -21,10 +24,23 @@ export default function App(){
     const [ListContry, setListContry] = useState(null)
     const [ListContrySearch, setListContrySearch] = useState()
 
-    const [ValidateForm , setValidateForm] = useState({name: false, id: false,img1: false, img2: false, img3: false,check: false})
-
+    const [ValidateForm , setValidateForm] = useState({
+        name: false, 
+        id: false,
+        img1: false, 
+        img2: false, 
+        img3: false,
+        img4: false,
+        img5: false,
+        img6: false,
+        check: false,
+    })
+    
     const email = useSelector(state=>state.user && state.user.email)
     
+    const findValueContry = useCallback(()=>{
+        return listContries ? listContries.find(o=>SelectedContry === o.alpha2Code) : {}
+    },[SelectedContry,listContries])
 
     const idtype=useMemo(()=>{
         return [{value: 0, name:checkLanguage({vi: 'Chứng minh nhân dân/ Bằng lái xe ', en: "Identity Card / Driver's License"}, language)}, {value: 1, name:checkLanguage({vi: 'Hộ chiếu', en: 'Passport'}, language)}]
@@ -34,20 +50,18 @@ export default function App(){
         if(listContries){
             setListContry([...listContries])
         }
-    },listContries)
+    },[listContries])
 
     useEffect(()=>{
         setListContrySearch(findValueContry().name ? findValueContry().name : 'Viet Nam')
-    },[SelectedContry])
+    },[SelectedContry,findValueContry])
 
 
     const findValueID = useCallback(()=>{
         return idtype.find(o=>SelectedID === o.value).name
-    },[SelectedID])
+    },[SelectedID, idtype])
 
-    const findValueContry = useCallback(()=>{
-        return listContries ? listContries.find(o=>SelectedContry === o.alpha2Code) : {}
-    },[SelectedContry,listContries])
+   
 
     useEffect(()=>{
         const selectBlock = document.querySelectorAll('.type .selected')
@@ -74,12 +88,11 @@ export default function App(){
                 reader.onload = function(e) {
                     var label = input.nextElementSibling
                     label.querySelector('img.placeholder').setAttribute('src' , e.target.result)
-                    // label.querySelector('p').style.display = 'none'
                 }
-                reader.readAsDataURL(input.files[0]); // convert to base64 string
+                reader.readAsDataURL(input.files[0],);
             }
         }
-    },[])
+    },[language])
 
     const userId = useSelector(state=>state && state.user && state.user._id)
 
@@ -95,13 +108,27 @@ export default function App(){
         const uploadFont = new FormData()
         uploadFont.append('file', submitData.font)
         uploadFont.append('userId' , userId)
-        console.log(uploadFont);
         arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadFont))
 
         const uploadSelf = new FormData()
         uploadSelf.append('file', submitData.self)
         uploadSelf.append('userId' , userId)
         arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadSelf))
+
+        const uploadSelfLeft = new FormData()
+        uploadSelfLeft.append('file', submitData.selfleft)
+        uploadSelfLeft.append('userId' , userId)
+        arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadSelfLeft))
+
+        const uploadSelfRight = new FormData()
+        uploadSelfRight.append('file', submitData.selfright)
+        uploadSelfRight.append('userId' , userId)
+        arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadSelfRight))
+
+        const uploadSelfUp = new FormData()
+        uploadSelfUp.append('file', submitData.selfup)
+        uploadSelfUp.append('userId' , userId)
+        arrayUpload.push(callapi().post('/api/upload_kyc_image', uploadSelfUp))
 
         if(SelectedID === 0){
             const uploadBack = new FormData()
@@ -134,7 +161,6 @@ export default function App(){
                 dispatch(actChangeLoading(false))
 
                 if(resUpdate.status === 1){
-                    dispatch(asyncGetUserData(false))
                     message.success(checkLanguage({vi: 'Gửi KYC thành công, bạn vui lòng chờ xét duyệt', en: 'Send KYC info to admin success. Please wait!'},language))
                 }else if (resUpdate.status === 100){
                     message.error(checkLanguage({vi: 'Số chứng minh/passport đã được sử dụng cho tài khoản khác', en: 'Your ID is used for another account'},language))
@@ -148,7 +174,7 @@ export default function App(){
             return
         }
         
-    },[SelectedID,SelectedContry,userId])
+    },[SelectedID,SelectedContry,userId,dispatch,language])
     return(
         <>
         <form
@@ -185,9 +211,6 @@ export default function App(){
                             onFocus={e=>{
                                 setListContrySearch('')
                                 e.target.parentElement.parentElement.classList.add('show')
-                            }}
-                            onBlur={e => {
-                                // setListContry([...listContries])
                             }}
                             onChange={e=>{
                                 setListContrySearch(e.target.value)
@@ -231,7 +254,7 @@ export default function App(){
                 <span>{checkLanguage({vi: 'Tên', en: 'Name'}, language)}</span>
                 <input 
                 onChange={e => e.target.value !== '' ? setValidateForm({...ValidateForm, name: true}) : setValidateForm({...ValidateForm, name: false})}
-                name="name" placeholder={checkLanguage({vi: 'Tên', en: 'Name'}, language)}/>
+                name="name" placeholder={checkLanguage({vi: 'Tên chính xác trên chứng minh / hộ chiếu', en: 'Name exactly on your ID / Passport'}, language)}/>
             </div>
             <div className="input-group">
                 <span> {findValueID()} </span>
@@ -258,9 +281,10 @@ export default function App(){
                 <label htmlFor="font" className="upload-block">
                     <img alt="" src={frontid} />
                     <img alt="" src="" className="placeholder" />
-                    <p>Nhấn vào đây để tải lên ảnh mặt trước</p>
+                    <p> {checkLanguage({vi : 'Nhấn vào đây để tải lên ảnh mặt trước', en : 'Click here to upload front'}, language)} </p>
                 </label>
             </div>
+
             {SelectedID === 0 && <div className="upload">
                 <div className="text">{checkLanguage({vi: '2. Mặt sau CMND/ Bằng lái xe', en: `2. ID card / Driver's license back image`}, language)}</div>
                 <input 
@@ -272,11 +296,19 @@ export default function App(){
                 <label htmlFor="back" className="upload-block">
                     <img alt="" src={backid} />
                     <img alt="" src="" className="placeholder" />
-                    <p>Nhấn vào đây để tải lên ảnh mặt sau</p>
+                    <p>{checkLanguage({vi : 'Nhấn vào đây để tải lên ảnh mặt sau', en : 'Click here to upload back'}, language)}</p>
                 </label>
             </div>}
+
             <div className="upload">
-                <div className="text">{SelectedID === 0 ? checkLanguage({vi: '3. Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn.', en: `3. Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a written sentence "KINGDOM GAME 4.0", current date and your signature in that.`}, language) : checkLanguage({vi: '2.Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn.', en: `Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a written sentence "KINGDOM GAME 4.0", current date and your signature in that.`}, language)}</div>
+                <div className="text">{SelectedID === 0 ? '3' : '2'}
+                    {
+                        checkLanguage({
+                            vi: '. Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi tay chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn.(Chính diện)', 
+                            en: `. Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a hand written sentence "KINGDOM GAME 4.0", current date and your signature in that.(Keep straight)`
+                        }, language) 
+                    }    
+                </div>
                 <input 
                 onChange={e=>{
                     readURL(e);
@@ -286,9 +318,76 @@ export default function App(){
                 <label htmlFor="self" className="upload-block">
                     <img alt="" src={self} />
                     <img alt="" src="" className="placeholder" />
-                    <p>Nhấn vào đây để tải lên</p>
+                    <p>{checkLanguage({vi : 'Nhấn vào đây để tải lên', en : 'Click here to upload'}, language)}</p>
                 </label >
             </div>
+
+            <div className="upload">
+                <div className="text">{SelectedID === 0 ? '4' : '3'}
+                    {
+                        checkLanguage({
+                            vi: '. Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi tay chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn. (Mặt phía bên trái)', 
+                            en: `. Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a hand written sentence "KINGDOM GAME 4.0", current date and your signature in that.(Turn left)`
+                        }, language) 
+                    }    
+                </div>
+                <input 
+                onChange={e=>{
+                    readURL(e);
+                    (e.target.files && e.target.files[0]) ? setValidateForm({...ValidateForm, img4: true}) : setValidateForm({...ValidateForm, img4: false})
+                }}
+                type="file" accept="image/*" id="selfleft" name="selfleft" style={{display: 'none'}} />
+                <label htmlFor="selfleft" className="upload-block">
+                    <img alt="" src={selfleft} />
+                    <img alt="" src="" className="placeholder" />
+                    <p>{checkLanguage({vi : 'Nhấn vào đây để tải lên', en : 'Click here to upload'}, language)}</p>
+                </label >
+            </div>
+
+            <div className="upload">
+                <div className="text">{SelectedID === 0 ? '5' : '4'}
+                    {
+                        checkLanguage({
+                            vi: '. Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi tay chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn. (Mặt phía bên phải)', 
+                            en: `. Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a hand written sentence "KINGDOM GAME 4.0", current date and your signature in that.(Turn right)`
+                        }, language) 
+                    }    
+                </div>
+                <input 
+                onChange={e=>{
+                    readURL(e);
+                    (e.target.files && e.target.files[0]) ? setValidateForm({...ValidateForm, img5: true}) : setValidateForm({...ValidateForm, img5: false})
+                }}
+                type="file" accept="image/*" id="selfright" name="selfright" style={{display: 'none'}} />
+                <label htmlFor="selfright" className="upload-block">
+                    <img alt="" src={selfright} />
+                    <img alt="" src="" className="placeholder" />
+                    <p>{checkLanguage({vi : 'Nhấn vào đây để tải lên', en : 'Click here to upload'}, language)}</p>
+                </label >
+            </div>
+
+            <div className="upload">
+                <div className="text">{SelectedID === 0 ? '6' : '5'}
+                    {
+                        checkLanguage({
+                            vi: '. Ảnh có mặt bạn chụp chung với CMND/Bằng lái xe/Hộ chiếu và một tờ giấy ghi tay chữ "KINGDOM GAME 4.0", ngày tháng năm hiện tại và chữ ký của bạn. (Mặt ngước lên)', 
+                            en: `. Image with your face taken with your ID / Driver's License / Passport and a piece of paper which there is a hand written sentence "KINGDOM GAME 4.0", current date and your signature in that.(Turn up)`
+                        }, language) 
+                    }    
+                </div>
+                <input 
+                onChange={e=>{
+                    readURL(e);
+                    (e.target.files && e.target.files[0]) ? setValidateForm({...ValidateForm, img6: true}) : setValidateForm({...ValidateForm, img6: false})
+                }}
+                type="file" accept="image/*" id="selfup" name="selfup" style={{display: 'none'}} />
+                <label htmlFor="selfup" className="upload-block">
+                    <img alt="" src={selfup} />
+                    <img alt="" src="" className="placeholder" />
+                    <p>{checkLanguage({vi : 'Nhấn vào đây để tải lên', en : 'Click here to upload'}, language)}</p>
+                </label >
+            </div>
+
             <div className="input-group checkbox">
                 <input 
                 className="checkbox"
@@ -303,11 +402,11 @@ export default function App(){
                 (isKYC !== '1' && isKYC !== '2')?
                 (SelectedID === 0 ? 
                 (
-                    (ValidateForm.check && ValidateForm.id && ValidateForm.name && ValidateForm.img1 && ValidateForm.img2 && ValidateForm.img3) ?
+                    (ValidateForm.check && ValidateForm.id && ValidateForm.name && ValidateForm.img1 && ValidateForm.img2 && ValidateForm.img3, ValidateForm.img4 , ValidateForm.img5 , ValidateForm.img6) ?
                     {opacity: 1, pointerEvents: 'all'} : {opacity: .6, pointerEvents: 'none'}
                 ) :
                 (
-                    (ValidateForm.check && ValidateForm.id && ValidateForm.name && ValidateForm.img1 && ValidateForm.img3) ? 
+                    (ValidateForm.check && ValidateForm.id && ValidateForm.name && ValidateForm.img1 && ValidateForm.img3, ValidateForm.img4 , ValidateForm.img5 , ValidateForm.img6) ? 
                     {opacity: 1, pointerEvents: 'all'} : {opacity: .6, pointerEvents: 'none'}
                 )) : {opacity: .6, pointerEvents: 'none'}
                  

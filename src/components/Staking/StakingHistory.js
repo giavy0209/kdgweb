@@ -1,108 +1,129 @@
-import React, {useState, useMemo} from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { DatePicker } from 'antd';
-import { useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+import { faAngleLeft, faAngleRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { DatePicker, InputNumber, message } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import nodata from '../../assets/img/nodata.png'
 import { checkLanguage } from '../../helpers';
 import KDG from '../../assets/img/kdg-icon.png'
-import callapi from '../../axios';
+import callAPI from '../../axios';
+import { actChangeLoading} from '../../store/action';
+import renderDate from '../../helpers/renderDate';
 
 const { RangePicker } = DatePicker;
-export default function App({...prop}) {
-    const history = useHistory();
-    const [dates, setDates] = useState([]);
-    const disabledDate = current => {
-      if (!dates || dates.length === 0) {
-        return false;
-      }
-      const tooLate = dates[0] && current.diff(dates[0], 'days') > 7;
-      const tooEarly = dates[1] && dates[1].diff(current, 'days') > 7;
-      return tooEarly || tooLate;
-    };
+const ITEM_PER_PAGE = 10
 
-    const user = useSelector(state => state.user)
+const RenderStatus = function ({id,status , language}) {
+    const dispatch = useDispatch()
+    const handleEndStaking = useCallback(async (type) => {
+        dispatch(actChangeLoading(true))
+        await callAPI.post('/end_staking' , {type , trans_id : id})
+        dispatch(actChangeLoading(false))
+        
+        type === 1 && message.success(checkLanguage({vi : 'Gia hạn thành công' , en : 'Renew success' } , language))
+        type === 2 && message.success(checkLanguage({vi : 'Kết thúc staking thành công' , en : 'End Success' } , language))
 
-
-    const [StakingHistory, setStakingHistory] = useState([])
-
-    useMemo(async ()=>{
-      if(user){
-        const res = (await callapi().get(`/api/get_staking_transaction/${user._id}?skip=0&take=99`)).data
-        console.log(res);
-        setStakingHistory([...res.data])
-      }
-    },[user])
-
-    const language = useSelector(state=>state.lang)
-    return(
+    },[language,id])
+    return (
         <>
-        <div className="kdg-container" style={{marginTop: 50}}> 
-            <div className="kdg-link-back">
-              <span 
-              style={{cursor: 'pointer'}}
-              onClick={(e)=>{
-              history.push('/staking')
-              }}>
-                <FontAwesomeIcon color="#f9c700" icon={faArrowLeft} />  
-                {checkLanguage({vi: 'Trở về', en: 'Back'}, language)}
-              </span>
-            </div> 
-                <div className="date-time-picker-container">
-                {/* <RangePicker
-                disabledDate={disabledDate}
-                onCalendarChange={value => {
-                setDates(value);
-                }}
-                style={{backgroundColor: 'rgba(255,255,255, 0)'}}
-                
-                /> */}
-            </div>
-        </div>
-        <div className="kdg-container account">
-        </div>
-        <div className="kdg-container">
-          <div className="history">
-            <table className="stacking-history">
-              <thead>
-                <tr>
-                  <th style={{fontSize: 30, fontWeight:600}} colSpan="9">{checkLanguage({vi: 'LỊCH SỬ STAKING', en: 'MY STAKING RECORD'}, language)}</th>
-                </tr>
-                <tr>
-                  <th>Coin/Token</th>
-                  <th>{checkLanguage({vi: 'Thời gian bắt đầu', en: 'Start date'}, language)}</th>
-                  <th>{checkLanguage({vi: 'Thời gian mở khoá', en: 'End date'}, language)}</th>
-                  <th>{checkLanguage({vi: 'Số tiền staking', en: 'Staking quantity'}, language)}</th>
-                  <th>{checkLanguage({vi: 'Tỷ lệ lợi nhuận hàng năm dự kiến', en: 'Estimated annual interest rate'}, language)}</th>
-                  {/* <th>Tiến độ</th>
-                  <th>Năng suất khóa tại thời điểm này</th>
-                  <th>Tình trạng</th>
-                  <th>Hoạt động</th> */}
-                </tr>
-              </thead>
-              <tbody>
-                {StakingHistory.length > 0? StakingHistory.map(stake =>
-                  <tr>
-                    <td><img width="30px" src={KDG} alt="" />  KDG</td>                  
-                    <td> {new Date(stake.start_date).getDate()}/{new Date(stake.start_date).getMonth()+1}/{new Date(stake.start_date).getFullYear()} </td>
-                    <td>{new Date(stake.end_date).getDate()}/{new Date(stake.end_date).getMonth()+1}/{new Date(stake.end_date).getFullYear()} </td>
-                    <td> {stake.kdg_coin_send} </td>
-                    <td> 30% </td>
-                  </tr>
-                ):
-                  <tr>
-                    <td colSpan="9">
-                      <img src={nodata} alt="" /> <br></br>
-                      {checkLanguage({vi: 'Không có dữ liệu', en: 'No data'}, language)}
-                    </td>
-                  </tr>  
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
+        {
+            status === 0 ? <td></td> :
+            status === 1 ? <td className="green">{checkLanguage({vi : 'Đang nhận lãi', en : 'Progressing'}, language)}</td> :
+            status === 4 ? <td className="red">{checkLanguage({vi : 'Kết thúc', en : 'Finished'}, language)}</td> :
+            status === 2 ? <td className="red">{checkLanguage({vi : 'Chờ mở khóa', en : 'Waiting for unlock'}, language)}</td> :
+            status === 3 ? <td>
+                <button className="done" onClick={()=>handleEndStaking(1)}>{checkLanguage({vi : 'Gia hạn staking', en : 'Renewal'}, language)}</button> <br />
+                <button className="cont" onClick={()=>handleEndStaking(2)}>{checkLanguage({vi : 'Kết thúc', en : 'Finished'}, language)}</button>
+            </td> : null
+        }
         </>
     )
+}
+
+export default function App({ ...prop }) {
+    const coin = new URLSearchParams(useLocation().search).get('coin');
+    const history = useHistory();
+    const [Page, setPage] = useState(1)
+    const [Total, setTotal] = useState(0)
+    const [History, setHistory] = useState([])
+    const language = useSelector(state => state.lang)
+    const balance = useSelector(state => state.balances?.find(o=>o._id === coin))
+    console.log(balance);
+    const handleGetStakingHistory = useCallback(async (balance,Page ) => {
+        const res = await callAPI.get(`/transactions?type=4&coin=${balance.coin._id}&skip=${(Page - 1) * ITEM_PER_PAGE}&limit=${ITEM_PER_PAGE}`)
+        console.log(res);
+        setTotal(res.total)
+        setHistory(res.data)
+    },[])
+    useMemo(() => {
+        balance && handleGetStakingHistory(balance,Page)
+    },[handleGetStakingHistory, Page, balance])
     
+    return (
+        <>
+            <div className="staking-history">
+                <div className="kdg-container">
+                    <div className="block1">
+                        <div
+                        onClick={()=>history.goBack()}
+                        className="back-button">
+                            <span className="icon"><FontAwesomeIcon icon={faArrowLeft}/></span>
+                            <span className="text"> {checkLanguage({vi : 'Trở về' , en : 'Back'}, language)} </span>
+                        </div>
+                    </div>
+
+                    {/* <div className="date-picker">
+                        <RangePicker 
+                        placeholder={[
+                            checkLanguage({vi : "Ngày bắt đầu", en : 'Start date'} , language),
+                            checkLanguage({vi : "Ngày kết thúc", en : 'End date'} , language)
+                        ]}
+                        // onChange={handleChangeDatePicker}
+                        />
+                    </div> */}
+
+                    <div className="history">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="head-title" colSpan="9">{checkLanguage({vi: 'LỊCH SỬ STAKING', en: 'MY STAKING RECORD'}, language)}</th>
+                                </tr>
+                                <tr>
+                                    <th>{checkLanguage({vi: 'Ngày tạo staking', en: 'Create date'}, language)}</th>
+                                    <th>{checkLanguage({vi: 'Thời gian bắt đầu trả lãi', en: 'Start date'}, language)}</th>
+                                    <th>{checkLanguage({vi: 'Thời gian kết thúc trả lãi', en: 'End date'}, language)}</th>
+                                    <th>{checkLanguage({vi: 'Thời gian mở khóa', en: 'Unlock date'}, language)}</th>
+                                    <th>{checkLanguage({vi: 'Số tiền staking', en: 'Staking quantity'}, language)}</th>
+                                    <th>{checkLanguage({vi: 'Lợi nhuận đã nhận', en: 'Profit receive'}, language)}</th>
+                                    <th>{checkLanguage({vi: 'Trạng thái', en: 'Status'}, language)}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {History.map(o => <tr>
+                                    <td>{renderDate(o.create_date , 'dd/momo/yyyy')}</td>
+                                    <td>{renderDate(o.create_date, 'dd/momo/yyyy' , o.staking.start_after + 'd')}</td>
+                                    <td>{renderDate(o.create_date, 'dd/momo/yyyy' , o.staking.end_after + 'd')}</td>
+                                    <td>{renderDate(o.create_date, 'dd/momo/yyyy' , o.staking.unlock_after + 'd')}</td>
+                                    <td>{ o.value}</td>
+                                    <td>{ Math.floor(o.receive * 100) / 100}</td>
+                                    <RenderStatus id={o._id} language={language} status={o.status}/>
+                                </tr>
+                                )}
+                            </tbody>
+                        </table>
+                        <div className="pagination">
+                            <span onClick={() => {Page > 1 && setPage(Page - 1)}} className="arrow"><FontAwesomeIcon icon={faAngleLeft} /></span>
+                            <InputNumber onPressEnter={e => {
+                                setPage(Number(e.target.value))
+                            }} value={Page} style={{ width: 60 }} />
+                            <span onClick={() => {
+                                Math.ceil(Total / ITEM_PER_PAGE) > Page && setPage(Page + 1)
+                            }} className="arrow"><FontAwesomeIcon icon={faAngleRight} /></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
 }
