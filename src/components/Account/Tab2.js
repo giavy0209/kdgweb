@@ -20,7 +20,7 @@ export default function App(){
         document.execCommand("copy");
         input.remove();
         message.success(checkLanguage({vi: 'Đã copy', en: 'copied'}, language))
-    },[])
+    },[language])
 
     const handleGetHistory = useCallback(async ()=>{
         const res = (await callapi().get(`/api/get_transaction?id=${user._id}&skip=0&take=9999999&type=kyc-success`)).data 

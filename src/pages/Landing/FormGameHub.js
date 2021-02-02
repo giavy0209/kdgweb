@@ -6,7 +6,6 @@ import callapi from '../../axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkLanguage } from '../../helpers';
 import { actChangeLoading } from '../../store/action';
-import { useHistory } from 'react-router-dom';
 
 const { Option } = Select;
 

@@ -72,9 +72,7 @@ export default function App(){
         }
     },[language,prelang,Search,PreSearch])
 
-    useMemo(()=>{
-        handleGetNews()
-    },[Page,prelang,PreSearch])
+    useMemo(handleGetNews,[Page,prelang,PreSearch])
 
     
 
@@ -91,7 +89,7 @@ export default function App(){
                 <div className="search">
                     <input 
                     onKeyPress={e=>{
-                        if(e.key == 'Enter'){
+                        if(e.key === 'Enter'){
                             const value = e.target.value
                             setSearch(value)
                         }

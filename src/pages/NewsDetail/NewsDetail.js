@@ -18,49 +18,16 @@ export default function App(){
     const {id} = useParams()
     const [News, setNews] = useState(null)
 
-    const setFixSideBar = useCallback(()=>{
-        if(window.innerWidth > 767){
-            document.addEventListener('scroll', e=>{
-                var blockAside = document.querySelector('aside .block-aside')
-                var blockAsideHeight = blockAside.offsetHeight
-                var aside = document.querySelector('aside')
-                var headerHeight = document.querySelector('header .bottom-header').offsetHeight
-                var mainContentHeight = document.querySelector('.news-content .main-content').offsetHeight
-    
-                aside.style.height = mainContentHeight + 'px'
-                blockAside.style.height = window.innerHeight - headerHeight + 'px'
-    
-                if(window.scrollY > 200 && blockAsideHeight + window.scrollY < mainContentHeight){
-                    blockAside.style.top = window.scrollY + 'px'
-                }else if(window.scrollY < 200){
-                    blockAside.style.top = 0 + 'px'
-                }
-            })
-        }
-    },[])
-    
-
     useEffect(()=>{
         News && (document.title = checkLanguage({vi: News.title_vi, en: News.title_en}, language))
         News && (document.querySelector('meta[name="description"]')).setAttribute('content', checkLanguage({vi: News.meta_vi, en: News.meta_en}, language)) 
         News && (document.querySelector('meta[property="og:description"]')).setAttribute('content', checkLanguage({vi: News.meta_vi, en: News.meta_en}, language)) 
         News && (document.querySelector('meta[property="og:image"]')).setAttribute('content', checkLanguage({vi: News.thumbURL_vi, en: News.thumbURL_en}, language)) 
-    },[language,News])
-
-    useEffect(()=>{
-        if(!id){
-            history.push('/')
-        }
-    },[id])
-
-    useEffect(()=>{
-        setFixSideBar()
-        document.querySelector('.maskdownload').style.display = 'none'
-    },[])
+    },[language,News,dispatch])
 
     useMemo(()=>{
         dispatch(asyncGetNews(0, 50,''))
-    },[])
+    },[dispatch])
 
     useEffect(()=>{
         dispatch(asyncGetNewsById(id))
@@ -76,7 +43,7 @@ export default function App(){
                 h,minute,day,month,year
             })
         })
-    },[id])
+    },[id,dispatch])
     var checkNews = useCallback((o, lang)=>{
         var vi  = [
             'thumbURL_vi',
@@ -145,7 +112,6 @@ export default function App(){
                                                 var d = new Date(o.create_date)
                                                 var h = (d.getHours() + '').length === 2 ? d.getHours() : '0' + d.getHours()
                                                 var minute = (d.getMinutes() + '').length === 2 ? d.getMinutes() : '0' + d.getMinutes()
-                                                var sec = (d.getSeconds() + '').length === 2 ? d.getSeconds() : '0' + d.getSeconds()
                                                 var day = (d.getDate() + '').length === 2 ? d.getDate() : '0' + d.getDate()
                                                 var month = ((d.getMonth() + 1) + '').length === 2 ? (d.getMonth() + 1) : '0' + (d.getMonth() + 1)
                                                 var year = (d.getFullYear() + '').length === 2 ? d.getFullYear() : '0' + d.getFullYear()
@@ -156,6 +122,8 @@ export default function App(){
                                                         <h3 className="othernew-title">{checkLanguage({vi: o.title_vi, en: o.title_en},language)}</h3>
                                                         <p className="othernew-date">{h}:{minute} - {day}/{month}/{year}</p>
                                                     </li>
+                                                }else{
+                                                    return null
                                                 }
                                             }
                                             )

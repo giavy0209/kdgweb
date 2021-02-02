@@ -25,9 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 export default function App(){
     const language = useSelector(state=>state.lang)
-    useEffect(()=>{
-        
-    },[])
+
     const loadedList = useCallback(()=>{
         var listTitle = document.querySelectorAll('.highline-function.bottom .list-something .something .title')
         var heightest = 0
@@ -46,7 +44,8 @@ export default function App(){
         list.forEach(el =>{
             el.style.height = heightest + 'px'
         })
-    })
+    },[])
+
     const handleClickTop = useCallback((type)=>{
         var track = document.querySelector('.highline-function.top .list-track')
         var itemWidth = track.querySelector('.highline-function.top .item').offsetWidth
@@ -69,17 +68,17 @@ export default function App(){
         var track = document.querySelector('.highline-function.bottom .list-track')
         var itemWidth = track.querySelector('.highline-function.bottom .item').offsetWidth
         if(type === 0){
+            var targetLeft = Math.floor(track.scrollLeft / itemWidth - 0.0001) * itemWidth
             if(targetLeft < 0){
                 targetLeft = track.scrollWidth
             }
-            var targetLeft = Math.floor(track.scrollLeft / itemWidth - 0.0001) * itemWidth
             smoothscroll(track, track.scrollLeft, targetLeft , 0,0,200)
         }
         if(type === 1){
+            var targetRight = Math.ceil(track.scrollLeft / itemWidth + 0.0001) * itemWidth
             if(targetRight >= track.scrollWidth){
                 targetRight=0
             }
-            var targetRight = Math.ceil(track.scrollLeft / itemWidth + 0.0001) * itemWidth
             smoothscroll(track, track.scrollLeft, targetRight , 0,0,200)
         }
     },[])

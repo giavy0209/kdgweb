@@ -1,10 +1,10 @@
-import React , { useEffect, useState , useCallback, useMemo} from 'react';
+import React , { useEffect, useState , useCallback} from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkLanguage, storage } from '../helpers';
 import { atcChangeLanguage } from '../store/action'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCaretDown, faUserEdit, faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faUserEdit, faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 export default function App({type}) {
   const dispatch = useDispatch()
   const ROUTERS_LINK = useSelector(state => state.router)
@@ -26,11 +26,7 @@ export default function App({type}) {
     if(pathEN){
       window.open(checkLanguage({vi:path, en: pathEN}, language),'_blank')
     }
-    if(isURL){
-      console.log(selectedItem);
-      window.open(selectedItem, '_blank')
-    }
-    if(!isURL && !pathEN){
+    if(!pathEN){
       if(selectedItem !== ''){
         if(selectedItem !=='null'){
           if(event) event.stopPropagation();
@@ -82,9 +78,8 @@ export default function App({type}) {
   },[dispatch])
 
   const username = useSelector(state=>{
-    return state.user && {first_name: state.user.first_name , last_name:state.user.last_name, email: state.user.email}
+    return state.user
   })
-
   const lastMenu = useCallback(()=>{
     if(username){
       return <li
@@ -105,8 +100,8 @@ export default function App({type}) {
           <div className="top-dropdown">
             <FontAwesomeIcon style={{verticalAlign: 'middle'}} icon={faUser} size="2x"/>
             <div>
-              <p>{ (username.first_name || username.last_name) && `${username.first_name ? username.first_name : '' } ${username.last_name ? username.last_name : '' }`}</p>
-              <p>{username.email &&  username.email}</p>
+              <p>{ (username?.kyc.first_name || username?.kyc.last_name) && `${username?.kyc.first_name ? username?.kyc.first_name : '' } ${username?.kyc.last_name ? username?.kyc.last_name : '' }`}</p>
+              <p>{username?.email &&  username?.email}</p>
             </div>
           </div>
           <div 
@@ -129,8 +124,8 @@ export default function App({type}) {
       </li>
     }else{
       return <>
-      <li className="login"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? loginBtn.url : ''}> {checkLanguage(loginBtn, language)} </a></li>
-      <li className="reg"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? regBtn.url : ''}> {checkLanguage(regBtn,language)} </a></li>
+      <li className="login"><a rel="noopener noreferrer" href={loginBtn ? loginBtn.url : ''}> {checkLanguage(loginBtn, language)} </a></li>
+      <li className="reg"><a rel="noopener noreferrer" href={loginBtn ? regBtn.url : ''}> {checkLanguage(regBtn,language)} </a></li>
       </>
     }
   },[username, handleClick, language,loginBtn, regBtn])
@@ -164,8 +159,8 @@ export default function App({type}) {
         
         {lastMenu()}
         {!username && <span className="button-mobile">
-            <li className="login"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? loginBtn.url : ''}> {checkLanguage(loginBtn, language)} </a></li>
-            <li className="reg"><a target="_blank" rel="noopener noreferrer" href={loginBtn ? regBtn.url : ''}> {checkLanguage(regBtn,language)} </a></li>
+            <li className="login"><a rel="noopener noreferrer" href={loginBtn ? loginBtn.url : ''}> {checkLanguage(loginBtn, language)} </a></li>
+            <li className="reg"><a rel="noopener noreferrer" href={loginBtn ? regBtn.url : ''}> {checkLanguage(regBtn,language)} </a></li>
         </span>}
         <span className='language'>
           <li className={language === 'en' ? 'active' : ''} onClick={()=>handleChooseLang('en')}>EN</li>

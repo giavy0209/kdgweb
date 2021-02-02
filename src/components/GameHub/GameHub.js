@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { Rate } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faEnvelope, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
@@ -238,10 +238,11 @@ export default function App(){
 
     return(
         <>
+        
         {ModalData &&
         <div onClick={()=>setModalData(null)} id="overlay">
             <div id="modal-container" onClick={e => e.stopPropagation()}>
-                <img id="image" src={ModalData.img} />
+                <img id="image" src={ModalData.img} alt="" />
                 <div className="rate">
                     <span className="rating">Rating</span>
                     <span className="circle">3.5</span>
@@ -257,11 +258,19 @@ export default function App(){
                         <div className="tag">Đấu trí</div>
                     </div>
                     <div className="button">CHƠI GAME</div>
+                    <div className="button"> {checkLanguage({vi : 'NẠP GAME' , en : 'DEPOSIT'} , language)} </div>
                 </div>
             </div>
         </div>}
 
         <div className='gamehub'>
+                <div className="deposit-modal">
+                    <div className="mask"></div>
+                    <div className="modal-content">
+                        
+                    </div>
+
+                </div>
             <header style={{backgroundImage: `url(${bgbanner1})`}} className="header">
                 <div className="kdg-container">
                     <div className="top-header">

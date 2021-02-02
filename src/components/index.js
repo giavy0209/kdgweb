@@ -10,11 +10,9 @@ import ListImage from './ListImage'
 import Ecosystem from './Ecosystem'
 import Footer from './Footer'
 import Account from './Account'
-import LuckySpin from './LuckySpin'
 import {
     Staking,
     StakingHistory,
-    StakingShare,
     StakingJoin,
 } from './Staking'
 import Wallet from './Wallet'
@@ -35,7 +33,6 @@ export {
     Footer,
     Ecosystem,
     Account,
-    LuckySpin,
     News,
     Wallet,
     HomeWallet,
@@ -44,5 +41,4 @@ export {
     Staking,
     StakingHistory,
     StakingJoin,
-    StakingShare,
 }

@@ -1,72 +1,14 @@
 import { faArrowLeft, faCheck, faExclamationCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useCallback, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import React, { useCallback, useState ,useMemo} from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory, useLocation } from 'react-router-dom'
 import '../../assets/css/staking.scss'
 import { checkLanguage } from '../../helpers'
 import KDG from '../../assets/img/kdg-icon.png'
-import callapi from '../../axios'
 import { message } from 'antd'
-import { asyncGetBalance } from '../../store/action'
-
-const stake = [
-    {
-        type : 1,
-        profit: 0.01
-    },
-    {
-        type : 3 ,
-        profit : 0.02
-    },
-    {
-        type : 6 ,
-        profit : 0.03
-    },
-    {
-        type : 12 ,
-        profit : 0.04
-    },
-]
-
-const calcDate = function(type) {
-    var find_type = stake.find(o => o.type === type)
-    var create_date = new Date()
-    var day = create_date.getDate()
-    var month = create_date.getMonth() + 1
-    var year = create_date.getFullYear()
-    var VN_8AM_TIME = new Date(`${year}-${month}-${day}T01:00:00.00Z`)
-    var start_date = new Date(`${year}-${month}-${day}T01:00:00.00Z`);
-    if(create_date < VN_8AM_TIME){
-        start_date.setDate(start_date.getDate() + 1)
-    }else{
-        start_date.setDate(start_date.getDate() + 2)
-    }
-    var end_date = new Date(start_date)
-    end_date.setDate(end_date.getDate() - 1)
-    end_date.setMonth(end_date.getMonth() + find_type.type)
-
-
-    var unlock_date = new Date(end_date.getTime() + 86400000)
-    var confirm_date = new Date(end_date.getTime() + 86400000 * 4) 
-
-    var total_day = (end_date - start_date) / 86400000
-    var total_profit = find_type.profit * find_type.type
-    var profit_per_day = total_profit/ total_day
-
-    return {
-        start_date,end_date,unlock_date , confirm_date,profit_per_day,total_profit
-    }
-}
-
-const renderDate = function (date){
-    var d = new Date(date)
-    var day = d.getDate()
-    var month = d.getMonth() + 1
-    var year = d.getFullYear()
-
-    return `${day}/${month}/${year}`
-}
+import callAPI from '../../axios'
+import { STORAGE_DOMAIN } from '../../constant'
 
 const style = `
 body #root{
@@ -75,46 +17,53 @@ body #root{
 `
 
 export default function App() {
+    const coin = new URLSearchParams(useLocation().search).get('coin');
     const history = useHistory()
     const language = useSelector(state=>state.lang)
-    const [Selected, setSelected] = useState(12)
-    const [Value, setValue] = useState(1000)
-    const dispatch = useDispatch()
-    const balance = useSelector(state=>{
-        return state.allBalance
-    })
-
-    const [Validate, setValidate] = useState({check : false, min: true})
     
-    const handleChangeInput = useCallback((e)=>{
-        var value = Number(e.target.value)
-        if(value){
-            setValue(value)
-            if(value >= 200){
-                setValidate({...Validate , min : true})
-            }else{
-                setValidate({...Validate , min : false})
-            }
-        }
-    },[Validate])
+    const [Packages, setPackages] = useState([]);
+    const [Choose, setChoose] = useState('');
+    const [Value , setValue] = useState(0)
+    const balance = useSelector(state => state.balances?.find(o=>o._id === coin))
 
-    const handleStaking = useCallback(async ()=>{
-        var res = (await callapi().post('/api/create_staking_v2', {kdg_coin : Value, type : Selected})).data
-        if(res.status === 1){
-            message.success(checkLanguage(
-                {vi : 'Staking Thành công' , en : 'Staking successfully'},
-                language
-            ))
-            dispatch(asyncGetBalance())
-        }else{
-            message.error(checkLanguage(
-                {vi : 'Staking không thành công, vui lòng thử lại' , en : 'Staking fail, please try again'},
-                language
-            ))
-        }
-    },[Value , Selected,language])
+    const handleGetStakingPackage = useCallback(async (coin) => {
+        const res = await callAPI.get(`/staking_package?coin=${coin}`)
+        setPackages(res.data)
+        setChoose(res.data[0])
+    },[])
 
-  return(
+    const handleChangeValue = useCallback(e => {
+        const value = Number(e.target.value)
+        if(value !== 0 && !value) return setValue(0)
+        
+        if(value > balance.balance) return setValue(balance.balance)
+        setValue(value)
+    },[balance])
+
+    const profitPerDay = useMemo(() => {
+        if(!Choose || !Value) return 0;
+        const findPackage = Packages.find(o => o._id === Choose._id);
+        return Value * findPackage.profit_per_day / 100
+    },[Choose,Packages, Value])
+
+    const totalProfit = useMemo(() => {
+        if(Choose === '' || !Value) return 0;
+        const findPackage = Packages.find(o => o._id === Choose._id);
+        return (Value * findPackage.profit_per_day / 100) * findPackage.end_after + Value
+    },[Choose,Packages, Value])
+
+    const handleStaking = useCallback(async () => {
+        const res = await callAPI.post('/staking' , {value : Value , coin : balance.coin._id , package : Choose._id})
+        if(res.status === 1) message.success(checkLanguage({
+            vi :'Staking thành công',
+            en: 'Staking success'
+        }, language))
+    },[Value , balance , Choose , language])
+
+    useMemo(() => {
+        handleGetStakingPackage(coin)
+    },[coin])
+    return(
         <>
             <style>{style}</style>
             <div className="kdg-container">
@@ -129,11 +78,11 @@ export default function App() {
                         <h2 className="title">Staking</h2>
                         <div className="block-top-info">
                             <div className="coin-info">
-                                <img src={KDG} alt=""/>
-                                <span className="name">KDG</span>
+                                <img src={STORAGE_DOMAIN + balance?.coin.icon.path} alt=""/>
+                                <span className="name">{balance?.coin.code}</span>
                             </div>
                             <div className="stake-info">
-                            {checkLanguage({vi: 'Tỷ lệ lợi nhuận hằng năm tham chiếu lên tới', en: 'Expected annual rate of return up to'}, language)} <span className="percent">48%</span>
+                            {checkLanguage({vi: 'Tỷ lệ lợi nhuận tham chiếu lên tới', en: 'Expected annual rate of return up to'}, language)} <span className="percent">{Math.ceil(Choose.profit_per_day * 360)}%</span>
                             </div>
                         </div>
                     </div>
@@ -143,24 +92,24 @@ export default function App() {
 
                         <div className="kdg-row kdg-column-4 list-block2">
                             {
-                                stake.map( _stake => 
+                                Packages.map( _stake => 
                                     <div className="item">
                                         <div 
-                                        onClick={()=>setSelected(_stake.type)}
-                                        className={`choose-stake ${Selected === _stake.type ? 'active' : ''}`}>
+                                        onClick={()=>setChoose(_stake)}
+                                        className={`choose-stake ${Choose._id === _stake._id ? 'active' : ''}`}>
                                             <span className="checkbox">
                                                 <div className="icon">
                                                     <FontAwesomeIcon icon={faCheck} />
                                                 </div>
                                             </span>
-                                            <span className="des"> {_stake.type} {checkLanguage({vi : 'Tháng', en: 'Months'}, language)} </span>
+                                            <span className="des"> {_stake.end_after - _stake.start_after} {checkLanguage({vi : 'Ngày', en: 'Days'}, language)} </span>
                                         </div>
                                     </div>
                                 )
                             }
                         </div>
                     </div>
-                    <div className="block3">
+                    {/* <div className="block3">
                         <div className="kdg-row kdg-column-4">
                             <div className="item">
                                 <div className="dot"></div>
@@ -202,7 +151,7 @@ export default function App() {
                             </div>
                             
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="block4">
                         <div className="title">{checkLanguage({vi: 'Số Lượng Đầu Tư', en: 'Investment Amount'}, language)}</div>
@@ -211,19 +160,26 @@ export default function App() {
                             <div className="kdg-col-8">
                                 <div className="group-input-info">
                                     <div className="available">
-                                        {checkLanguage({vi: 'Số dư khả dụng:', en: 'Available balance'}, language)} {balance && Math.floor(balance.kdg_balance * 1000) / 1000} KDG
+                                        {checkLanguage({vi: 'Số dư khả dụng:', en: 'Available balance'}, language)} {balance?.balance} {balance?.coin.code}
                                     </div>
                                     <div className="group-input">
                                         <span className="input">
                                             <span>{checkLanguage({vi: 'Nhập số lượng đầu tư:', en: 'Enter amount to stake'}, language)}</span>
-                                            <input
-                                            onChange={handleChangeInput}
-                                            type="text" value={Value}/>
+                                            <input 
+                                            onChange={handleChangeValue}
+                                            type="text" 
+                                            value={Value}
+                                            />
                                         </span>
-                                        <span className="coin-name">KDG</span>
+                                        <span className="coin-name">{balance?.coin.code}</span>
                                     </div>
-                                    <div className={`error ${Validate.min ? '' : 'show'}`}>
-                                        <span className="error-icon"><FontAwesomeIcon icon={faTimesCircle} /></span> {checkLanguage({vi: 'Số lượng đầu tư tối thiểu là 200 KDG', en: 'Minimum stake is 200 KDG'}, language)}
+                                    <div className="kdg-row kdg-column-2">
+                                        <span className="item" style={{color : '#ff0000'}}>
+                                            {checkLanguage({vi : 'Tối thiểu', en : 'Minimum'}, language)} : {Choose.min}
+                                        </span>
+                                        <span className="item" style={{color : '#ff0000'}}>
+                                            {checkLanguage({vi : 'Tối đa', en : 'Maximum'},language)} : {Choose.max}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -232,11 +188,11 @@ export default function App() {
                                 <div className="calc-group">
                                     <div className="top">
                                         <div className="name">{checkLanguage({vi: 'Lợi nhuận ngày', en: 'Daily interest'}, language)}</div>
-                                        <div className="data"> {(calcDate(Selected).profit_per_day * Value).toFixed(2)} KDG</div>
+                                        <div className="data">{profitPerDay} {balance?.coin.code}</div>
                                     </div>
                                     <div className="bottom">
                                         <div className="name">{checkLanguage({vi: 'Tổng gốc & lãi', en: 'Total principal & interest'}, language)}</div>
-                                        <div className="data"> {Value + calcDate(Selected).total_profit * Value} KDG</div>
+                                        <div className="data"> {totalProfit} {balance?.coin.code}</div>
                                     </div>
                                 </div>
                             </div>
@@ -248,32 +204,15 @@ export default function App() {
                         <p className="sub-title">{checkLanguage({vi: 'Vui lòng đọc kỹ quy tắc trước khi tham gia', en: 'Please read the rules carefully before joining'}, language)}</p>
                         <div className="block-content">
                             <div className="group-content">
-                                <div className="title-content">
-                                    <span className="index">(1)</span> {checkLanguage({vi: 'Stake KDG để nhận lãi: Số lượng stake tối thiểu: 200 KDG', en: 'Stake KDG to receive interest: Minimum amount of Stake is 200KDG'}, language)}
-                                </div>
-                                <div className="content">
-                                    <p>{checkLanguage({vi: '- Có các gói stake như sau:', en: 'There are packages of Stake as follows:'}, language)}</p>
-                                    <div className="row-content">
-                                        <span className="bold">01 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 1% / tháng', en: 'Interest rate is 1% / month'}, language)}-
-                                        <span className="bold">06 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 3% / tháng', en: 'Interest rate is 3% / month'}, language)}
-                                    </div>
-                                    <div className="row-content">
-                                        <span className="bold">03 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 2% / tháng', en: 'Interest rate is 2% / month'}, language)}-
-                                        <span className="bold">12 {checkLanguage({vi: 'tháng:', en: 'month'}, language)}</span> {checkLanguage({vi: 'Lãi suất là 4% / tháng', en: 'Interest rate is 4% / month'}, language)}
-                                    </div>
-                                </div>
+                                <div className="title-content"><span className="index">(1)</span> {checkLanguage({vi: 'Lãi suất được trả lúc 8:00 hàng ngày (Tối thiểu 24 tiếng cho lần nhận lãi đầu tiên).', en: 'Interest is paid at 8:00 every day (Min 24 hours for the first interest payment)'}, language)}</div>
                             </div>
                             <div className="group-content">
-                                <div className="title-content"><span className="index">(2)</span> {checkLanguage({vi: 'Lãi suất được trả lúc 8:00 hàng ngày (Tối thiểu 24 tiếng cho lần nhận lãi đầu tiên).', en: 'Interest is paid at 8:00 every day (Min 24 hours for the first interest payment)'}, language)}</div>
-                            </div>
-                            <div className="group-content">
-                                <div className="title-content"><span className="index">(3)</span> {checkLanguage({vi: 'Kết thúc thời hạn stake, người dùng có thể rút khoản gốc đã stake trong vòng 05 ngày bằng cách nhấn xác nhận kết thúc stake. Khoản stake không được rút sẽ được tự động gia hạn.', en: 'At the end of the Stake period, users can withdraw the Stake original within 05 days by pressing the button to confirm. Stakes that are not withdrawn will be automatically renewed'}, language)}</div>
+                                <div className="title-content"><span className="index">(2)</span> {checkLanguage({vi: 'Kết thúc thời hạn stake, người dùng có thể rút khoản gốc đã stake trong vòng 05 ngày bằng cách nhấn xác nhận kết thúc stake. Khoản stake không được rút sẽ được tự động gia hạn.', en: 'At the end of the Stake period, users can withdraw the Stake original within 05 days by pressing the button to confirm. Stakes that are not withdrawn will be automatically renewed'}, language)}</div>
                             </div>
                         </div>
                         <div className="input-group checkbox">
                             <input 
                             className="checkbox"
-                            onChange={e => setValidate({...Validate, check: e.target.checked})}
                             type="checkbox" name="confirm" id="confirm"/> 
                             <label className="checkbox-label" for="confirm">
                                 <span className="checkbox-box"></span> 
@@ -283,8 +222,8 @@ export default function App() {
                             </label>
 
                             <button 
-                            onClick={handleStaking}
-                            className={(Validate.check && Validate.min) ? '' : 'disable'}>
+                            style={(Value < Choose.min || Value > Choose.max) ? {pointerEvents : 'none'} : null}
+                            onClick={handleStaking}>
                                 {checkLanguage({vi: 'Tham gia ngay', en: 'Join now'}, language)}
                             </button>
                         </div>

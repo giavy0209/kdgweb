@@ -10,7 +10,6 @@ import {
     Tab,
     Footer,
     Account,
-    LuckySpin,
     Staking,
     StakingHistory,
     StakingJoin,
@@ -18,7 +17,6 @@ import {
     News,
     HomeWallet,
     GameHub,
-    StakingShare,
 } from '../components'
 
 export default function checkComponents(type){
@@ -44,8 +42,6 @@ export default function checkComponents(type){
         return {component: Tab, haveContainer : true}
     }else if(type === 11){
         return {component: Footer, haveContainer : false}
-    }else if(type === 12){
-        return {component: LuckySpin, haveContainer : false}
     }else if(type === 13){
         return {component: Staking, haveContainer : false}
     }else if(type === 14){
@@ -60,7 +56,5 @@ export default function checkComponents(type){
         return {component: HomeWallet, haveContainer : true}
     }else if(type === 19){
         return {component: GameHub, haveContainer : false}
-    }else if(type === 20){
-        return {component: StakingShare, haveContainer : false}
     }
 }

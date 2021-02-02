@@ -1,18 +1,17 @@
-import React, { useMemo, useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { asyncGetUserData,asyncLogin, actChangeLoading} from '../../store/action'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import {message} from 'antd'
 import '../../assets/css/login-reg.scss'
 import { checkLanguage, validateForm } from '../../helpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { ChooseLanguage } from '../../components'
+import { asyncLogin } from '../../store/authAction'
 export default function App({...rest}) {
+    const {email} = useParams()
     const history = useHistory()
     const dispatch = useDispatch()
-    const token = useSelector(state => state.token)
-    const JWT = useSelector(state => state.JWT)
     const language = useSelector(state => state.lang)
 
     const [ValidForm , setValidForm] = useState({email:false, password: true})
@@ -22,25 +21,10 @@ export default function App({...rest}) {
         document.title = checkLanguage({vi: 'Đăng nhập', en: 'Login'}, language)
     },[language])
 
-    useMemo(()=>{
-        dispatch(actChangeLoading(true))
-        if(token && JWT) {
-            dispatch(asyncGetUserData(token))
-            .then(res=>{
-                dispatch(actChangeLoading(false))
-                if(res !== false){
-                    history.push('/home-wallet')
-                }
-            })
-        }
-        dispatch(actChangeLoading(false))
-
-    },[dispatch,history,token,JWT])
-
-    const email = useSelector(state => state.user && state.user.email)
-    useEffect(()=>{
-        if(email) setValidForm({...ValidForm , email :true})
+    useEffect(() => {
+        if(email) setValidForm(valid => {return {...valid , email : true}})
     },[email])
+
     const handleLogin = useCallback( async(e)=>{
         e.preventDefault()
         const data = new FormData(e.target)
@@ -48,22 +32,18 @@ export default function App({...rest}) {
         for(var pair of data.entries()) {
             submitData[pair[0]] = pair[1]
         }
-        dispatch(asyncLogin(submitData))
-        .then(res=>{
-            console.log(res);
-            if(res.ok){
-                history.push('/home-wallet')
-            }else{
-                if(res.res.data.status === 103){
-                    message.error(checkLanguage({vi: 'Email không tồn tại', en: 'Email is not exist'},language))
-                }else if(res.res.data.status === 104){
-                    message.error(checkLanguage({vi: 'Sai mật khẩu', en: 'Wrong password'},language))
-                }
-            }
-        })
-        .catch(res=>{
-        })
-    },[dispatch,history])
+        const res = await dispatch(asyncLogin(submitData))
+        if(res.status === 1) history.push('/home-wallet')
+        if(res.status === 101) message.error(checkLanguage({
+            vi : 'Email đã tồn tại',
+            en : 'Email existed'
+        },language))
+        if(res.status === 102) message.error(checkLanguage({
+            vi : 'Sai tên đăng nhập hoặc mật khẩu',
+            en : 'incorrect email or password'
+        },language))
+    },[dispatch,history,language])
+
     return (
         <>
         <div className="form-block">

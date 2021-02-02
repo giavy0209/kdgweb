@@ -1,80 +1,65 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { DatePicker, message } from 'antd';
-import { useHistory } from 'react-router-dom'
+import { faAngleLeft, faAngleRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { DatePicker, InputNumber, message } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import nodata from '../../assets/img/nodata.png'
 import { checkLanguage } from '../../helpers';
 import KDG from '../../assets/img/kdg-icon.png'
-import callapi from '../../axios';
+import callAPI from '../../axios';
 import { actChangeLoading} from '../../store/action';
+import renderDate from '../../helpers/renderDate';
 
 const { RangePicker } = DatePicker;
+const ITEM_PER_PAGE = 10
 
-const renderDate = function (date){
-    var d = new Date(date)
-    var day = d.getDate()
-    var month = d.getMonth() + 1
-    var year = d.getFullYear()
-
-    return `${day}/${month}/${year}`
-}
-const stake = [
-    {
-        type : 1,
-        profit: 0.01
-    },
-    {
-        type : 3 ,
-        profit : 0.02
-    },
-    {
-        type : 6 ,
-        profit : 0.03
-    },
-    {
-        type : 12 ,
-        profit : 0.04
-    },
-]
-export default function App({ ...prop }) {
-    const history = useHistory();
-    const dispatch = useDispatch();
-    const [StakingHistory, setStakingHistory] = useState([])
-    const [StartDate, setStartDate] = useState(null);
-    const [EndDate, setEndDate] = useState(null);
-    useMemo(async () => {
-        console.log(StartDate);
-        console.log(EndDate);
+const RenderStatus = function ({id,status , language}) {
+    const dispatch = useDispatch()
+    const handleEndStaking = useCallback(async (type) => {
         dispatch(actChangeLoading(true))
-        const res = (await callapi().get(`/api/staking_v2/?skip=0&take=99&start_date=${StartDate ? StartDate : 0}&end_date=${EndDate ? EndDate : 0}`)).data
+        await callAPI.post('/end_staking' , {type , trans_id : id})
         dispatch(actChangeLoading(false))
-        if(res.status === 1){
-            setStakingHistory([...res.data])
+        
+        type === 1 && message.success(checkLanguage({vi : 'Gia hạn thành công' , en : 'Renew success' } , language))
+        type === 2 && message.success(checkLanguage({vi : 'Kết thúc staking thành công' , en : 'End Success' } , language))
+
+    },[language,id])
+    return (
+        <>
+        {
+            status === 0 ? <td></td> :
+            status === 1 ? <td className="green">{checkLanguage({vi : 'Đang nhận lãi', en : 'Progressing'}, language)}</td> :
+            status === 4 ? <td className="red">{checkLanguage({vi : 'Kết thúc', en : 'Finished'}, language)}</td> :
+            status === 2 ? <td className="red">{checkLanguage({vi : 'Chờ mở khóa', en : 'Waiting for unlock'}, language)}</td> :
+            status === 3 ? <td>
+                <button className="done" onClick={()=>handleEndStaking(1)}>{checkLanguage({vi : 'Gia hạn staking', en : 'Renewal'}, language)}</button> <br />
+                <button className="cont" onClick={()=>handleEndStaking(2)}>{checkLanguage({vi : 'Kết thúc', en : 'Finished'}, language)}</button>
+            </td> : null
         }
-    }, [StartDate , EndDate])
+        </>
+    )
+}
 
-    const handleChangeDatePicker = useCallback((data)=> {
-        if(data){
-            var start_date = new Date(data[0]._d).getTime()
-            var end_date = new Date(data[1]._d).getTime()
-            setStartDate(start_date)
-            setEndDate(end_date)
-        }
-    },[])
-
-    const handleDoneStaking = useCallback(async(_id) => {
-        var res = (await callapi().post('/api/end_staking' , {staking_id : _id})).data
-        if(res.status === 1) {
-            message.success(checkLanguage({vi : 'Trả staking thành công' , en : 'Pay staking succeess'}, language))
-        }
-    },[language])
-    const handleContStaking = useCallback(async() => {
-
-    },[])
-
+export default function App({ ...prop }) {
+    const coin = new URLSearchParams(useLocation().search).get('coin');
+    const history = useHistory();
+    const [Page, setPage] = useState(1)
+    const [Total, setTotal] = useState(0)
+    const [History, setHistory] = useState([])
     const language = useSelector(state => state.lang)
+    const balance = useSelector(state => state.balances?.find(o=>o._id === coin))
+    console.log(balance);
+    const handleGetStakingHistory = useCallback(async (balance,Page ) => {
+        const res = await callAPI.get(`/transactions?type=4&coin=${balance.coin._id}&skip=${(Page - 1) * ITEM_PER_PAGE}&limit=${ITEM_PER_PAGE}`)
+        console.log(res);
+        setTotal(res.total)
+        setHistory(res.data)
+    },[])
+    useMemo(() => {
+        balance && handleGetStakingHistory(balance,Page)
+    },[handleGetStakingHistory, Page, balance])
+    
     return (
         <>
             <div className="staking-history">
@@ -88,15 +73,15 @@ export default function App({ ...prop }) {
                         </div>
                     </div>
 
-                    <div className="date-picker">
+                    {/* <div className="date-picker">
                         <RangePicker 
                         placeholder={[
                             checkLanguage({vi : "Ngày bắt đầu", en : 'Start date'} , language),
                             checkLanguage({vi : "Ngày kết thúc", en : 'End date'} , language)
                         ]}
-                        onChange={handleChangeDatePicker}
+                        // onChange={handleChangeDatePicker}
                         />
-                    </div>
+                    </div> */}
 
                     <div className="history">
                         <table>
@@ -105,62 +90,37 @@ export default function App({ ...prop }) {
                                     <th className="head-title" colSpan="9">{checkLanguage({vi: 'LỊCH SỬ STAKING', en: 'MY STAKING RECORD'}, language)}</th>
                                 </tr>
                                 <tr>
-                                    <th>Coin/Token</th>
                                     <th>{checkLanguage({vi: 'Ngày tạo staking', en: 'Create date'}, language)}</th>
                                     <th>{checkLanguage({vi: 'Thời gian bắt đầu trả lãi', en: 'Start date'}, language)}</th>
                                     <th>{checkLanguage({vi: 'Thời gian kết thúc trả lãi', en: 'End date'}, language)}</th>
                                     <th>{checkLanguage({vi: 'Thời gian mở khóa', en: 'Unlock date'}, language)}</th>
                                     <th>{checkLanguage({vi: 'Số tiền staking', en: 'Staking quantity'}, language)}</th>
-                                    <th>{checkLanguage({vi: 'Tỷ lệ lợi nhuận hàng năm dự kiến', en: 'Estimated annual interest rate'}, language)}</th>
                                     <th>{checkLanguage({vi: 'Lợi nhuận đã nhận', en: 'Profit receive'}, language)}</th>
                                     <th>{checkLanguage({vi: 'Trạng thái', en: 'Status'}, language)}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {StakingHistory.length > 0? StakingHistory.map(stake_history =>
-                                <tr>
-                                    <td><img width="30px" src={KDG} alt="" />  KDG</td>                  
-                                    <td> {renderDate(stake_history.create_date)} </td>
-                                    <td>{renderDate(stake_history.start_date)} </td>
-                                    <td> {renderDate(stake_history.end_date)} </td>
-                                    <td> {renderDate(stake_history.unlock_date)} </td>
-                                    <td> {stake_history.kdg_coin_send} </td>
-                                    <td> {stake.find(o=> o.type === stake_history.type).profit * 100 * 12}% </td>
-                                    <td> {stake_history.kdg_coin_receive ? Math.round(stake_history.kdg_coin_receive * 1000)/1000 : 0} KDG</td>
-                                    {
-                                        stake_history.status === 0 ? 
-                                        <td></td>
-                                        :
-                                        stake_history.status === 1 ? 
-                                        <td className='green'>
-                                            {checkLanguage({vi : 'Đang nhận lãi' , en : 'Receive profit'} , language)}
-                                        </td>
-                                        :
-                                        stake_history.status === 2 ? 
-                                        <td className='yellow'>
-                                            <button
-                                            onClick={()=>handleDoneStaking(stake_history._id)}
-                                            className="done">{checkLanguage({vi : 'Xác nhận' , en : 'Confirm'} , language)}</button>
-                                            <button 
-                                            onClick={()=>handleContStaking(stake_history._id)}
-                                            className="cont">{checkLanguage({vi : 'Gia hạn' , en : 'Extend'} , language)}</button>
-                                        </td>
-                                        :
-                                        <td className='red'>
-                                            {checkLanguage({vi : 'Đã kết thúc' , en : 'Done'} , language)}
-                                        </td>
-                                    }
+                                {History.map(o => <tr>
+                                    <td>{renderDate(o.create_date , 'dd/momo/yyyy')}</td>
+                                    <td>{renderDate(o.create_date, 'dd/momo/yyyy' , o.staking.start_after + 'd')}</td>
+                                    <td>{renderDate(o.create_date, 'dd/momo/yyyy' , o.staking.end_after + 'd')}</td>
+                                    <td>{renderDate(o.create_date, 'dd/momo/yyyy' , o.staking.unlock_after + 'd')}</td>
+                                    <td>{ o.value}</td>
+                                    <td>{ Math.floor(o.receive * 100) / 100}</td>
+                                    <RenderStatus id={o._id} language={language} status={o.status}/>
                                 </tr>
-                                ):
-                                <tr>
-                                    <td colSpan="9">
-                                    <img src={nodata} alt="" /> <br></br>
-                                    {checkLanguage({vi: 'Không có dữ liệu', en: 'No data'}, language)}
-                                    </td>
-                                </tr>  
-                                }
+                                )}
                             </tbody>
                         </table>
+                        <div className="pagination">
+                            <span onClick={() => {Page > 1 && setPage(Page - 1)}} className="arrow"><FontAwesomeIcon icon={faAngleLeft} /></span>
+                            <InputNumber onPressEnter={e => {
+                                setPage(Number(e.target.value))
+                            }} value={Page} style={{ width: 60 }} />
+                            <span onClick={() => {
+                                Math.ceil(Total / ITEM_PER_PAGE) > Page && setPage(Page + 1)
+                            }} className="arrow"><FontAwesomeIcon icon={faAngleRight} /></span>
+                        </div>
                     </div>
                 </div>
             </div>
