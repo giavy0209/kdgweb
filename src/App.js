@@ -2,7 +2,7 @@ import React, {useMemo, useCallback, useEffect, useState}  from 'react';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { asyncGetSettings, atcChangeLanguage,asyncGetListCategories, actChangeLoading} from './store/action'
-import { actChangeBalances} from './store/authAction'
+import { actChangeBalances, actChangeUser} from './store/authAction'
 import Home from './pages/Home'
 import Term from './pages/Term'
 import Login from './pages/Login'
@@ -34,7 +34,11 @@ function App() {
     const listenBalance = (res) => {
       dispatch(actChangeBalances(res.balances))
     }
+    const listenUser = (res) => {
+      dispatch(actChangeUser(res.data))
+    }
     socket.on('balances' , listenBalance)
+    socket.on('user' , listenUser)
   }, []);
 
   useMemo(()=>{
@@ -44,14 +48,20 @@ function App() {
     }else{
       dispatch(atcChangeLanguage('en'))
     }
-    dispatch(actChangeLoading(true));
-
+    const isClear = storage.getItem('isClear')
+    if(!isClear) {
+      localStorage.clear()
+      storage.setItem('isClear' , true)
+    }
     Promise.all([
       dispatch(asyncGetSettings(false)),
       dispatch(asyncGetListCategories(false)),
       dispatch(asyncInitAuth())
     ]).then(() => {
       dispatch(actChangeLoading(false));
+    })
+    .catch(() => {
+      dispatch(actChangeLoading(false))
     })
   },[dispatch])
 

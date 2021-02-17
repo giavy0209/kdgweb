@@ -7,14 +7,14 @@ import '../../assets/css/login-reg.scss'
 import { checkLanguage, validateForm } from '../../helpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import callapi from '../../axios'
 import { ChooseLanguage } from '../../components'
+import callAPI from '../../axios'
 
 export default function App({...rest}) {
     const {ref} = useParams()
     const [CountDownSendMail, setCountDownSendMail] = useState(null)
     const [CountDownSendMailTimeOut, setCountDownSendMailTimeOut] = useState(null)
-    const [ValidForm , setValidForm] = useState({email:false, password: false, repassword: false, register_code: false,})
+    const [ValidForm , setValidForm] = useState({email:false, password: false, repassword: false, email_code: false,})
     const [Eye, setEye] = useState({password: false , repassword: false})
     const history = useHistory()
     const dispatch = useDispatch()
@@ -55,7 +55,7 @@ export default function App({...rest}) {
         }
         dispatch(actChangeLoading(true))
         try {
-            const res = (await callapi().post('/create_code?type=1',{email})).data
+            const res = (await callAPI.post('/create_code?type=1',{email}))
             if(res.status === 1){
                 setCountDownSendMail(120)
                 message.success(checkLanguage({
@@ -94,7 +94,7 @@ export default function App({...rest}) {
             }, language))
         }
         dispatch(actChangeLoading(true))
-        const res = (await callapi().post('/user',submitData)).data
+        const res = (await callAPI.post('/user',submitData))
         dispatch(actChangeLoading(false))
         if(res.status === 1){
             message.success(checkLanguage({vi: "Đăng ký thành công", en: 'Register success'},language))
@@ -207,14 +207,14 @@ export default function App({...rest}) {
                             if(!Number(e.target.value) || e.target.value.length !== 6){
                                 e.target.nextElementSibling.classList.add('show')
                                 e.target.nextElementSibling.innerText = checkLanguage({vi: 'Mã xác minh Email không đúng định dạng',en: 'Sign up code is not valid'},language)
-                                setValidForm({...ValidForm, register_code: false})
+                                setValidForm({...ValidForm, email_code: false})
                             }else{
                                 e.target.nextElementSibling.classList.remove('show')
                                 e.target.nextElementSibling.innerText = ''
-                                setValidForm({...ValidForm, register_code: true})
+                                setValidForm({...ValidForm, email_code: true})
                             }
                         }}
-                        name="register_code" />
+                        name="email_code" />
                         <span className="validate-error"></span>
                     </div>
                     <div className="form-group half va-b">
@@ -259,7 +259,7 @@ export default function App({...rest}) {
                     <div className="form-group half">
                         <button 
                         style={
-                            (ValidForm.email && ValidForm.password && ValidForm.register_code && ValidForm.repassword && check) ? 
+                            (ValidForm.email && ValidForm.password && ValidForm.email_code && ValidForm.repassword && check) ? 
                             {opacity:  1 , pointerEvents:  'all'} :
                             {opacity: .6 , pointerEvents: 'none'} 
                         } 

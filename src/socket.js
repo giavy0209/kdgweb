@@ -2,23 +2,30 @@ import io from 'socket.io-client'
 import { storage } from './helpers'
 import {refreshToken} from './axios'
 import { WS_DOMAIN } from './constant'
-const socket = io(WS_DOMAIN)
+const token = storage.getToken()
+const socket = io(WS_DOMAIN, {
+    auth : {
+        token : token,
+        type : 2
+    },
+})
 socket.on('connect' , async () => {
-    const token = await storage.getToken()
-    socket.emit('auth' , token)
     console.log('socket connected');
 })
-socket.on('authed' , () => {
-    console.log('authed');
-})
-socket.on('not-auth' ,async () => {
-    const {status} = await refreshToken()
-    if(status === 0) socket.disconnect()
-    const token = await storage.getToken()
-    socket.emit('auth' , token)
+socket.on('connect_error' , () => {
+    console.log('error');
+    
 })
 
-socket.on('disconnect' , () => {
-    console.log('disconnect');
+socket.on('disconnect' , (r) => {
+    console.log(r);
+    if(r === 'io server disconnect'){
+        setTimeout(async() => {
+            await refreshToken()
+            const token = await storage.getToken()
+            socket.auth.token = token
+            socket.connect()
+        }, 1000);
+    }
 })
 export default socket

@@ -44,6 +44,7 @@ export default function App({...rest}) {
     
 
     async function getCode(email){
+        console.log(123);
         if(!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             return  message.error(checkLanguage({
                 vi : 'Email không đúng định dạng',
@@ -52,7 +53,7 @@ export default function App({...rest}) {
         }
         dispatch(actChangeLoading(true))
         try {
-            const res = (await callapi().post('/create_code?type=2',{email})).data
+            const res = (await callapi.post('/create_code?type=2',{email}))
             if(res.status === 1){
                 setCountDownSendMail(120)
                 message.success(checkLanguage({
@@ -91,7 +92,7 @@ export default function App({...rest}) {
             }, language))
         }
         dispatch(actChangeLoading(true))
-        const res = (await callapi().post('/forgot_password',submitData)).data
+        const res = (await callapi.post('/forgot_password',submitData))
         dispatch(actChangeLoading(false))
         if(res.status === 1){
             message.success(checkLanguage({

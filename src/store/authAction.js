@@ -11,6 +11,7 @@ export function actChangeUser(user) {
 export function asyncGetUser() {
     return async dispatch => {
         const res = await callAPI.get('/user')
+        console.log(res);
         storage.setItem('user' , res.data)
         dispatch(actChangeUser(res.data))
     }
