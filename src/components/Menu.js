@@ -113,7 +113,6 @@ export default function App({type}) {
           <div 
           onClick={()=>{
             storage.clearToken()
-            storage.clearJWT()
             window.open('/', '_self')
           }}
           className="bottom-dropdown">

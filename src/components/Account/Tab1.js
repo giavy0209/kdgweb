@@ -33,7 +33,7 @@ export default function App(){
         for(var pair of data.entries()) {
             submitData[pair[0]] = pair[1]
         }
-        const res = (await callAPI.post(`/api/change_password`,{old_password : submitData.oldpass , new_password : submitData.newpass}))
+        const res = (await callAPI.post(`/change_password`,{old_password : submitData.oldpass , new_password : submitData.newpass}))
         if(res.status === 1){   
             message.success(checkLanguage({vi: 'Cập nhật mật khẩu thành công', en:'Change password success'},language))
         }
